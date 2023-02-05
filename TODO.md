@@ -2,35 +2,35 @@
 
 ## BACKEND
 
--Create  python script that establishes connection to database [ ]
+- [ ] Create  python script that establishes connection to database 
 
--Implement backend API [ ]
+- [ ] Implement backend API 
 
 ## FRONTEND
 
--Design Front end [ ]
+- [ ] Design Front end 
 
 ## CLI
 
--Create Command Line Tool [ ]
+- [ ] Create Command Line Tool 
 
 ## DATABASE
 
--Create Database [ ]
-    -Make Dummy Data [ ]
+- [ ] Create Database 
+    - [ ] Make Dummy Data 
 
 ## VPP
 
-- Update VPP graphs [ ]
+- [ ] Update VPP graphs 
 
-- Update SRS doc [ ]
+- [ ] Update SRS doc 
 
 ## TEST
 
-- Implement CLI Functionality Tests [ ]
+- [ ] Implement CLI Functionality Tests 
 
-- Implement API Functionality Tests [ ]
+- [ ] Implement API Functionality Tests 
 
 # DONE 
 
--Updated README File [x]
+- [x] Updated README File 
