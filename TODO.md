@@ -27,6 +27,8 @@ Tasks to be completed.
 
 - [ ] Update SRS doc @ntua-el19219
 
+- [ ] Create Stakeholders Requirements Specifications Doc @ntua-el19188
+
 ## TEST
 
 - [ ] Implement CLI Functionality Tests @ntua-el19136
