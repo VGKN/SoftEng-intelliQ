@@ -3,7 +3,7 @@
 Tasks to be completed.
 
 ## SERVER
-- [ ] Figure out server that will host the database and the required credentials
+- [ ] Figure out server that will host the database and the required credentials @ntua-el19144
 
 ## BACKEND
 
