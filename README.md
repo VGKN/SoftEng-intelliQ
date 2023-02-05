@@ -1,6 +1,24 @@
 # Software Engineering Project 2022-2023
 
-Group: softeng2022-19
-Members:  el1936, el19144, el19188, el19219.
+Team name:SoftEng22-19
 
 Software Engineering Project: intelliQ
+
+Semester Project for Software Engineering course @ NTUA, 7th Semester 2022-2023
+
+This project was conducted for the course of Software Engineering at the 2022-2023 Winter semester of the Electrical and Computer Engineering School at the National Technical University of Athens
+
+Scenario
+
+The subject of the project is the development of a software application for the configuration and
+running  of "intelligent questionnaires", which will be called "intelliQ". The intelliQ app will
+used to aggregate data from such questionnaires in various surveys.
+
+**The project is a collaborate effort of a team of 4 members:**
+
+| Name | Registration Number
+| ----- | -----
+| Theos Stefanos | 03119219
+| Bitsanis Athanasios | 03119136
+| Kassaris Nikolaos | 03119188
+| Vougias Konstantinos | 03119144
