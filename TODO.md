@@ -2,6 +2,9 @@
 
 Tasks to be completed.
 
+## SERVER
+- [ ] Figure out server that will host the database and the required credentials
+
 ## BACKEND
 
 - [ ] Create  python script that establishes connection to database @ntua-el19144
