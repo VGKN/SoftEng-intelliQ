@@ -23,6 +23,7 @@ Tasks to be completed.
 
 - [ ] Create Database @ntua-el19188
     - [ ] DDL Production @ntua-el19136, @ntua-el19188
+    - [ ] Test DDL schema @ntua-el19136
     - [ ] DML Production @ntua-el19188, @ntua-el19144
     - [ ] Make Dummy Data @ntua-el19144
 
