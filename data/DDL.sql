@@ -37,7 +37,7 @@ CREATE TABLE Question (
     Question_ID INT UNSIGNED NOT NULL,
     Qtext VARCHAR(255) NOT NULL,
     Qrequired BINARY(1) NOT NULL,
-    Qtype VARCHAR(10),
+    Qtype VARCHAR(10) NOT NULL,
     QuestionaireID INT UNSIGNED NOT NULL, 
     PRIMARY KEY(Question_ID)
 );
