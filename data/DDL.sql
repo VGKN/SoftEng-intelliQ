@@ -34,16 +34,16 @@ CREATE TABLE User (
 );
 
 CREATE TABLE Question (
-    Question_ID INTEGER UNSINGED NOT NULL,
+    Question_ID INT UNSIGNED NOT NULL,
     Qtext VARCHAR(255) NOT NULL,
     Qrequired BINARY(1) NOT NULL,
     Qtype VARCHAR(10),
-    QuestionaireID INTEGER UNSINGED NOT NULL, 
+    QuestionaireID INT UNSIGNED NOT NULL, 
     PRIMARY KEY(Question_ID)
 );
 
 CREATE TABLE Options (
-    OptID INT UNSINGED NOT NULL,
+    OptID INT UNSIGNED NOT NULL,
     Opt_Text VARCHAR(255) NOT NULL,
     PRIMARY KEY (OptID)
 );
@@ -60,8 +60,8 @@ CREATE TABLE Questionnaire_Keywords (
     QuestionnaireQuestionnaireID INT UNSIGNED NOT NULL,
     KeywordsKeyword VARCHAR(20) NOT NULL,
     PRIMARY KEY (QuestionnaireQuestionnaireID, KeywordsKeyword),
-    FOREIGN KEY (QuestionnaireQuestionnaireID) REFERENCES Questionnaire(QuestionnaireQuestionnaireID) ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY (KeywordsKeyword) REFERENCES Keywords(KeywordsKeyword) ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY (QuestionnaireQuestionnaireID) REFERENCES Questionnaire(QuestionnaireID) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (KeywordsKeyword) REFERENCES Keywords(Keyword) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE Questions_Options (
