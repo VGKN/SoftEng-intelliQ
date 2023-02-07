@@ -3,7 +3,7 @@
 Tasks to be completed.
 
 ## SERVER
-- [ ] Figure out server that will host the database and the required credentials @ntua-el19144
+- [ ] Figure out server that will host the database and the required credentials @ntua-el19219
 
 ## BACKEND
 
@@ -22,7 +22,9 @@ Tasks to be completed.
 ## DATABASE
 
 - [ ] Create Database @ntua-el19188
-    - [ ] Make Dummy Data @ntua-el19219
+    - [ ] DDL Production @ntua-el19136, @ntua-el19188
+    - [ ] DML Production @ntua-el19188, @ntua-el19144
+    - [ ] Make Dummy Data @ntua-el19144
 
 ## VPP
 
