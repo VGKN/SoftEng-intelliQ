@@ -1,0 +1,54 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+
+DROP SCHEMA IF EXISTS intelliQ;
+CREATE SCHEMA intelliQ;
+USE intelliQ;
+
+CREATE TABLE Admin (
+    Aid INT UNSIGNED NOT NULL,
+    Last_Name VARCHAR(50) NOT NULL,
+    First_Name VARCHAR(50) NOT NULL,
+    Telephone INT UNSIGNED NOT NULL,
+    PRIMARY KEY (Aid)
+);
+
+CREATE TABLE Questionnaire (
+    QuestionnaireID INT UNSIGNED NOT NULL,
+    Questionnaire_Title VARCHAR(50) NOT NULL,
+    Aid INT UNSIGNED NOT NULL,
+    PRIMARY KEY(QuestionnaireID)
+);
+
+CREATE TABLE Questionnaire_Keywords (
+    QuestionnaireQuestionnaireID INT UNSIGNED NOT NULL,
+    KeywordsKeyword VARCHAR(20) NOT NULL,
+    PRIMARY KEY (QuestionnaireQuestionnaireID, KeywordsKeyword),
+    FOREIGN KEY (QuestionnaireQuestionnaireID) REFERENCES Questionnaire(QuestionnaireQuestionnaireID) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (KeywordsKeyword) REFERENCES Keywords(KeywordsKeyword) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE Keywords (
+    Keyword VARCHAR(20) NOT NULL,
+    PRIMARY KEY (Keyword)
+);
+
+CREATE TABLE User (
+    UserID INT UNSIGNED NOT NULL,
+    Username VARCHAR(50) NOT NULL,
+    Email  VARCHAR(50) NOT NULL,
+    PRIMARY KEY (UserID)
+);
+
+CREATE TABLE Session (
+    SessionID VARCHAR(50) NOT NULL,
+    QuestionnaireID INT UNSIGNED NOT NULL,
+    UserString VARCHAR(10) NOT NULL,
+    PRIMARY KEY (SessionID),
+    FOREIGN KEY (QuestionnaireID) REFERENCES Questionnaire(QuestionnaireID) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
