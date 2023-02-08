@@ -14,6 +14,7 @@ Tasks to be completed.
 ## FRONTEND
 
 - [ ] Design Front end @ntua-el19136
+- [ ] Form styles @ntua-el19188
 
 ## CLI
 
