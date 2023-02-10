@@ -2,23 +2,22 @@
 
 Tasks to be completed.
 
-## SERVER
-- [ ] Figure out server that will host the database and the required credentials @ntua-el19219
+## POSTMAN
+
+- [ ] Sync API with Postman @ntua-el19219
 
 ## BACKEND
 
-- [ ] Create  python script that establishes connection to database @ntua-el19144
-
-- [ ] Implement backend API @ntua-el19136
+- [ ] Implement backend API endpoints @ntua-el19136
+- [ ] Make connection between frontend and backend
 
 ## FRONTEND
 
 - [ ] Design Front end @ntua-el19136
-- [ ] Form styles @ntua-el19188
 
 ## CLI
-
 - [ ] Create Command Line Tool @ntua-el19144
+    - [ ] Create python scripts to interact with endpoints @ntua-el19129
 
 ## DATABASE
 
@@ -31,17 +30,16 @@ Tasks to be completed.
 ## VPP
 
 - [ ] Update VPP graphs @ntua-el19219
-
 - [ ] Update SRS doc @ntua-el19219
-
 - [ ] Create Stakeholders Requirements Specifications Doc @ntua-el19188
 
 ## TEST
 
 - [ ] Implement CLI Functionality Tests @ntua-el19136
-
 - [ ] Implement API Functionality Tests @ntua-el19188
 
 # DONE
-
+- [x] Create  python script that establishes connection to database
+- [x] Figure out server that will host the database and the required credentials
+- [x] Form styles.css @ntua-el19188
 - [x] Updated README File
