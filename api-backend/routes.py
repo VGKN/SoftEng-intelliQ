@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from flask_mysqldb import MySQL
-from dbdemo import app, db ## initially created by __init__.py, need to be used here
-from dbdemo.forms import MyForm,FieldForm,ProjectForm
+from api-backend import app, db ## initially created by __init__.py, need to be used here
+from api-backend.forms import MyForm,FieldForm,ProjectForm
 import requests
 
 @app.route("/")
@@ -25,7 +25,7 @@ def getUser():
         Questionnaires = [dict(zip(column_names, entry)) for entry in cur.fetchall()]     
         cur.close()
         return render_template("user.html",Questionnaires=Questionnaires,tablename1=tablename1,pageTitle="Welcome user")
-        
+
 @app.route("/admin")
 def getOrgs():
     try:
