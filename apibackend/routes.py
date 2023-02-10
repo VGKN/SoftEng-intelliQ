@@ -42,7 +42,7 @@ def getOrgs():
          #                      
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        return render_template("admin.html",pageTitle="Landing Page")
 
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
