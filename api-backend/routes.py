@@ -13,20 +13,17 @@ def index():
         return render_template("base.html",pageTitle="Landing Page")
 
 
-@app.route("/samenumber")
-def getOrgs():
+@app.route("/user")
+def getUser():
     try:
-        tablename1="Organizations"
+        tablename1="Welcome user"
         cur = db.connection.cursor()
         
-        cur.execute("create view num_of_proj as SELECT EXTRACT(YEAR from project.project_start) as years, organization.ID as org_ID,count(project.ID) as num_of_proj FROM manages,organization,project WHERE organization.ID = organization_ID AND project.ID = project_ID GROUP BY years,org_ID")
-        cur.execute("SELECT org_ID,organization.org_name FROM organization,(SELECT t1.org_ID, t1.num_of_proj FROM num_of_proj as t1, num_of_proj as t2   WHERE (t1.org_ID = t2.org_ID AND t1.num_of_proj = t2.num_of_proj AND t1.years - t2.years = 1)) as newtable  WHERE (org_ID = organization.ID AND num_of_proj>=10)")
+        cur.execute("SELECT Questionnaire_Title FROM Questionnaire")
         column_names = [i[0] for i in cur.description]
-        Orgs = [dict(zip(column_names, entry)) for entry in cur.fetchall()]  
-          
-        cur.execute("DROP VIEW num_of_proj")   
+        Questionnaires = [dict(zip(column_names, entry)) for entry in cur.fetchall()]     
         cur.close()
-        return render_template("samenumber.html",Orgs=Orgs,tablename1=tablename1,pageTitle="Organizations that satisfy query 3.4")
+        return render_template("user.html",Questionnaires=Questionnaires,tablename1=tablename1,pageTitle="Welcome user")
          #                      
     except Exception as e:
         print(e)
