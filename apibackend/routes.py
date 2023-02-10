@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from flask_mysqldb import MySQL
-from api-backend import app, db ## initially created by __init__.py, need to be used here
-from api-backend.forms import MyForm,FieldForm,ProjectForm
+from apibackend import app, db ## initially created by __init__.py, need to be used here
+from apibackend.forms import MyForm,FieldForm,ProjectForm
 import requests
 
 @app.route("/")

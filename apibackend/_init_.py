@@ -19,4 +19,4 @@ app.config.from_file("config.json",load=json.load)
 db = MySQL(app)
 
 ## routes must be imported after the app object has been initialized
-from api-backend import routes
+from apibackend import routes
