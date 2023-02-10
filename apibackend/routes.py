@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for, abo
 from flask_mysqldb import MySQL
 from apibackend import app, db ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm
-import requests
+#import requests
 
 @app.route("/")
 def index():
@@ -48,9 +48,9 @@ def getOrgs():
 def getStatus():
     try:
 
-        r= requests.get()
+        #r= requests.get()
         
-        data = r.json()
+        #data = r.json()
          
         ## create connection to database
         cur = db.connection.cursor()
@@ -90,7 +90,7 @@ def getCouples():
          #                      
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        return render_template("frontend/templates/base.html",pageTitle="Landing Page")
         
         
 @app.route("/resetall", methods=["POST"])
