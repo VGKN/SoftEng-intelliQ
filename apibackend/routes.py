@@ -25,6 +25,10 @@ def getUser():
         Questionnaires = [dict(zip(column_names, entry)) for entry in cur.fetchall()]     
         cur.close()
         return render_template("user.html",Questionnaires=Questionnaires,tablename1=tablename1,pageTitle="Welcome user")
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
 
 @app.route("/admin")
 def getOrgs():
