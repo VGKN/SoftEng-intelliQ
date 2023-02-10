@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for, abo
 from flask_mysqldb import MySQL
 from dbdemo import app, db ## initially created by __init__.py, need to be used here
 from dbdemo.forms import MyForm,FieldForm,ProjectForm
+import requests
 
 @app.route("/")
 def index():
@@ -24,15 +25,29 @@ def getUser():
         Questionnaires = [dict(zip(column_names, entry)) for entry in cur.fetchall()]     
         cur.close()
         return render_template("user.html",Questionnaires=Questionnaires,tablename1=tablename1,pageTitle="Welcome user")
+        
+@app.route("/admin")
+def getOrgs():
+    try:
+        cur = db.connection.cursor()
+        
+        cur.execute("")
+        cur.execute("")   
+        cur.close()
+        return render_template("admin.html", pageTitle="Admin", name= "admin name")
          #                      
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
 
-@app.route("/res")
-def getDeliverables():
+@app.route("/healthcheck", methods=["GET"])
+def getStatus():
     try:
-        tablename1="Researchers" 
+
+        r= requests.get()
+        
+        data = r.json()
+         
         ## create connection to database
         cur = db.connection.cursor()
         cur.execute("create VIEW no_deliverables as ( select RESEARCHER_ID from works_in where project_title in (SELECT t1.project_title  FROM project t1  LEFT JOIN deliverables t2 ON t2.project_title = t1.project_title WHERE t2.project_title IS NULL))")
@@ -44,14 +59,14 @@ def getDeliverables():
         res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
         cur.execute("DROP VIEW no_deliverables")
         cur.close()
-        return render_template("res.html",tablename1=tablename1,res=res,pageTitle="Researchers that work on projects without deliverables")                      
+        return render_template("healthcheck.html",tablename1=tablename1,res=res,pageTitle="Connection Status")                      
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
         
       
   
-@app.route("/couples")
+@app.route("/questionnaire_upd", methods=["POST"])
 def getCouples():
     try:
         tablename1="Couples"
@@ -67,14 +82,14 @@ def getCouples():
             couple["Ranking"]=id
         cur.execute("DROP VIEW Couples")   
         cur.close()
-        return render_template("couples.html",Couples=Couples,tablename1=tablename1,pageTitle="Most popular combinations of Fields")
+        return render_template("questionnaire_upd.html",Couples=Couples,tablename1=tablename1,pageTitle="Upload Questionnaire")
          #                      
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
         
         
-@app.route("/researchers")
+@app.route("/resetall", methods=["POST"])
 def getResearcher():
     try:
         tablename1="Young Researchers"
@@ -91,7 +106,7 @@ def getResearcher():
         cur.execute("DROP VIEW current_researchers")
 
         cur.close()
-        return render_template("researchers.html",researchers=researchers,tablename1=tablename1,pageTitle="Researchers")
+        return render_template("resetall.html",researchers=researchers,tablename1=tablename1,pageTitle="Purge")
          #                      
     except Exception as e:
         print(e)
@@ -99,7 +114,7 @@ def getResearcher():
         
         
         
-@app.route("/admins")
+@app.route("/resetq", methods=["POST"])
 def getAdmins():
     try:
         tablename1="Top 5 Admins by amount of funding given"
@@ -114,14 +129,14 @@ def getAdmins():
         admins = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
         cur.execute("DROP VIEW best_admin")
         cur.close()
-        return render_template("admins.html",admins=admins,tablename1=tablename1,pageTitle="Admins")
+        return render_template("resetq.html",admins=admins,tablename1=tablename1,pageTitle="Clear All Answers")
          #                      
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
         
         
-@app.route("/query",methods=["GET","POST"])
+@app.route("/createquestionnaire",methods=["GET","POST"])
 def getquery():
     form=ProjectForm()
     
@@ -174,7 +189,7 @@ def getquery():
             cur.close()
 
 
-            return render_template("query.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
+            return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
                                                            
         except Exception as e:
         ## if the connection to the database fails, return HTTP response 500
