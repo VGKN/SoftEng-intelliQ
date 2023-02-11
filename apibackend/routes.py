@@ -33,16 +33,20 @@ def getUser():
 @app.route("/answering")
 def getAnswering():
     try:
-        #cur = db.connection.cursor()
-        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+        cur = db.connection.cursor()
+        cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
 
-        #column_names = [i[0] for i in cur.description]
+        column_names = [i[0] for i in cur.description]
      
-        #res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+        question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
 
-        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+        cur.execute("select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaire_id = {}))".format(number))
 
-        return render_template("answering.html", res=res, pageTitle="Welcome user")
+        col_names = [j[0] for j in cur.description]
+
+        options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
+
+        return render_template("answering.html", question=question, options=options)
          #                      
     except Exception as e:
         print(e)
