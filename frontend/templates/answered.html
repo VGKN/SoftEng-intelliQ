@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="container" id="row-container" style="width: 500px;" >
+    {% include "flash_messages.html" %}
+
+		<div class="row" id="row" >
+		 <div class="col-md-12" >
+            <div class="card" id="card-container-layout" >
+                <div class="card-body" id="card" >
+                    <h4 class="card-title">Congratulations!</h4>
+                    <p class="card-text" id="paragraph">You answered all the necessary questions.Thank you!<br></p>
+                </div>
+                <a class="btn btn-primary" id="show-btn" href="/">Summary of answers</a>
+            </div>
+        </div> 
+
+        {% endblock content%}

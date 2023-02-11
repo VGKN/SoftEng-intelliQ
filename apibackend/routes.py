@@ -17,14 +17,50 @@ def index():
 @app.route("/user")
 def getUser():
     try:
-        tablename1="Welcome user"
         cur = db.connection.cursor()
-        
-        cur.execute("SELECT Questionnaire_Title FROM Questionnaire")
+        cur.execute("select questionnaire_title from questionnaire")
+
         column_names = [i[0] for i in cur.description]
-        Questionnaires = [dict(zip(column_names, entry)) for entry in cur.fetchall()]     
-        cur.close()
-        return render_template("user.html",Questionnaires=Questionnaires,tablename1=tablename1,pageTitle="Welcome user")
+     
+        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+
+        return render_template("user.html", res=res, pageTitle="Welcome user")
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+
+@app.route("/answering")
+def getAnswering():
+    try:
+        #cur = db.connection.cursor()
+        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+
+        #column_names = [i[0] for i in cur.description]
+     
+        #res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+
+        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+
+        return render_template("answering.html", res=res, pageTitle="Welcome user")
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+
+@app.route("/answered")
+def getAnswered():
+    try:
+        #cur = db.connection.cursor()
+        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+
+        #column_names = [i[0] for i in cur.description]
+     
+        #res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+
+        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+
+        return render_template("answered.html", pageTitle="Welcome user")
          #                      
     except Exception as e:
         print(e)

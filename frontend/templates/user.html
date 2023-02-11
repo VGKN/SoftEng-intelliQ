@@ -15,32 +15,25 @@
                           <label for="exampleInputPassword1">Category</label>
                           <input type="password" class="form-control" id="exampleInputPassword1">
                         </div>
-                        <button type="submit" class="btn btn-primary" id="show-btn" href="/views">Check</button>
+                        <button type="submit" class="btn btn-primary" id="show-btn" href="/user">Check</button>
                     </form>
                 </div>
             </div>
         </div>  
 		
+
+        {% for cont in res %}
 		</div>
 		 <div class="row" id="row-2">
 		  <div class="col-md-4">
             <div class="card" id="card-container-layout">
                 <div class="card-body" id="card">
-                    <h4 class="card-title"></h4>
-                    <p class="card-text" id="paragraph">I create Questionnaires but i need to insert my credentials first.<br></p>
-                    <form>
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Username</label>
-                          <input type="Username" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputPassword1">Password</label>
-                          <input type="password" class="form-control" id="exampleInputPassword1">
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="show-btn" href="/views">Sign in</button>
-                    </form>
+                    <h4 class="card-title">Questionnaire #{{cont}}</h4>
+                    <p class="card-text" id="paragraph">{{cont.questionnaire_title}}<br></p>
+                    <button type="submit" class="btn btn-primary" id="show-btn" href="/answering">Answer it</button>
                 </div>
             </div>
         </div>
+        {% endfor %}
 		 
 {% endblock content%}
