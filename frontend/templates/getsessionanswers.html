@@ -1,1 +1,83 @@
-weg w
+{% extends 'index.html' %}
+
+{% block content %}
+
+<html>
+<head>
+    <title>Page Layout</title>
+    <style>
+        .head1 {
+            font-size:40px;
+            color:#5804a6;
+            font-weight:bold;
+            margin-left:20px;
+        }
+        .head2 {
+            font-size:17px;
+            margin-left:15px;
+            margin-bottom:15px;
+        }
+        .head3 {
+            font-size:20px;
+            margin-left:15px;
+            margin-bottom:15px;
+            margin-top: 30px;
+            font-weight:bold
+        }
+        body {
+            margin: 0 auto;
+            background-position:center;
+            background-size: contain;
+        }
+
+        .body_sec {
+            margin-left:20px;
+        }
+    </style>
+</head>
+  
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="head1">Select Questionnaire</div>
+        <div class="head2">Choose the questionnaire whose answers you want to see</div>
+    </header>
+        
+
+      <header>
+        <div class="head3">Questionnaire #1</div>
+    </header>
+
+ 
+        <div class="head2">Session #12 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #13 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #14 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #22 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+
+        <header>
+            <div class="head3">Questionnaire #2</div>
+        </header>
+
+        <div class="head2">Session #9 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #18 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #26 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #30 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+
+        <header>
+            <div class="head3">Questionnaire #3</div>
+        </header>
+
+        <div class="head2">Session #4 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #8 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #11 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+        <div class="head2"> Session #25 <a class="btn btn-primary" id="show-btn" href="/answers_ui">See results</a> </div>
+
+
+
+
+
+
+
+
+
+{% endblock content%}

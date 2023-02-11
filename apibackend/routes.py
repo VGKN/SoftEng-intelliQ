@@ -423,3 +423,23 @@ def page_not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     return render_template("errors/500.html", pageTitle = "Internal Server Error"),500
+
+
+@app.route("/answers_ui")
+def getAnswersui():
+    try:
+        return render_template("answers_ui.html",pageTitle="Landing Page")
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("answers_ui.html",pageTitle="Landing Page")
+
+
+@app.route("/getsessionanswers")
+def getAnswers():
+    try:
+        return render_template("getsessionanswers.html",pageTitle="Landing Page")
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("getsessionanswers.html",pageTitle="Landing Page")
