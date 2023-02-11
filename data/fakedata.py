@@ -14,7 +14,7 @@ for questions in data['questions']:
     x=questions['qtext'].find("[*")
     y=questions['qID ']
     L.append("INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID']))
-    print(x)
+    print(x,y)
     for option in questions['options']:
        X.append("INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt']))
    #Keywords.append(keywords)
