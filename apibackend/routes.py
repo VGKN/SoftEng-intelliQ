@@ -462,3 +462,17 @@ def getAnswers():
     except Exception as e:
         print(e)
         return render_template("getsessionanswers.html",pageTitle="Landing Page")
+        
+@app.route("/getsessionanswers/<int:questionnaire_id>", methods=["GET"])
+def getAnswersS(questionnaire_id):
+    try:
+         #cur = db.connection.cursor()
+         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
+         #column_names = [i[0] for i in cur.description]
+         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+         #return jsonify(table)
+         return {'success':'ok'}
+         #                      
+    except Exception as e:
+        print(e)
+        return {'success':'ok'}
