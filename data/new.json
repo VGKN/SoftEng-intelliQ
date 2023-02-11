@@ -8,19 +8,6 @@
 ],
 "questions": [
 {
-"qID ": "P00",
-"qtext": "Ποιο είναι το mail σας;",
-"required": "FALSE",
-"type": "profile",
-"options": [
-{
-"optID": "P00TXT",
-"opttxt": "<open string>",
-"nextqID": "P01"
-}
-]
-},
-{
 "qID ": "P01",
 "qtext": "Ποια είναι η ηλικία σας;",
 "required": "TRUE",
