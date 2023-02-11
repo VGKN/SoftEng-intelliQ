@@ -33,16 +33,11 @@ def getUser():
 @app.route("/admin")
 def getOrgs():
     try:
-        cur = db.connection.cursor()
-        
-        cur.execute("")
-        cur.execute("")   
-        cur.close()
         return render_template("admin.html", pageTitle="Admin", name= "admin name")
          #                      
     except Exception as e:
         print(e)
-        return render_template("admin.html",pageTitle="Landing Page")
+        return render_template("base.html",pageTitle="Landing Page")
 
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
@@ -70,23 +65,11 @@ def getStatus():
         
       
   
-@app.route("/questionnaire_upd", methods=["POST"])
+@app.route("/questionnaire_upd")
 def getCouples():
     try:
-        tablename1="Couples"
-        cur = db.connection.cursor()
-        cur.execute("CREATE VIEW Couples AS SELECT c.field_name AS Field1, a.field_name AS Field2 FROM Project_Field c, Project_Field a WHERE (a.field_name > c.field_name AND c.project_title IN (SELECT Project_title FROM Project) AND  a.project_title IN (SELECT Project_title FROM Project) AND a.project_title=c.project_title)")
 
-        cur.execute("SELECT Field1, Field2, COUNT(*) AS occurences FROM Couples GROUP BY Field1, Field2 ORDER BY occurences DESC LIMIT 3")
-        
-        column_names = [i[0] for i in cur.description]
-  
-        Couples = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-        for id,couple in enumerate(Couples):
-            couple["Ranking"]=id
-        cur.execute("DROP VIEW Couples")   
-        cur.close()
-        return render_template("questionnaire_upd.html",Couples=Couples,tablename1=tablename1,pageTitle="Upload Questionnaire")
+        return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
          #                      
     except Exception as e:
         print(e)
@@ -140,7 +123,7 @@ def getAdmins():
         return render_template("base.html",pageTitle="Landing Page")
         
         
-@app.route("/createquestionnaire",methods=["GET","POST"])
+@app.route("/getquestionanswers",methods=["GET","POST"])
 def getquery():
     form=ProjectForm()
     
