@@ -15,8 +15,9 @@ texts=[]
 x=0
 y=0
 booll=0
+nextq=''
 
-L.append("INSERT INTO Questionnaire (questionnaireID, questionnaireTitle, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle']))
+L.append("INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle']))
 for keyword in data['keywords']:
     L.append("INSERT INTO Keywords (keyword) VALUES ('{}');".format(keyword))
     Z.append("INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('{}','{}');".format(data['questionnaireID'],keyword))
@@ -51,7 +52,11 @@ for questions in data['questions']:
         L.append("INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID']))
     for option in questions['options']:
        X.append("INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt']))
-       Z.append("INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}')".format(questions['qID '], option['optID'], option['nextqID']))
+       if option['nextqID']=='-':
+            nextq=questions['qID ']
+       else:
+            nextq=option['nextqID']
+       Z.append("INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq))
 
 s = string.ascii_letters
 for _ in range(10):

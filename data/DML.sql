@@ -1,22 +1,20 @@
-DELETE FROM Admin;
-DELETE FROM Questionnaire;
-DELETE FROM Sesion;
-DELETE FROM Keywords;
-DELETE FROM Question;
 DELETE FROM Questionnaire_Keywords;
-DELETE FROM Options;
-DELETE FROM Session_Questions_Options;
 DELETE FROM Questions_Options;
+DELETE FROM Session_Questions_Options;
+DELETE FROM Question;
+DELETE FROM Sesion;
+DELETE FROM Questionnaire;
+DELETE FROM Admin;
+DELETE FROM Keywords;
+DELETE FROM Options;
+
 
 
 INSERT INTO Admin (Aid, Last_name, First_name, Telephone) VALUES (1,'Tiz', 'Ali', 6944343432);
-
-INSERT INTO Questionnaire (questionnaireID, questionnaireTitle, Aid) VALUES ('QQ000','My first research questionnaire',1);
-
+INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('QQ000','My first research questionnaire',1);
 INSERT INTO Keywords (keyword) VALUES ('footbal');
 INSERT INTO Keywords (keyword) VALUES ('islands');
 INSERT INTO Keywords (keyword) VALUES ('timezone');
-
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('P00','Ποιο είναι το mail σας;','FALSE','profile','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('P01','Ποια είναι η ηλικία σας;','TRUE','profile','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q01','Ποιο είναι το αγαπημένο σας χρώμα;','TRUE','question','QQ000');
@@ -28,9 +26,7 @@ INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALU
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q07','Κάνετε χειμερινό σκι;','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q08','Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q09','Με δεδομένο ότι απαντήσατε /Οχι/ στην ερώτηση /Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;/: Προτιμάτε τη θερινή ή την χειμερινή ώρα;','TRUE','question','QQ000');
-
-INSERT INTO Sesion (Session_ID, QuestionnaireID, UserString) VALUES ('ATBP','QQ000','vUbGKTIr');
-
+INSERT INTO Sesion (Session_ID, QuestionnaireID, UserString) VALUES ('ATBP','QQ000','FAxJIuTX');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P00TXT','<open string>');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01A1','<30');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01A2','30-50');
@@ -57,41 +53,38 @@ INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('Q07A3','Τακτικά');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('Q08A1','Ναι');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('Q08A2','Οχι');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('Q09A1','Θερινή');
-
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('Q09A2','Χειμερινή');
 INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('QQ000','footbal');
 INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('QQ000','islands');
 INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('QQ000','timezone');
-
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P00','P00TXT','P01')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P01','P01A1','Q01')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P01','P01A2','Q01')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P01','P01A3','Q01')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P01','P01A4','Q01')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q01','Q01A1','Q02')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q01','Q01A2','Q02')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q01','Q01A3','Q02')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q02','Q02A1','Q03')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q02','Q02A2','Q04')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q03','Q03A1','Q04')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q03','Q03A2','Q04')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q03','Q03A3','Q04')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q04','Q04A1','Q05')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q04','Q04A2','Q06')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q05','Q05A1','Q07')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q05','Q05A2','Q07')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q05','Q05A3','Q07')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q06','Q06A1','Q07')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q06','Q06A2','Q07')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q07','Q07A1','Q08')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q07','Q07A2','Q08')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q07','Q07A3','Q08')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q08','Q08A1','Q09')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q08','Q08A2','-')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q09','Q09A1','-')
-INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q09','Q09A2','-')
-
-INSERT INTO Session_Questions_Options (Q_ID, S_ID, O_ID) VALUES ('P00','ATBP','<*>');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P00','P00TXT','P01');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P01','P01A1','Q01');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P01','P01A2','Q01');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P01','P01A3','Q01');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('P01','P01A4','Q01');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q01','Q01A1','Q02');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q01','Q01A2','Q02');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q01','Q01A3','Q02');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q02','Q02A1','Q03');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q02','Q02A2','Q04');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q03','Q03A1','Q04');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q03','Q03A2','Q04');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q03','Q03A3','Q04');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q04','Q04A1','Q05');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q04','Q04A2','Q06');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q05','Q05A1','Q07');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q05','Q05A2','Q07');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q05','Q05A3','Q07');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q06','Q06A1','Q07');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q06','Q06A2','Q07');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q07','Q07A1','Q08');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q07','Q07A2','Q08');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q07','Q07A3','Q08');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q08','Q08A1','Q09');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q08','Q08A2','Q08');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q09','Q09A1','Q09');
+INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('Q09','Q09A2','Q09');
+INSERT INTO Session_Questions_Options (Q_ID, S_ID, O_ID) VALUES ('P00','ATBP','P00TXT');
 INSERT INTO Session_Questions_Options (Q_ID, S_ID, O_ID) VALUES ('P01','ATBP','P01A2');
 INSERT INTO Session_Questions_Options (Q_ID, S_ID, O_ID) VALUES ('Q01','ATBP','Q01A2');
 INSERT INTO Session_Questions_Options (Q_ID, S_ID, O_ID) VALUES ('Q02','ATBP','Q02A2');
