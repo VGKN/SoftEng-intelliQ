@@ -15,7 +15,7 @@ CREATE TABLE Admin (
 );
 
 CREATE TABLE Questionnaire (
-    QuestionnaireID INT UNSIGNED NOT NULL,
+    QuestionnaireID VARCHAR(50) NOT NULL,
     Questionnaire_Title VARCHAR(50) NOT NULL,
     Aid INT UNSIGNED NOT NULL,
     PRIMARY KEY(QuestionnaireID)
@@ -34,30 +34,30 @@ CREATE TABLE User (
 );
 
 CREATE TABLE Question (
-    Question_ID INT UNSIGNED NOT NULL,
+    Question_ID VARCHAR(50) NOT NULL,
     Qtext VARCHAR(255) NOT NULL,
-    Qrequired BINARY(1) NOT NULL,
+    Qrequired VARCHAR(50) NOT NULL,
     Qtype VARCHAR(10) NOT NULL,
-    QuestionaireID INT UNSIGNED NOT NULL, 
+    QuestionaireID VARCHAR(50) NOT NULL, 
     PRIMARY KEY(Question_ID)
 );
 
 CREATE TABLE Options (
-    Opt_ID INT UNSIGNED NOT NULL,
+    Opt_ID VARCHAR(50) NOT NULL,
     Opt_Text VARCHAR(255) NOT NULL,
     PRIMARY KEY (Opt_ID)
 );
 
 CREATE TABLE Sesion (
-    Session_ID INT UNSIGNED NOT NULL,
-    QuestionnaireID INT UNSIGNED NOT NULL,
+    Session_ID VARCHAR(50) NOT NULL,
+    QuestionnaireID VARCHAR(50) NOT NULL,
     UserString VARCHAR(10) NOT NULL,
     PRIMARY KEY (Session_ID),
     FOREIGN KEY (QuestionnaireID) REFERENCES Questionnaire(QuestionnaireID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE Questionnaire_Keywords (
-    QuestionnaireQuestionnaireID INT UNSIGNED NOT NULL,
+    QuestionnaireQuestionnaireID VARCHAR(50) NOT NULL,
     KeywordsKeyword VARCHAR(20) NOT NULL,
     PRIMARY KEY (QuestionnaireQuestionnaireID, KeywordsKeyword),
     FOREIGN KEY (QuestionnaireQuestionnaireID) REFERENCES Questionnaire(QuestionnaireID) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -65,9 +65,9 @@ CREATE TABLE Questionnaire_Keywords (
 );
 
 CREATE TABLE Questions_Options (
-    QuestionID INT UNSIGNED NOT NULL,
-    OptID INT UNSIGNED NOT NULL,
-    Next_Q INT UNSIGNED NOT NULL,
+    QuestionID VARCHAR(50) NOT NULL,
+    OptID VARCHAR(50) NOT NULL,
+    Next_Q VARCHAR(50) NOT NULL,
     PRIMARY KEY (QuestionID, OptID),
     FOREIGN KEY (QuestionID) REFERENCES Question(Question_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (OptID) REFERENCES Options(Opt_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -75,9 +75,9 @@ CREATE TABLE Questions_Options (
 );
 
 CREATE TABLE Session_Questions_Options (
-    Q_ID INT UNSIGNED NOT NULL,
-    S_ID INT UNSIGNED NOT NULL,
-    O_ID INT UNSIGNED NOT NULL,
+    Q_ID VARCHAR(50) NOT NULL,
+    S_ID VARCHAR(50) NOT NULL,
+    O_ID VARCHAR(50) NOT NULL,
     PRIMARY KEY (Q_ID, S_ID, O_ID),
     FOREIGN KEY (Q_ID) REFERENCES Question(Question_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (S_ID) REFERENCES Sesion(Session_ID) ON DELETE RESTRICT ON UPDATE CASCADE,
