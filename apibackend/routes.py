@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, flash, redirect, url_for, abo
 from flask_mysqldb import MySQL
 from apibackend import app, db ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm
+from fileinput import filename
+ 
 #import requests
 
 @app.route("/")
@@ -13,6 +15,12 @@ def index():
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
 
+@app.route('/success', methods = ['POST'])  
+def success():  
+    if request.method == 'POST':  
+        f = request.files['file']
+        f.save(f.filename)  
+        return render_template("Acknowledgement.html", name = f.filename)
 
 @app.route("/user")
 def getUser():
