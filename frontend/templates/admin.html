@@ -1,16 +1,44 @@
 {% extends 'index.html' %}
 
 {% block content %}
-				<h1>-------{{name}}-------</h1>
-					<div>
-                        <body> 
-							<p>Click on the "Choose File" button to upload a json file:</p>
+<div class="container" id="row-container" style="width: 1500px;" >
 
-                            <form action="/action_page.php">
-                                <input type="file" id="myFile" name="filename">
-                                 <input type="submit">
-                            </form>
+<div class='parent'>
 
-                        </body>
-                    </div>
+<div class="card," style="width: 30rem;">
+    <img src="https://kaliforms.com/wp-content/uploads/2021/07/person-filling-pre-sales-questionnaire-form.jpg" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Upload Questionnaire</h5>
+      <p class="card-text">Publish your own dynamic questionnaire with personalised questions and answers.</p>
+      <a href="/questionnaire_upd" class="btn btn-primary">Let's get it</a>
+    </div>
+</div>
+
+
+<div class="card," style="width: 30rem;">
+    <img src="https://img.freepik.com/premium-vector/colorful-percentage-pie-chart-circle-diagram-infographic-vector-illustration-design-template_508097-172.jpg?w=2000" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Question Answers </h5>
+      <p class="card-text">See all given answers for a <br> specific question.</p>
+      <a href="/getquestionanswers" class="btn btn-primary">See answers</a>
+    </div>
+</div>
+
+<div class="card," style="width: 30rem;">
+    <img src="https://datavizproject.com/wp-content/uploads/types/Bar-Chart-Vertical.png" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Session Answers</h5>
+      <p class="card-text">See all given answers of a session for a specific questionnaire.</p>
+      <a href="getsessionanswers" class="btn btn-primary">See answers</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<style>
+.parent{ 
+    display:flex; 
+ } 
+</style>
 {% endblock content%}
