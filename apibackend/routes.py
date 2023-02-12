@@ -4,7 +4,9 @@ from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init
 from apibackend.forms import MyForm,FieldForm,ProjectForm
 import os
 from werkzeug.utils import secure_filename
-
+from flask import send_file
+from flask import send_from_directory
+from flask import current_app
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -149,6 +151,14 @@ def upload_file():
             return redirect(url_for('success', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
+#Download File
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    path = filename
+    # Returning file from appended path
+    return send_file(path, as_attachment=True)
+
+
 @app.route("/getquestionnaires")
 def getquestionnaires():
     try:
@@ -195,8 +205,8 @@ def Answers(QuestionnaireID, Question_ID):
             query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
             query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
 
-            #cur.execute(query)
-            cur.execute(query1)
+            cur.execute(query)
+            #cur.execute(query1)
 
             column_names = [i[0] for i in cur.description]
      
