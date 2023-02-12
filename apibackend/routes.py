@@ -1,14 +1,10 @@
-import os
 from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from flask_mysqldb import MySQL
-from apibackend import app, db ## initially created by __init__.py, need to be used here
+from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm
+import os
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/Desktop/intelliQ/SoftEng22-19'
-ALLOWED_EXTENSIONS = {'json'}
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -27,37 +23,7 @@ def index():
          #                      
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
-
-@app.route('/success', methods = ['POST'])  
-def success():  
-    if request.method == 'POST':  
-       f = request.files['file']
-       f.save(f.filename)  
-       return render_template("Acknowledgement.html", name = f.filename)
-    
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@app.route('/questionnaire_upd', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('success', name=filename))
-    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+        abort(500)
 
 @app.route("/user")
 def getUser():
@@ -79,23 +45,29 @@ def getUser():
 def getAnswering():
     try:
         cur = db.connection.cursor()
-        cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+        cur.execute("select Qtext from question where questionnaireid = {}".format('QQ000'))
 
         column_names = [i[0] for i in cur.description]
      
         question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
 
-        cur.execute("select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaire_id = {}))".format(number))
+        cur.close()
+
+        cur = db.connection.cursor()
+
+        cur.execute("select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaireid = {}))".format('QQ000'))
 
         col_names = [j[0] for j in cur.description]
 
         options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
 
+        cur.close()
+
         return render_template("answering.html", question=question, options=options)
          #                      
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        #return render_template("base.html",pageTitle="Landing Page")
 
 @app.route("/answered")
 def getAnswered():
@@ -123,6 +95,38 @@ def getOrgs():
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
+    
+#redirection upon successfull upload of the allowed files
+@app.route('/success', methods = ['GET'])  
+def success():  
+    if request.method == 'GET': 
+       return render_template("Acknowledgement.html")
+    
+#process of file upload in /questionnaire_upd
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/questionnaire_upd', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            print(filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('success', name=filename))
+    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+
 
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
@@ -208,64 +212,18 @@ def getAdmins():
         return render_template("base.html",pageTitle="Landing Page")
         
         
-#@app.route("/getquestionanswers/<str:questionnaireID>/<str:questionID>",methods=["GET"])
-#def Questions():
-    #form=ProjectForm()
-    #if request.method=="GET":
-         
-       # forma=form.__dict__
-        #admin=forma["admin_id"].data
-        #date=forma["date"].data
-        #duration=forma["duration"].data
-        #try:
-            
-            
-         #   cur = db.connection.cursor()
-          #  if date == "" and duration == "" and admin == "":
-        #        cur.execute("SELECT * FROM Project")
-                
-
-         #   if date != "" and duration != "" and admin != "":
-           #     cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND duration = '{}' AND admin_id = '{}' ".format(date, date, duration, admin))
-                
-
-          #  elif date != "" and duration != "" and admin == "":
-          #      cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND duration = '{}' ".format(date, date, duration))
-               
-
-           # elif date != "" and duration == "" and admin != "":
-          #      cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND admin_id = '{}' ".format(date, date, admin))
-               
-
-          #  elif date == "" and duration != "" and admin != "":
-            #    cur.execute("SELECT * FROM Project WHERE duration = '{}' AND admin_id = '{}' ".format(duration, admin))
-                
-
-          #  elif date != "" and duration == "" and admin == "":
-            #    cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' ".format(date, date))
-              # 
-
-           # elif date == "" and duration != "" and admin == "":
-            #    cur.execute("SELECT * FROM Project WHERE duration = '{}' ".format(duration))
-               
-
-          #  elif date == "" and duration == "" and admin != "":
-             #   cur.execute("SELECT * FROM Project WHERE admin_id = '{}' ".format(admin))
-                
-          #  column_names=[i[0] for i in cur.description]
-           # print(column_names)
-           # table=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            #print(table)
-          #  cur.close()
-
-
-            #return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
-                                                           
-       # except Exception as e:
-        ## if the connection to the database fails, return HTTP response 500
-            #flash(str(e), "danger")
-           # abort(500)
-    
+@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
+def Questions():
+    try:
+        if request.method=="GET":
+            try:
+                return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
+                                                                
+            except Exception as e:
+                        ## if the connection to the database fails, return HTTP response 500
+                flash(str(e), "danger")
+                abort(500)
+        
     #else: 
        # try:
             ## create connection to database
@@ -277,11 +235,9 @@ def getAdmins():
             #cur.close()
             #return render_template("query.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
                                                            
-       # except Exception as e:
-        ## if the connection to the database fails, return HTTP response 500
-           # flash(str(e), "danger")
-            #abort(500)
-    
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
             
 """@app.route("/query1",methods=["GET","POST"])
 def getquery1():
