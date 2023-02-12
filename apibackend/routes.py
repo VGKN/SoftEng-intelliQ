@@ -248,9 +248,25 @@ def getAdmins():
 
             #return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
                                                            
-   # except Exception as e:
-    #    print(e)
-    #    return render_template("base.html",pageTitle="Landing Page")
+       # except Exception as e:
+        ## if the connection to the database fails, return HTTP response 500
+            #flash(str(e), "danger")
+           # abort(500)
+    
+    #else: 
+       # try:
+            ## create connection to database
+           # cur = db.connection.cursor()
+            ## execute query
+           #cur.execute("SELECT * FROM Project")
+            #column_names = [i[0] for i in cur.description]
+            #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+            #cur.close()
+            #return render_template("query.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
+                                                           
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
             
 """@app.route("/query1",methods=["GET","POST"])
 def getquery1():
