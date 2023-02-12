@@ -69,23 +69,29 @@ def getUser():
 def getAnswering():
     try:
         cur = db.connection.cursor()
-        cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+        cur.execute("select Qtext from question where questionnaireid = {}".format('QQ000'))
 
         column_names = [i[0] for i in cur.description]
      
         question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
 
-        cur.execute("select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaire_id = {}))".format(number))
+        cur.close()
+
+        cur = db.connection.cursor()
+
+        cur.execute("select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaireid = {}))".format('QQ000'))
 
         col_names = [j[0] for j in cur.description]
 
         options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
 
+        cur.close()
+
         return render_template("answering.html", question=question, options=options)
          #                      
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        #return render_template("base.html",pageTitle="Landing Page")
 
 @app.route("/answered")
 def getAnswered():
