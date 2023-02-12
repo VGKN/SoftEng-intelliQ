@@ -6,44 +6,24 @@ import os
 from werkzeug.utils import secure_filename
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     try:
-        return render_template("base.html",pageTitle="Landing Page")                      
+        if request.method == 'POST':
+            admin_username=request.form.get("Username")
+            admin_password=request.form.get("password")
+            print("Users", admin_username, admin_password)
+            if admin_username == '' or admin_password == '':
+                return render_template("BadRequest.html",pageTitle="Landing Page")
+
+            else:
+                render_template("admin.html",pageTitle="Landing Page")    
+
+        return render_template("base.html",pageTitle="Landing Page")    
+         #                      
     except Exception as e:
         print(e)
         abort(500)
-
-#redirection upon successfull upload of the allowed files
-@app.route('/success', methods = ['GET'])  
-def success():  
-    if request.method == 'GET': 
-       return render_template("Acknowledgement.html")
-    
-#process of file upload in /questionnaire_upd
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@app.route('/questionnaire_upd', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            print(filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('success', name=filename))
-    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
 @app.route("/user")
 def getUser():
@@ -115,6 +95,38 @@ def getOrgs():
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
+    
+#redirection upon successfull upload of the allowed files
+@app.route('/success', methods = ['GET'])  
+def success():  
+    if request.method == 'GET': 
+       return render_template("Acknowledgement.html")
+    
+#process of file upload in /questionnaire_upd
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/questionnaire_upd', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            print(filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('success', name=filename))
+    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+
 
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
@@ -458,6 +470,15 @@ def getAnswersS(questionnaire_id):
     except Exception as e:
         print(e)
         return {'success':'ok'}
+
+@app.route("/BadRequest")
+def badrequest():
+    try:
+        return render_template("Badrequest400.html",pageTitle="Landing Page")
+                         
+    except Exception as e:
+        print(e)
+        return render_template("Badrequest400.html",pageTitle="Landing Page")
         
 @app.errorhandler(404)
 def page_not_found(e):
