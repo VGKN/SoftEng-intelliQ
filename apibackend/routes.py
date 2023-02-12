@@ -167,33 +167,26 @@ def getquestionnaires():
         return render_template("base.html",pageTitle="Landing Page")
     
 
-@app.route("/getquestionnaires/<string:questionnaireID>",methods=['GET'])
-def Questions(questionnaireID):
-   
-    try:
-        if request.method=='GET':
-           try:
-                cur = db.connection.cursor()
-                query="select Question_ID from Question where QuestionaireID ='{}'".format(questionnaireID)
-                cur.execute(query)
-            
-                column_names = [i[0] for i in cur.description]
-             
-                Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
-            
-                cur.close()
+@app.route("/getquestionnaires/<string:QuestionnaireID>")
+def Questions(QuestionnaireID):
+        try:
+            cur = db.connection.cursor()
+            query="select Qtext from Question where Question.QuestionaireID ='{}'".format(QuestionnaireID)
+            cur.execute(query)
 
-                return render_template("getquestions.html",Questions=Questions)
-                
-           except Exception as e:
-                print(e)
-                return render_template("base.html",pageTitle="Landing Page")
-        else: 
-                return render_template("base.html",pageTitle="Landing Page")
-    except Exception as e:
-        print(e)
-        return render_template("base.html",pageTitle="Landing Page")
-       
+            column_names = [i[0] for i in cur.description]
+     
+            Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+
+            cur.close()
+
+            return render_template("getquestions.html",Questions=Questions)
+                                                                
+        except Exception as e:
+            print(e)
+            return render_template("base.html",pageTitle="Landing Page")
+
+    
 
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
