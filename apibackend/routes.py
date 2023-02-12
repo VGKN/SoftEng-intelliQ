@@ -116,6 +116,37 @@ def upload_file():
             return redirect(url_for('success', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
+@app.route("/getquestionnaires")
+def getquestionnaires():
+    try:
+        cur = db.connection.cursor()
+
+        cur.execute("select Questionnaire_Title from Questionnaire")
+
+        column_names = [i[0] for i in cur.description]
+     
+        Questionnaire = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+
+        cur.close()
+        return render_template("getquestionnaires.html",Questionnaire=Questionnaire)
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+    
+
+@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
+def Questions():
+    try:
+        if request.method=="GET":
+            try:
+                return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
+                                                                
+            except Exception as e:
+                        ## if the connection to the database fails, return HTTP response 500
+                flash(str(e), "danger")
+                abort(500)
+    
+
 
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
