@@ -135,6 +135,50 @@ def upload_file():
             return redirect(url_for('success', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
+@app.route("/getquestionnaires")
+def getquestionnaires():
+    try:
+        cur = db.connection.cursor()
+
+        cur.execute("select QuestionnaireID, Questionnaire_Title from Questionnaire")
+
+        column_names = [i[0] for i in cur.description]
+     
+        Questionnaire = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+
+        cur.close()
+        return render_template("getquestionnaires.html",Questionnaire=Questionnaire)
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+    
+
+@app.route("/getquestionnaire/<string:questionnaireID>",methods=["GET", "POST"])
+def Questions(questionnaireID):
+    try:
+        if request.method=="POST":
+            try:
+                cur = db.connection.cursor()
+                query="select QuestionID from Question where Question.QuestionaireID ='{}'".format(questionnaireID)
+                cur.execute(query)
+
+                column_names = [i[0] for i in cur.description]
+     
+                Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+
+                cur.close()
+
+                return render_template("getquestions.html",Questions=Questions)
+                                                                
+            except Exception as e:
+                print(e)
+                return render_template("base.html",pageTitle="Landing Page")
+        else: return render_template("base.html",pageTitle="Landing Page")
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+    
+
 
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
@@ -221,7 +265,7 @@ def getAdmins():
         
         
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questions(questionnaireID,questionID):
+def Questionss():
     try:
         if request.method=="GET":
             try:
