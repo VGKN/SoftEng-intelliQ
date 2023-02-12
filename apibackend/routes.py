@@ -24,21 +24,35 @@ def index():
         print(e)
         abort(500)
 
-@app.route("/user")
+@app.route("/user", methods=['GET', 'POST'])
 def getUser():
     try:
-        cur = db.connection.cursor()
-        cur.execute("select questionnaire_title from questionnaire")
+        if request.method == 'POST':
+            category=request.form.get("Category")
+            cur = db.connection.cursor()
+            cur.execute("select Keyword from Keywords")
 
-        column_names = [i[0] for i in cur.description]
-     
-        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+            column_names = [i[0] for i in cur.description]
+            x = cur.fetchall()
 
-        return render_template("user.html", res=res, pageTitle="Welcome user")
+            k=0
+            for keywords in x:
+                for keyword in keywords:
+                    if category == keyword:
+                        k=1
+                    
+
+            if not k:
+                return render_template("Nodata402.html",pageTitle="Landing Page")
+            else:
+                return render_template("questionnaire_list.html",pageTitle="Landing Page")
+
+        else:
+            return render_template("user.html", res=res, pageTitle="Welcome user")
          #                      
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        return render_template("user.html",pageTitle="Landing Page")
 
 @app.route("/answering")
 def getAnswering():
@@ -472,14 +486,6 @@ def getAnswersS(questionnaire_id):
         print(e)
         return {'success':'ok'}
 
-@app.route("/BadRequest")
-def badrequest():
-    try:
-        return render_template("Badrequest400.html",pageTitle="Landing Page")
-                         
-    except Exception as e:
-        print(e)
-        return render_template("Badrequest400.html",pageTitle="Landing Page")
         
 @app.errorhandler(404)
 def page_not_found(e):
