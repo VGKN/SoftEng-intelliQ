@@ -12,19 +12,18 @@
 		 <div class="col-md-12" >
             <div class="card" id="card-container-layout" >
                 <div class="card-body" id="card" >
-                    <h4 class="card-title">Question #{q}</h4>
-                    <p class="card-text" id="paragraph">{{ q.Qtext }}<br></p>
+                    <h4 class="card-title">{{ q.Qtext }}</h4>
                     {% for o in options %}
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                         <label class="form-check-label" for="flexRadioDefault1">
-                          {{o.Opt_Text}}
+                          {{o.Opt_text}}
                         </label>
                       </div>
                       {% endfor %}
                       {% endfor %}
                 </div>
-                <a class="btn btn-primary" id="show-btn" href="/answered">Submit</a>
+                <a class="btn btn-primary" id="show-btn" href="/nextq">Submit</a>
             </div>
         </div> 
 		 

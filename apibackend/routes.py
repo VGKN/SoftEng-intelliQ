@@ -46,7 +46,7 @@ def getAnswering():
         cur = db.connection.cursor()
         questionnairee='QQ000'
         
-        query = "select Qtext from Question where QuestionaireID ='{}'".format(questionnairee)
+        query = "select Qtext from Question where QuestionaireID ='{}' limit 1".format(questionnairee)
         print(query)
         cur.execute(query)
         
@@ -55,16 +55,23 @@ def getAnswering():
      
         question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
 
-        #query2 = "select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaireid = {}))".format('QQ000')
-        #cur.execute(query2)
+        query1 = "select question_id from question where questionaireid = '{}' limit 1".format(questionnairee)
+        cur.execute(query1)
 
-        #col_names = [j[0] for j in cur.description]
+        x = cur.fetchall()
+        myx = x[0][0]
 
-        #options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
+        query2 = "select Opt_text from options where opt_id in (select optid from questions_options where questionid = '{}') ".format(myx) 
+        cur.execute(query2)
+
+        col_names = [j[0] for j in cur.description]
+
+        options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
+        print(options)
 
         cur.close()
 
-        return render_template("answering.html", question=question)#, options=options)
+        return render_template("answering.html", question=question, options=options)
          #                      
     except Exception as e:
         print(e)
