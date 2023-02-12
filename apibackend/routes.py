@@ -201,11 +201,11 @@ def getAdmins():
         
         
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questions():
+def Questions(questionnaireID,questionID):
     try:
         if request.method=="GET":
             try:
-                return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
+                return render_template("admin.html")
                                                                 
             except Exception as e:
                         ## if the connection to the database fails, return HTTP response 500
