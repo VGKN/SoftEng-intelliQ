@@ -2,7 +2,7 @@ import json
 import random
 import string
 
-
+"""
 with open('new.json', encoding='utf-8') as file:
     data=json.load(file)
 Keywords=[]
@@ -67,20 +67,20 @@ for _ in range(10):
 
 L=[]
 Z=[]
-with open('new2.json', encoding='utf-8') as f:
+with open('new9.json', encoding='utf-8') as f:
     data2=json.load(f)
     L.append("INSERT INTO Sesion (Session_ID, QuestionnaireID, UserString) VALUES ('{}','{}','{}');".format(data2['session'],data2['questionnaireID'],c))
     for answer in data2['answers']:
         Z.append("INSERT INTO Session_Questions_Options (Q_ID, S_ID, O_ID) VALUES ('{}','{}','{}');".format(answer['qID '],data2['session'],answer['ans']))
 
-"""    
-with open('DML2.sql', 'w') as file:
+   
+with open('DML2.sql', 'a') as file:
     for line in L:
         file.write(line)
         file.write('\n')
-    for line in X:
-        file.write(line)
-        file.write('\n')
+    #for line in X:
+        #file.write(line)
+        #file.write('\n')
     for line in Z:
         file.write(line)
         file.write('\n')
