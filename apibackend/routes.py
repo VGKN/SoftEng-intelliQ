@@ -198,25 +198,64 @@ def getAdmins():
         return render_template("base.html",pageTitle="Landing Page")
         
         
-@app.route("/getquestionanswers")
-def getquestionanswers():
-    try:
+@app.route("/getquestionanswers/<str:questionnaireID>/<str:questionID>",methods=["GET"])
+def Questions():
+    #form=ProjectForm()
+    if request.method=="GET":
+         
+       # forma=form.__dict__
+        #admin=forma["admin_id"].data
+        #date=forma["date"].data
+        #duration=forma["duration"].data
+        #try:
+            
+            
+         #   cur = db.connection.cursor()
+          #  if date == "" and duration == "" and admin == "":
+        #        cur.execute("SELECT * FROM Project")
+                
 
-        teblename1="Questionnaires"
-        cur = db.connection.cursor()
-        cur.execute("select * from Questionnaire")
-        column_names = [i[0] for i in cur.description]
-     
-        Questionnaires = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+         #   if date != "" and duration != "" and admin != "":
+           #     cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND duration = '{}' AND admin_id = '{}' ".format(date, date, duration, admin))
+                
 
-        cur.close()
-        return render_template("getquestionanswers.html",Questionnaires=Questionnaires, tablename1=tablename1, pageTitle="Questionnaires.")
+          #  elif date != "" and duration != "" and admin == "":
+          #      cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND duration = '{}' ".format(date, date, duration))
+               
+
+           # elif date != "" and duration == "" and admin != "":
+          #      cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND admin_id = '{}' ".format(date, date, admin))
+               
+
+          #  elif date == "" and duration != "" and admin != "":
+            #    cur.execute("SELECT * FROM Project WHERE duration = '{}' AND admin_id = '{}' ".format(duration, admin))
+                
+
+          #  elif date != "" and duration == "" and admin == "":
+            #    cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' ".format(date, date))
+              # 
+
+           # elif date == "" and duration != "" and admin == "":
+            #    cur.execute("SELECT * FROM Project WHERE duration = '{}' ".format(duration))
+               
+
+          #  elif date == "" and duration == "" and admin != "":
+             #   cur.execute("SELECT * FROM Project WHERE admin_id = '{}' ".format(admin))
+                
+          #  column_names=[i[0] for i in cur.description]
+           # print(column_names)
+           # table=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
+            #print(table)
+          #  cur.close()
+
+
+            return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
                                                            
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
             
-@app.route("/query1",methods=["GET","POST"])
+"""@app.route("/query1",methods=["GET","POST"])
 def getquery1():
         form=FieldForm()
         if request.method=="POST" and form.validate_on_submit():
@@ -414,17 +453,7 @@ def getALLFIELDS():
             print(e)
             return redirect(url_for("index"))               
 
-
-@app.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return render_template("errors/404.html", pageTitle = "Not Found"),404
-
-@app.errorhandler(500)
-def server_error(e):
-    return render_template("errors/500.html", pageTitle = "Internal Server Error"),500
-
-
+"""
 @app.route("/answers_ui")
 def getAnswersui():
     try:
@@ -457,3 +486,13 @@ def getAnswersS(questionnaire_id):
     except Exception as e:
         print(e)
         return {'success':'ok'}
+        
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template("errors/404.html", pageTitle = "Not Found"),404
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template("errors/500.html", pageTitle = "Internal Server Error"),500
+
