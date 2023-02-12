@@ -319,6 +319,52 @@ def getAnswers():
         print(e)
         return render_template("getsessionanswers.html",pageTitle="Landing Page")
         
+        
+        
+        
+        
+@app.route("/admin/healthcheck", methods=['GET'])
+def healthcheck():
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+                                 
+   
+
+@app.route("/admin/questionnaire_upd", methods=["POST"])
+def questionnaire_upd(questionnaire_id):
+    try:
+         if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            print(filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('success', name=filename))
+    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+         return {'success':'ok'}
+         #                      
+    except Exception as e:
+        print(e)
+        return {'success':'ok'}
+
+    """
 @app.route("/getsessionanswers/<int:questionnaire_id>", methods=["GET"])
 def getAnswersS(questionnaire_id):
     try:
@@ -333,7 +379,24 @@ def getAnswersS(questionnaire_id):
         print(e)
         return {'success':'ok'}
 
-        
+
+@app.route("/getsessionanswers/<int:questionnaire_id>", methods=["GET"])
+def getAnswersS(questionnaire_id):
+    try:
+         #cur = db.connection.cursor()
+         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
+         #column_names = [i[0] for i in cur.description]
+         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+         #return jsonify(table)
+         return {'success':'ok'}
+         #                      
+    except Exception as e:
+        print(e)
+        return {'success':'ok'}
+
+
+
+    """       
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
