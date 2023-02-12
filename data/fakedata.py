@@ -2,7 +2,7 @@ import json
 import random
 import string
 
-"""
+
 with open('new.json', encoding='utf-8') as file:
     data=json.load(file)
 Keywords=[]
@@ -37,13 +37,15 @@ for questions in data['questions']:
         y=questions['qtext'].find("]",x+2)
         myy.append(y)
     if len(qtext)!=0:
+        print(qtext)
         for question in data['questions']:
             if question['qID ']==qtext[1]:
                 texts.append(question['qtext'])
                 for options in question['options']:
                     if options['optID']==qtext[0]:
                         texts.append(options['opttxt'])
-       
+        print(myx,myy)
+        print(texts)
         strhelp='/'
         questiontext=questions['qtext'][0:myx[0]]+strhelp+texts[1]+strhelp+questions['qtext'][myy[0]+1:myx[1]] +strhelp+texts[0]+strhelp+questions['qtext'][myy[1]+1:]          
        
@@ -71,14 +73,14 @@ with open('new2.json', encoding='utf-8') as f:
     for answer in data2['answers']:
         Z.append("INSERT INTO Session_Questions_Options (Q_ID, S_ID, O_ID) VALUES ('{}','{}','{}');".format(answer['qID '],data2['session'],answer['ans']))
 
-    
-with open('DML.sql', 'a') as file:
+"""    
+with open('DML2.sql', 'w') as file:
     for line in L:
         file.write(line)
         file.write('\n')
-   # for line in X:
-   #     file.write(line)
-   #     file.write('\n')
+    for line in X:
+        file.write(line)
+        file.write('\n')
     for line in Z:
         file.write(line)
         file.write('\n')
