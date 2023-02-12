@@ -3,14 +3,13 @@
 {% block content %}
 
 
-{% for cont in Questions %}
+{% for cont in Answers %}
 
 <center><div class="container" id="row-container" style="width: 1900px;">
   <div class="col-md-22">
     <div class="card" id="card-container-layout">
         <div class="card-body" id="card">
-            <h4 class="card-title">{{cont.Qtext}}</h4>
-            <a class="btn btn-primary" id="show-btn" href="/getquestionnaires/{{QID}}/{{cont.Question_ID}}">See Answers</a>
+            <h4 class="card-title">{{cont.Opt_text}}</h4>
         </div>
     </div>
 </div></center>
