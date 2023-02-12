@@ -44,8 +44,12 @@ def getUser():
 def getAnswering():
     try:
         cur = db.connection.cursor()
-        query = "select Qtext from Question"#where QuestionnaireID = 'QQ000'"
+        questionnairee='QQ000'
+        
+        query = "select Qtext from Question where QuestionaireID ='{}'".format(questionnairee)
+        print(query)
         cur.execute(query)
+        
 
         column_names = [i[0] for i in cur.description]
      
