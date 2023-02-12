@@ -42,16 +42,24 @@ def getUser():
                 for keyword in keywords:
                     if category == keyword:
                         k=1
-                    
 
-            if not k:
-                return render_template("Nodata402.html",pageTitle="Landing Page")
+            cur.close()
+            cur = db.connection.cursor()
+
+            query = "select Questionnaire_Title from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(category)
+            cur.execute(query)
+
+            col_names = [j[0] for j in cur.description]
+            res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+
+            if k:
+                return render_template("questionnaire_list.html", res=res, pageTitle="Welcome user")
             else:
-                return render_template("questionnaire_list.html",pageTitle="Landing Page")
+                return render_template("Nodata402.html",pageTitle="Landing Page")
 
         else:
-            return render_template("user.html", res=res, pageTitle="Welcome user")
-         #                      
+            return render_template("user.html", pageTitle="Welcome user")
+                              
     except Exception as e:
         print(e)
         return render_template("user.html",pageTitle="Landing Page")
