@@ -11,8 +11,14 @@
         <div class="card-body" id="card">
             <h4 class="card-title">{{cont.Questionnaire_Title}}</h4>
             <a class="btn btn-primary" id="show-btn" href="/getquestionnaires/{{cont.QuestionnaireID}}">See Questions</a>
+            <p>or</p>
+            <a class="btn" style="width:100%" href="{{ url_for('download', filename='QQ000.json') }}"><i class="fa fa-download" ></i>Download Answers</a>
         </div>
     </div>
 </div></center>
+<style>.btn:hover {
+    color: white;
+    background-color: RoyalBlue;
+  }</style>
 {% endfor %}
 {% endblock content%}

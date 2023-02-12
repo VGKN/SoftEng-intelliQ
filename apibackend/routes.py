@@ -4,7 +4,9 @@ from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init
 from apibackend.forms import MyForm,FieldForm,ProjectForm
 import os
 from werkzeug.utils import secure_filename
-
+from flask import send_file
+from flask import send_from_directory
+from flask import current_app
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -156,6 +158,14 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('success', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+
+#Download File
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    path = filename
+    # Returning file from appended path
+    return send_file(path, as_attachment=True)
+
 
 @app.route("/getquestionnaires")
 def getquestionnaires():
