@@ -203,7 +203,7 @@ def Answers(QuestionnaireID, Question_ID):
             query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
             query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
 
-            #cur.execute(query)
+            cur.execute(query)
             cur.execute(query1)
 
             column_names = [i[0] for i in cur.description]
@@ -219,7 +219,7 @@ def Answers(QuestionnaireID, Question_ID):
                     dic[i]=1
                 else:
                     dic[i]+=1
-
+    
             print(Answers)
 
 
