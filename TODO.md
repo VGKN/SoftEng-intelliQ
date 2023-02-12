@@ -24,8 +24,8 @@ Tasks to be completed.
 - [ ] Create Database @ntua-el19188
     - [x] DDL Production @ntua-el19136, @ntua-el19188
     - [x] Test DDL schema @ntua-el19136
-    - [ ] DML Production @ntua-el19188, @ntua-el19144
-    - [ ] Make Dummy Data @ntua-el19144
+    - [x] DML Production @ntua-el19188, @ntua-el19144
+    - [x] Make Dummy Data @ntua-el19144
 
 ## VPP
 
