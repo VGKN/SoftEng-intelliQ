@@ -1,21 +1,20 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="container" id="row-container" style="width: 600px;" >
+<div class="container" id="row-container" style="width: 600px;">
 <div class="row" id="row" >
     <div class="col-md-12" >
        <div class="card" id="card-container-layout" >
-           <div class="card-body" id="card" >
-              <center> <h4 class="card-title">Upload your questionnaire here!</h4></center>
-               <p class="card-text" id="paragraph">Upload your .json file here.</p>
-               <h1>{{name}}</h1>
+            <div class="card-body" id="card" >
+                <center> <h4 class="card-title">Upload your questionnaire here!</h4></center>
+                <p class="card-text" id="paragraph">Upload your .json file here.</p>
+                <h1>{{name}}</h1>
                 <form action = "/success" method = "post" enctype="multipart/form-data">  
-                    <input type="file" name="file" />  
+                    <input type="file" name="file" >  
                     <input type = "submit" value="Upload">  
-                  </form>
-           </div>
-       </div>
-   </div>
-
-				
+                </form>
+            </div>
+        </div>
+    </div>
+    
 {% endblock content%}
