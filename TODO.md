@@ -22,10 +22,6 @@ Tasks to be completed.
 ## DATABASE
 
 - [ ] Create Database @ntua-el19188
-    - [x] DDL Production @ntua-el19136, @ntua-el19188
-    - [x] Test DDL schema @ntua-el19136
-    - [x] DML Production @ntua-el19188, @ntua-el19144
-    - [x] Make Dummy Data @ntua-el19144
 
 ## VPP
 
@@ -41,5 +37,9 @@ Tasks to be completed.
 # DONE
 - [x] Create  python script that establishes connection to database
 - [x] Figure out server that will host the database and the required credentials
-- [x] Form styles.css @ntua-el19188
+- [x] Form styles.css
 - [x] Updated README File
+- [x] DDL Production @ntua-el19136
+- [x] Test DDL schema @ntua-el19136
+- [x] DML Production @ntua-el19188
+- [x] Make Dummy Data
