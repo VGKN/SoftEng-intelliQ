@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+{% for cont in Questions %}
+
+<center><div class="container" id="row-container" style="width: 1500px;">
+  <div class="col-md-4">
+    <div class="card" id="card-container-layout">
+        <div class="card-body" id="card">
+            <h4 class="card-title">{{cont.QuestionID}}</h4>
+            <a class="btn btn-primary" id="show-btn" href="/getquestionnaires">See Answers</a>
+        </div>
+    </div>
+</div></center>
+{% endfor %}
+{% endblock content%}

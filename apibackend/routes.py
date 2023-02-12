@@ -60,7 +60,7 @@ def getAnswering():
         cur = db.connection.cursor()
         questionnairee='QQ000'
         
-        query = "select Qtext from Question where QuestionaireID ='{}'".format(questionnairee)
+        query = "select Qtext from Question where QuestionaireID ='{}' limit 1".format(questionnairee)
         print(query)
         cur.execute(query)
         
@@ -69,16 +69,23 @@ def getAnswering():
      
         question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
 
-        #query2 = "select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaireid = {}))".format('QQ000')
-        #cur.execute(query2)
+        query1 = "select question_id from question where questionaireid = '{}' limit 1".format(questionnairee)
+        cur.execute(query1)
 
-        #col_names = [j[0] for j in cur.description]
+        x = cur.fetchall()
+        myx = x[0][0]
 
-        #options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
+        query2 = "select Opt_text from options where opt_id in (select optid from questions_options where questionid = '{}') ".format(myx) 
+        cur.execute(query2)
+
+        col_names = [j[0] for j in cur.description]
+
+        options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
+        print(options)
 
         cur.close()
 
-        return render_template("answering.html", question=question)#, options=options)
+        return render_template("answering.html", question=question, options=options)
          #                      
     except Exception as e:
         print(e)
@@ -141,6 +148,50 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('success', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+
+@app.route("/getquestionnaires")
+def getquestionnaires():
+    try:
+        cur = db.connection.cursor()
+
+        cur.execute("select QuestionnaireID, Questionnaire_Title from Questionnaire")
+
+        column_names = [i[0] for i in cur.description]
+     
+        Questionnaire = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+
+        cur.close()
+        return render_template("getquestionnaires.html",Questionnaire=Questionnaire)
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+    
+
+@app.route("/getquestionnaire/<string:questionnaireID>",methods=["GET", "POST"])
+def Questions(questionnaireID):
+    try:
+        if request.method=="POST":
+            try:
+                cur = db.connection.cursor()
+                query="select QuestionID from Question where Question.QuestionaireID ='{}'".format(questionnaireID)
+                cur.execute(query)
+
+                column_names = [i[0] for i in cur.description]
+     
+                Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+
+                cur.close()
+
+                return render_template("getquestions.html",Questions=Questions)
+                                                                
+            except Exception as e:
+                print(e)
+                return render_template("base.html",pageTitle="Landing Page")
+        else: return render_template("base.html",pageTitle="Landing Page")
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+    
 
 
 @app.route("/healthcheck", methods=["GET"])
@@ -228,7 +279,7 @@ def getAdmins():
         
         
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questions(questionnaireID,questionID):
+def Questionss():
     try:
         if request.method=="GET":
             try:

@@ -22,11 +22,11 @@ INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALU
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q02','Ασχολείστε με το ποδόσφαιρο;','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q03','Τι ομάδα είστε;','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q04','Έχετε ζήσει σε νησί;','TRUE','question','QQ000');
-INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q05','Με δεδομένο ότι απαντήσατε /Ναι/ στην ερώτηση /Έχετε ζήσει σε νησί;/: Ποια η σχέση σας με το θαλάσσιο σκι;','TRUE','question','QQ000');
+INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q05','Με δεδομένο ότι απαντήσατε \'Ναι\' στην ερώτηση \'Έχετε ζήσει σε νησί;\': Ποια η σχέση σας με το θαλάσσιο σκι;','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q06','Είστε χειμερινός κολυμβητής','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q07','Κάνετε χειμερινό σκι;','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q08','Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;','TRUE','question','QQ000');
-INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q09','Με δεδομένο ότι απαντήσατε /Οχι/ στην ερώτηση /Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;/: Προτιμάτε τη θερινή ή την χειμερινή ώρα;','TRUE','question','QQ000');
+INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q09','Με δεδομένο ότι απαντήσατε \'Οχι\' στην ερώτηση \'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\': Προτιμάτε τη θερινή ή την χειμερινή ώρα;','TRUE','question','QQ000');
 INSERT INTO Sesion (Session_ID, QuestionnaireID, UserString) VALUES ('ATBZ','QQ000','WgufrwaP');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01A1','<30');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01A2','30-50');
@@ -133,17 +133,19 @@ INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('Q
 INSERT INTO Keywords (keyword) VALUES ('motorsports');
 INSERT INTO Keywords (keyword) VALUES ('driving');
 INSERT INTO Keywords (keyword) VALUES ('celebrities');
+
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('P01a','Ποια είναι η ηλικία σας;','TRUE','profile','QQ001');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q01a','Ασχολείστε με τις εξέλιξεις στο πρωτάθλημα της Formula 1 ;','TRUE','question','QQ001');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q02a','Πόσα χρόνια είστε φάν της Formula 1;','TRUE','question','QQ001');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q03a','Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες','TRUE','question','QQ001');
-INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q04a','Δεδομένου πως απαντήσατε /Ναι την Mercedes/ στην ερώτηση /Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες/: Ποιον απο τους δύο οδηγούς της Mercedes υποστηρίζετε περισσότερο;','TRUE','question','QQ001');
-INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q05a','Δεδομένου πως απαντήσατε /Ναι την Ferrari/ στην ερώτηση /Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες/: Ποιός απο τους δύο οδηγούς της Ferrari θεωρείτε πως είναι χειρότερος','TRUE','question','QQ001');
-INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q06a','Με δεδομένο ότι απαντήσατε /Ναι την Red Bull Racing/ στην ερώτηση /Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες/: Ποιός απο τους δύο οδηγούς της Red Bull Racing θεωρείτε πως είναι καλύτερος','TRUE','question','QQ001');
-INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q07a','Με δεδομένο ότι απαντήσατε /Όχι, καμία/ στην ερώτηση /Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες/: Ήσασταν κάποτε φαν κάποιας απο τις 3 κυρίαρχες ομάδες;','TRUE','question','QQ001');
+INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q04a','Δεδομένου πως απαντήσατε \'Ναι την Mercedes\' στην ερώτηση \'Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες\': Ποιον απο τους δύο οδηγούς της Mercedes υποστηρίζετε περισσότερο;','TRUE','question','QQ001');
+INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q05a','Δεδομένου πως απαντήσατε \'Ναι την Ferrari\' στην ερώτηση \'Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες\': Ποιός απο τους δύο οδηγούς της Ferrari θεωρείτε πως είναι χειρότερος','TRUE','question','QQ001');
+INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q06a','Με δεδομένο ότι απαντήσατε \'Ναι την Red Bull Racing\' στην ερώτηση \'Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες\': Ποιός απο τους δύο οδηγούς της Red Bull Racing θεωρείτε πως είναι καλύτερος','TRUE','question','QQ001');
+INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q07a','Με δεδομένο ότι απαντήσατε \'Όχι, καμία\' στην ερώτηση \'Υποστηρίζετε κάποια απο τις 3 κυριάρχες ομάδες\': Ήσασταν κάποτε φαν κάποιας απο τις 3 κυρίαρχες ομάδες;','TRUE','question','QQ001');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q08a','Ποιοί αγώνες θα λέγατε οτί είναι πιο ενδιαφέροντες στο πρωτάθλημα','TRUE','question','QQ001');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q09a','θα παρακολουθούσατε κάποιον αγώνα εάν σας το πρότεινε κάποιος φίλος σας;','TRUE','question','QQ001');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q10a','Συγκρίνοντας με τον περίγυρο σας, νίωθετε πως η δημοφιλία του αθλήμτος έχει ανέβει;','TRUE','question','QQ001');
+
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01aA1','<20');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01aA2','20-40');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01aA3','40-50');
