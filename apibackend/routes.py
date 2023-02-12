@@ -1,14 +1,10 @@
-import os
 from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from flask_mysqldb import MySQL
-from apibackend import app, db ## initially created by __init__.py, need to be used here
+from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm
+import os
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/Desktop/intelliQ/SoftEng22-19'
-ALLOWED_EXTENSIONS = {'json'}
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/")
 def index():
@@ -19,13 +15,13 @@ def index():
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
 
-@app.route('/success', methods = ['POST'])  
+#redirection upon successfull upload of the allowed files
+@app.route('/success', methods = ['GET'])  
 def success():  
-    if request.method == 'POST':  
-       f = request.files['file']
-       f.save(f.filename)  
-       return render_template("Acknowledgement.html", name = f.filename)
+    if request.method == 'GET': 
+       return render_template("Acknowledgement.html")
     
+#process of file upload in /questionnaire_upd
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -45,6 +41,7 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('success', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
@@ -273,11 +270,9 @@ def getAdmins():
             #cur.close()
             #return render_template("query.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
                                                            
-       # except Exception as e:
-        ## if the connection to the database fails, return HTTP response 500
-           # flash(str(e), "danger")
-            #abort(500)
-    
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
             
 """@app.route("/query1",methods=["GET","POST"])
 def getquery1():
