@@ -17,9 +17,9 @@ def index():
                 return render_template("BadRequest.html",pageTitle="Landing Page")
 
             else:
-                render_template("admin.html",pageTitle="Landing Page")    
-
-        return render_template("base.html",pageTitle="Landing Page")    
+                return render_template("admin.html",pageTitle="Landing Page")    
+        else:
+            return render_template("base.html",pageTitle="Landing Page")    
          #                      
     except Exception as e:
         print(e)
