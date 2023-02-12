@@ -6,10 +6,20 @@ import os
 from werkzeug.utils import secure_filename
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     try:
-        return render_template("base.html",pageTitle="Landing Page")                      
+        if request.method == 'POST':
+            admin_username=request.form.get("Username")
+            admin_password=request.form.get("password")
+            if admin_username == '' or admin_password == '':
+                return render_template("BadRequest400.html",pageTitle="Landing Page")
+
+            else:
+                return render_template("admin.html",pageTitle="Landing Page")    
+        else:
+            return render_template("base.html",pageTitle="Landing Page")    
+         #                      
     except Exception as e:
         print(e)
         abort(500)
@@ -34,29 +44,31 @@ def getUser():
 def getAnswering():
     try:
         cur = db.connection.cursor()
-        cur.execute("select Qtext from question where questionnaireid = {}".format('QQ000'))
+        questionnairee='QQ000'
+        
+        query = "select Qtext from Question where QuestionaireID ='{}'".format(questionnairee)
+        print(query)
+        cur.execute(query)
+        
 
         column_names = [i[0] for i in cur.description]
      
         question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
 
-        cur.close()
+        #query2 = "select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaireid = {}))".format('QQ000')
+        #cur.execute(query2)
 
-        cur = db.connection.cursor()
+        #col_names = [j[0] for j in cur.description]
 
-        cur.execute("select Opt_text from options where opt_id in (select optid from questions_options where questionid in (select question_id from question where questionnaireid = {}))".format('QQ000'))
-
-        col_names = [j[0] for j in cur.description]
-
-        options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
+        #options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
 
         cur.close()
 
-        return render_template("answering.html", question=question, options=options)
+        return render_template("answering.html", question=question)#, options=options)
          #                      
     except Exception as e:
         print(e)
-        #return render_template("base.html",pageTitle="Landing Page")
+        return render_template("base.html")
 
 @app.route("/answered")
 def getAnswered():
@@ -250,7 +262,7 @@ def Questionss():
     try:
         if request.method=="GET":
             try:
-                return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
+                return render_template("admin.html")
                                                                 
             except Exception as e:
                         ## if the connection to the database fails, return HTTP response 500
@@ -503,6 +515,15 @@ def getAnswersS(questionnaire_id):
     except Exception as e:
         print(e)
         return {'success':'ok'}
+
+@app.route("/BadRequest")
+def badrequest():
+    try:
+        return render_template("Badrequest400.html",pageTitle="Landing Page")
+                         
+    except Exception as e:
+        print(e)
+        return render_template("Badrequest400.html",pageTitle="Landing Page")
         
 @app.errorhandler(404)
 def page_not_found(e):

@@ -21,7 +21,8 @@ class FieldForm(FlaskForm):
     
 class ProjectForm(FlaskForm):
 
-    admin_id=StringField(label="Admin ID")
-    date=StringField(label="Date")
-    duration=StringField(label="Duration")
+    admin_username=StringField(label="Admin Username")
+    admin_password=StringField(label="Admin Password")
     submit = SubmitField("Submit")
+    
+    
