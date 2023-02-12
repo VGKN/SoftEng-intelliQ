@@ -171,7 +171,8 @@ def getquestionnaires():
 def Questions(QuestionnaireID):
         try:
             cur = db.connection.cursor()
-            query="select Qtext from Question where Question.QuestionaireID ='{}'".format(QuestionnaireID)
+            query="select Question_ID ,Qtext from Question where QuestionaireID ='{}'".format(QuestionnaireID)
+            
             cur.execute(query)
 
             column_names = [i[0] for i in cur.description]
@@ -180,13 +181,48 @@ def Questions(QuestionnaireID):
 
             cur.close()
 
-            return render_template("getquestions.html",Questions=Questions)
+            return render_template("getquestions.html",Questions=Questions, QID= QuestionnaireID)
                                                                 
         except Exception as e:
             print(e)
             return render_template("base.html",pageTitle="Landing Page")
 
-    
+@app.route("/getquestionnaires/<string:QuestionnaireID>/<string:Question_ID>")
+def Answers(QuestionnaireID, Question_ID):
+        try:
+            
+            cur = db.connection.cursor()
+            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
+
+            #cur.execute(query)
+            cur.execute(query1)
+
+            column_names = [i[0] for i in cur.description]
+     
+            Answers = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+            l=[]
+            for x in Answers: 
+                l.append(x['O_ID'])
+            print(l)
+            dic={}
+            for i in l:
+                if i not in dic.keys():
+                    dic[i]=1
+                else:
+                    dic[i]+=1
+
+            print(Answers)
+
+
+            cur.close()
+
+            return render_template("getanswers.html",Answers=Answers)
+                                                                
+        except Exception as e:
+            print(e)
+            return render_template("base.html",pageTitle="Landing Page")
+
 
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
