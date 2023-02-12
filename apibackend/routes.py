@@ -9,11 +9,10 @@ from fileinput import filename
 @app.route("/")
 def index():
     try:
-        return render_template("base.html",pageTitle="Landing Page")
-         #                      
+        return render_template("base.html",pageTitle="Landing Page")                      
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        abort(500)
 
 @app.route('/success', methods = ['POST'])  
 def success():  
@@ -173,59 +172,11 @@ def getAdmins():
         
 @app.route("/getquestionanswers/<str:questionnaireID>/<str:questionID>",methods=["GET"])
 def Questions():
-    #form=ProjectForm()
     if request.method=="GET":
-         
-       # forma=form.__dict__
-        #admin=forma["admin_id"].data
-        #date=forma["date"].data
-        #duration=forma["duration"].data
-        #try:
-            
-            
-         #   cur = db.connection.cursor()
-          #  if date == "" and duration == "" and admin == "":
-        #        cur.execute("SELECT * FROM Project")
-                
-
-         #   if date != "" and duration != "" and admin != "":
-           #     cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND duration = '{}' AND admin_id = '{}' ".format(date, date, duration, admin))
-                
-
-          #  elif date != "" and duration != "" and admin == "":
-          #      cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND duration = '{}' ".format(date, date, duration))
-               
-
-           # elif date != "" and duration == "" and admin != "":
-          #      cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' AND admin_id = '{}' ".format(date, date, admin))
-               
-
-          #  elif date == "" and duration != "" and admin != "":
-            #    cur.execute("SELECT * FROM Project WHERE duration = '{}' AND admin_id = '{}' ".format(duration, admin))
-                
-
-          #  elif date != "" and duration == "" and admin == "":
-            #    cur.execute("SELECT * FROM Project WHERE project_start < '{}' AND project_end > '{}' ".format(date, date))
-              # 
-
-           # elif date == "" and duration != "" and admin == "":
-            #    cur.execute("SELECT * FROM Project WHERE duration = '{}' ".format(duration))
-               
-
-          #  elif date == "" and duration == "" and admin != "":
-             #   cur.execute("SELECT * FROM Project WHERE admin_id = '{}' ".format(admin))
-                
-          #  column_names=[i[0] for i in cur.description]
-           # print(column_names)
-           # table=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            #print(table)
-          #  cur.close()
-
-
-            return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
-                                                           
+        return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
+                                                               
         except Exception as e:
-        ## if the connection to the database fails, return HTTP response 500
+                    ## if the connection to the database fails, return HTTP response 500
             flash(str(e), "danger")
             abort(500)
     
