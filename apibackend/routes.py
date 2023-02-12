@@ -10,10 +10,20 @@ ALLOWED_EXTENSIONS = {'json'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     try:
-        return render_template("base.html",pageTitle="Landing Page")
+        if request.method == 'POST':
+            admin_username=request.form.get("Username")
+            admin_password=request.form.get("password")
+            print("Users", admin_username, admin_password)
+            if admin_username == '' or admin_password == '':
+                return render_template("BadRequest.html",pageTitle="Landing Page")
+
+            else:
+                render_template("admin.html",pageTitle="Landing Page")    
+
+        return render_template("base.html",pageTitle="Landing Page")    
          #                      
     except Exception as e:
         print(e)
@@ -504,6 +514,15 @@ def getAnswersS(questionnaire_id):
     except Exception as e:
         print(e)
         return {'success':'ok'}
+
+@app.route("/BadRequest")
+def badrequest():
+    try:
+        return render_template("Badrequest400.html",pageTitle="Landing Page")
+                         
+    except Exception as e:
+        print(e)
+        return render_template("Badrequest400.html",pageTitle="Landing Page")
         
 @app.errorhandler(404)
 def page_not_found(e):
