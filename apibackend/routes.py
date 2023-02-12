@@ -1,10 +1,14 @@
+import os
 from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from flask_mysqldb import MySQL
 from apibackend import app, db ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm
-from fileinput import filename
- 
-#import requests
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = '/Desktop/intelliQ/SoftEng22-19'
+ALLOWED_EXTENSIONS = {'json'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/")
 def index():
@@ -18,9 +22,32 @@ def index():
 @app.route('/success', methods = ['POST'])  
 def success():  
     if request.method == 'POST':  
-        f = request.files['file']
-        f.save(f.filename)  
-        return render_template("Acknowledgement.html", name = f.filename)
+       f = request.files['file']
+       f.save(f.filename)  
+       return render_template("Acknowledgement.html", name = f.filename)
+    
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/questionnaire_upd', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('success', name=filename))
+    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
 @app.route("/user")
 def getUser():
@@ -113,15 +140,15 @@ def getStatus():
         
       
   
-@app.route("/questionnaire_upd")
-def getCouples():
-    try:
-
-        return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+#@app.route("/questionnaire_upd")
+#def getCouples():
+ #   try:
+#
+ #       return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
          #                      
-    except Exception as e:
-        print(e)
-        return render_template("frontend/templates/base.html",pageTitle="Landing Page")
+  #  except Exception as e:
+   #     print(e)
+    #    return render_template("frontend/templates/base.html",pageTitle="Landing Page")
         
         
 @app.route("/resetall", methods=["POST"])
