@@ -12,9 +12,8 @@ def index():
         if request.method == 'POST':
             admin_username=request.form.get("Username")
             admin_password=request.form.get("password")
-            print("Users", admin_username, admin_password)
             if admin_username == '' or admin_password == '':
-                return render_template("BadRequest.html",pageTitle="Landing Page")
+                return render_template("BadRequest400.html",pageTitle="Landing Page")
 
             else:
                 return render_template("admin.html",pageTitle="Landing Page")    
