@@ -146,30 +146,25 @@ def getquestionnaires():
         return render_template("base.html",pageTitle="Landing Page")
     
 
-@app.route("/getquestionnaire/<string:questionnaireID>",methods=["GET", "POST"])
-def Questions(questionnaireID):
-    try:
-        if request.method=="POST":
-            try:
-                cur = db.connection.cursor()
-                query="select QuestionID from Question where Question.QuestionaireID ='{}'".format(questionnaireID)
-                cur.execute(query)
+@app.route("/getquestionnaires/<string:QuestionnaireID>")
+def Questions(QuestionnaireID):
+        try:
+            cur = db.connection.cursor()
+            query="select Qtext from Question where Question.QuestionaireID ='{}'".format(QuestionnaireID)
+            cur.execute(query)
 
-                column_names = [i[0] for i in cur.description]
+            column_names = [i[0] for i in cur.description]
      
-                Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+            Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
 
-                cur.close()
+            cur.close()
 
-                return render_template("getquestions.html",Questions=Questions)
+            return render_template("getquestions.html",Questions=Questions)
                                                                 
-            except Exception as e:
-                print(e)
-                return render_template("base.html",pageTitle="Landing Page")
-        else: return render_template("base.html",pageTitle="Landing Page")
-    except Exception as e:
-        print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        except Exception as e:
+            print(e)
+            return render_template("base.html",pageTitle="Landing Page")
+
     
 
 
