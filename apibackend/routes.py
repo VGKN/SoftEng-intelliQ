@@ -121,7 +121,7 @@ def getquestionnaires():
     try:
         cur = db.connection.cursor()
 
-        cur.execute("select Questionnaire_Title from Questionnaire")
+        cur.execute("select QuestionnaireID, Questionnaire_Title from Questionnaire")
 
         column_names = [i[0] for i in cur.description]
      
@@ -134,17 +134,30 @@ def getquestionnaires():
         return render_template("base.html",pageTitle="Landing Page")
     
 
-@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questions():
+@app.route("/getquestionnaire/<string:questionnaireID>",methods=["GET", "POST"])
+def Questions(questionnaireID):
     try:
-        if request.method=="GET":
+        if request.method=="POST":
             try:
-                return render_template("createquestionnaire.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
+                cur = db.connection.cursor()
+                query="select QuestionID from Question where Question.QuestionaireID ='{}'".format(questionnaireID)
+                cur.execute(query)
+
+                column_names = [i[0] for i in cur.description]
+     
+                Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+
+                cur.close()
+
+                return render_template("getquestions.html",Questions=Questions)
                                                                 
             except Exception as e:
-                        ## if the connection to the database fails, return HTTP response 500
-                flash(str(e), "danger")
-                abort(500)
+                print(e)
+                return render_template("base.html",pageTitle="Landing Page")
+        else: return render_template("base.html",pageTitle="Landing Page")
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
     
 
 
@@ -233,7 +246,7 @@ def getAdmins():
         
         
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questions():
+def Questionss():
     try:
         if request.method=="GET":
             try:
