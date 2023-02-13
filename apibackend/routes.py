@@ -21,12 +21,12 @@ def index():
             admin_username = request.form.get("Username")
             admin_password = request.form.get("password")
             if admin_username == '' or admin_password == '':
-                return render_template("BadRequest400.html",pageTitle="Landing Page")
+                return render_template("BadRequest400.html")
 
             else:
                 return redirect(url_for("Admin"))
         else:
-            return render_template("base.html", pageTitle="Landing Page")
+            return render_template("base.html")
             
     except Exception as e:
         print(e)
@@ -196,7 +196,7 @@ def getAnswered(session):
                              
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        return render_template("base.html")
 
 @app.route("/summary/<string:session>")
 def getSummary(session):
@@ -229,11 +229,11 @@ def getSummary(session):
 @app.route("/admin")
 def Admin():
     try:
-        return render_template("admin.html", pageTitle="Landing Page")
+        return render_template("admin.html")
          #                      
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        return render_template("base.html")
 
 @app.route("/keyword", methods=['GET', 'POST'])
 def Keyword():
@@ -241,7 +241,7 @@ def Keyword():
         if request.method == 'POST':
             q_keyword = request.form.get("Question_keywords")
             if q_keyword == '':
-                return render_template("emptykeyword.html", pageTitle="Landing Page")
+                return render_template("emptykeyword.html")
 
             else:
                 cur = db.connection.cursor()
@@ -262,17 +262,17 @@ def Keyword():
 
                     col_names = [i[0] for i in cur.description]
                     res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
-                    return render_template("keywordresults.html", pageTitle="Landing Page", res=res)
+                    return render_template("keywordresults.html", res=res)
 
                 else:
-                    return render_template("badquestionrequest.html", pageTitle="Landing Page")
+                    return render_template("badquestionrequest.html")
 
         else:
-            return render_template("keywordquestions.html", pageTitle="Landing Page")
+            return render_template("keywordquestions.html")
          #                      
     except Exception as e:
         print(e)
-        return render_template("base.html", pageTitle="Landing Page")
+        return render_template("base.html")
     
 @app.route('/inserting/<string:name>/<string:state>', methods = ['GET'])  
 def success(name):  
@@ -284,9 +284,8 @@ def success(name):
 @app.route('/success/<string:name>', methods = ['GET'])  
 def inserting(name, state):  
     if request.method == 'GET':
-        #####CRUD
-        #if successful insert then state ="successfully uploaded"
-        #else tate ="unsuccessfully uploaded"
+        #if successful insert then state ="successfully added questionnaire"
+        #else tate ="questionnaire was not added to the database"
        redirect(url_for('success', name=filename, state=state))
     
 #process of file upload in /questionnaire_upd
@@ -312,7 +311,7 @@ def upload_file():
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('inserting', name=filename))
-    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+    return render_template("questionnaire_upd.html")
 
 # create and Download json File with all answers of questionnaire
 
@@ -377,7 +376,7 @@ def getquestionnaires():
         return render_template("getquestionnaires.html",Questionnaire=Questionnaire)
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        return render_template("base.html")
     
 
 @app.route("/getquestionnaires/<string:QuestionnaireID>")
@@ -398,7 +397,7 @@ def Questions(QuestionnaireID):
                                                                 
         except Exception as e:
             print(e)
-            return render_template("base.html",pageTitle="Landing Page")
+            return render_template("base.html")
 
 @app.route("/getquestionnaires/<string:QuestionnaireID>/<string:Question_ID>")
 def Answers(QuestionnaireID, Question_ID):
@@ -443,9 +442,9 @@ def Answers(QuestionnaireID, Question_ID):
                                                                 
         except Exception as e:
             print(e)
-            return render_template("base.html",pageTitle="Landing Page")
+            return render_template("base.html")
 
-
+'''
 @app.route("/healthcheck", methods=["GET"])
 def getStatus():
     try:
@@ -471,7 +470,7 @@ def getStatus():
         return render_template("base.html",pageTitle="Landing Page")
         
       
-  
+'''  
 #@app.route("/questionnaire_upd")
 #def getCouples():
  #   try:
@@ -482,7 +481,7 @@ def getStatus():
    #     print(e)
     #    return render_template("frontend/templates/base.html",pageTitle="Landing Page")
         
-        
+'''        
 @app.route("/resetall", methods=["POST"])
 def getResearcher():
     try:
@@ -529,7 +528,7 @@ def getAdmins():
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
         
-        
+'''       
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
 def Questionss():
     try:
@@ -541,34 +540,23 @@ def Questionss():
                         ## if the connection to the database fails, return HTTP response 500
                 flash(str(e), "danger")
                 abort(500)
-        
-    #else: 
-       # try:
-            ## create connection to database
-           # cur = db.connection.cursor()
-            ## execute query
-           #cur.execute("SELECT * FROM Project")
-            #column_names = [i[0] for i in cur.description]
-            #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            #cur.close()
-            #return render_template("query.html",table=table,tablename1="Projects",pageTitle="Show Projects based on criteria",form = form)
-                                                           
+                                                                  
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        return render_template("base.html")
             
 
 @app.route("/answers_ui")
 def getAnswersui():
     try:
         
-        return render_template("answers_ui.html",pageTitle="Landing Page")
+        return render_template("answers_ui.html")
          #                      
     except Exception as e:
         print(e)
-        return render_template("answers_ui.html",pageTitle="Landing Page")
+        return render_template("answers_ui.html")
 
-
+'''
 @app.route("/getsessionanswers")
 def getAnswers():
     try:
@@ -577,7 +565,7 @@ def getAnswers():
     except Exception as e:
         print(e)
         return render_template("getsessionanswers.html",pageTitle="Landing Page")
-        
+'''       
         
         
         
