@@ -7,7 +7,9 @@ import os
 import random
 import string
 from werkzeug.utils import secure_filename
-
+from flask import send_file
+from flask import send_from_directory
+from flask import current_app
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -17,6 +19,9 @@ def index():
             admin_password=request.form.get("password")
             if admin_username == '' or admin_password == '':
                 return render_template("BadRequest400.html",pageTitle="Landing Page")
+            
+            #elif admin_username != 'admin1' or admin_password != '1234':
+            #    return render_template("Notauthorized401.html",pageTitle="Landing Page")
 
             else:
                 return render_template("admin.html",pageTitle="Landing Page")    
@@ -27,8 +32,51 @@ def index():
         print(e)
         abort(500)
 
-@app.route("/user")
+@app.route("/user", methods=['GET', 'POST'])
 def getUser():
+
+    '''if request.method == 'POST':
+            if request.form['submit_button'] == 'See all Questionnaires':
+                #return render_template("base.html",pageTitle="Landing Page")
+                cur = db.connection.cursor()
+                query1="select Questionnaire_Title from questionnaire"  
+                cur.execute(query1)
+
+                collnames = [k[0] for k in cur.description]
+                result = [dict(zip(collnames, entry)) for entry in cur.fetchall()]
+                return render_template("all_questionnaires.html", result=result, pageTitle="Welcome user")
+
+            elif request.form['submit_button'] == 'Check':
+                category=request.form.get("Category")
+                cur = db.connection.cursor()
+                cur.execute("select Keyword from Keywords")
+
+                column_names = [i[0] for i in cur.description]
+                x = cur.fetchall()
+
+                k=0
+                for keywords in x:
+                    for keyword in keywords:
+                        if category == keyword:
+                         k=1
+
+                query = "select Questionnaire_Title from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(category)
+                cur.execute(query)
+
+                col_names = [j[0] for j in cur.description]
+                res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+
+                if k:
+                    return render_template("questionnaire_list.html", res=res, pageTitle="Welcome user")
+                else:
+                    return render_template("Nodata402.html",pageTitle="Landing Page")
+
+        return render_template("user.html",pageTitle="Landing Page")
+                              
+    except Exception as e:
+        print(e)
+        return render_template("user.html",pageTitle="Landing Page")'''
+
     try:
         cur = db.connection.cursor()
         cur.execute("select questionnaire_title, questionnaireid from questionnaire")
@@ -38,14 +86,18 @@ def getUser():
         res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
         print(res)
 
+
+
         return render_template("user.html", res=res)
          #                      
     except Exception as e:
         print(e)
         return render_template("base.html")
 
+
 @app.route("/firstanswer/<string:qid>",methods=["GET","POST"])
 def getFirst(qid):  
+        
 
     try:
         cur = db.connection.cursor()
@@ -192,6 +244,14 @@ def upload_file():
             return redirect(url_for('success', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
+#Download File
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    path = filename
+    # Returning file from appended path
+    return send_file(path, as_attachment=True)
+
+
 @app.route("/getquestionnaires")
 def getquestionnaires():
     try:
@@ -210,31 +270,61 @@ def getquestionnaires():
         return render_template("base.html",pageTitle="Landing Page")
     
 
-@app.route("/getquestionnaire/<string:questionnaireID>",methods=["GET", "POST"])
-def Questions(questionnaireID):
-    try:
-        if request.method=="POST":
-            try:
-                cur = db.connection.cursor()
-                query="select QuestionID from Question where Question.QuestionaireID ='{}'".format(questionnaireID)
-                cur.execute(query)
+@app.route("/getquestionnaires/<string:QuestionnaireID>")
+def Questions(QuestionnaireID):
+        try:
+            cur = db.connection.cursor()
+            query="select Question_ID ,Qtext from Question where QuestionaireID ='{}'".format(QuestionnaireID)
+            
+            cur.execute(query)
 
-                column_names = [i[0] for i in cur.description]
+            column_names = [i[0] for i in cur.description]
      
-                Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+            Questions = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
 
-                cur.close()
+            cur.close()
 
-                return render_template("getquestions.html",Questions=Questions)
+            return render_template("getquestions.html",Questions=Questions, QID= QuestionnaireID)
                                                                 
-            except Exception as e:
-                print(e)
-                return render_template("base.html",pageTitle="Landing Page")
-        else: return render_template("base.html",pageTitle="Landing Page")
-    except Exception as e:
-        print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        except Exception as e:
+            print(e)
+            return render_template("base.html",pageTitle="Landing Page")
+
+@app.route("/getquestionnaires/<string:QuestionnaireID>/<string:Question_ID>")
+def Answers(QuestionnaireID, Question_ID):
+        try:
+            
+            cur = db.connection.cursor()
+            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
+
+            cur.execute(query)
+            cur.execute(query1)
+
+            column_names = [i[0] for i in cur.description]
+     
+            Answers = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+            l=[]
+            for x in Answers: 
+                l.append(x['O_ID'])
+            print(l)
+            dic={}
+            for i in l:
+                if i not in dic.keys():
+                    dic[i]=1
+                else:
+                    dic[i]+=1
     
+            print(Answers)
+
+
+            cur.close()
+
+            return render_template("getanswers.html",Answers=Answers)
+                                                                
+        except Exception as e:
+            print(e)
+            return render_template("base.html",pageTitle="Landing Page")
 
 
 @app.route("/healthcheck", methods=["GET"])
@@ -348,205 +438,7 @@ def Questionss():
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
             
-"""@app.route("/query1",methods=["GET","POST"])
-def getquery1():
-        form=FieldForm()
-        if request.method=="POST" and form.validate_on_submit():
-                
-            field=form.__dict__
-            x=field["field"].data
-            return redirect(url_for("getALLRESEARCHERS",title=x))
-        else: 
-            return render_template("projects.html",pageTitle="Insert Project Title",form=form)      
-        
-      
-@app.route("/query1/projects/<title>")
-def getALLRESEARCHERS(title):
-    
-        
-        query="SELECT researcher_id, researcher_name, researcher_lastname ,researcher.org_name from researcher where researcher_id in (select researcher_id from Works_in where project_title='{}')".format(title)
-        tablename1="Title: {}".format(title)
-        try:
-        
-            ## create connection to database
-            cur = db.connection.cursor()
-            ## execute query
-            cur.execute(query)
-            
-            column_names = [i[0] for i in cur.description]
-            table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            cur.close()
 
-            return render_template("showresearchers.html",tablename1=tablename1,table=table,pageTitle="Show  Researchers based on Project")
-             #                      
-        except Exception as e:
-            print(e)
-            return render_template("projects.html",pageTitle="Insert Project Title")  
-
-            
-@app.route("/programs")
-def getPrograms():
-       
-        try:
-           
-            ## create connection to database
-            cur = db.connection.cursor()
-            ## execute query
-            cur.execute("SELECT * FROM Program")
-            
-            column_names = [i[0] for i in cur.description]
-           
-            table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            cur.close()
-
-            return render_template("programs.html",table=table,tablename1="Programs",pageTitle="Show all available Programs")
-                                   
-        except Exception as e:
-            print(e)
-            return redirect(url_for("index"))               
-
-@app.route("/fields",methods=["GET","POST"])
-def getField():
-    form=FieldForm()
-    if request.method=="POST" and form.validate_on_submit():
-        
-        field=form.__dict__
-        x=field["field"].data
-        return redirect(url_for("getFieldss",fieldname=x))
-    else: 
-        return render_template("fields.html",pageTitle="Insert interesting Field",form = form)      
-                                                           
-      
-@app.route("/fields/<fieldname>")
-def getFieldss(fieldname):
-    
-    
-        query="SELECT * FROM Works_in WHERE Project_title IN (SELECT Project_title FROM Project WHERE (project_start < DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND project_end > CURDATE() ) AND Project_title IN (SELECT project_title FROM Project_Field WHERE (field_name='{}')))".format(fieldname)
-        tablename1="Field: {}".format(fieldname)
-        try:
-        
-            ## create connection to database
-            cur = db.connection.cursor()
-            ## execute query
-            cur.execute(query)
-            
-            column_names = [i[0] for i in cur.description]
-            table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            cur.close()
-
-            return render_template("showfields.html",tablename1=tablename1,table=table,pageTitle="Show Projects and Researchers based on field")
-             #                      
-        except Exception as e:
-            print(e)
-            return render_template("fields.html",pageTitle="Insert interesting Field",form = form)  
-        
-      
-        
-@app.route("/views",methods=["GET","POST"])
-def getViews():
-   
-    form=MyForm()
-    if request.method=="POST" and form.validate_on_submit():
-        un = request.form['options']
-        return redirect(url_for("getView1",option=un))
-    else: 
-        return render_template("views.html",pageTitle="Choose a View",form = form)      
-                                                           
-      
-@app.route("/views/view<int:option>")
-def getView1(option):
-    
-    try:
-        if int(option)==1:
-            tablename1="R_Projects View"
-            cur = db.connection.cursor()
-            cur.execute("CREATE VIEW r_projects AS  SELECT Researcher.researcher_name,  Researcher.researcher_lastname,  Researcher.researcher_id, Works_in.project_title  FROM   Researcher, Works_in  WHERE Researcher.researcher_id = Works_in.researcher_id")
-
-            cur.execute("SELECT * FROM r_projects")
-            column_names=[i[0] for i in cur.description]
-        
-            view1=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            cur.execute("DROP VIEW r_projects")
-
-            
-           
-            cur.close()
-            return render_template("showview1.html",tablename1=tablename1,view1 = view1,pageTitle = "First View")
-            
-        elif int(option)==2:   
-            tablename1="Overview_Project View"
-            cur = db.connection.cursor()
-            
-            cur.execute("CREATE VIEW overview_project AS  SELECT Project.project_title, Project.budget,  Evaluation.evaluation_grade,Project.researcher_id  FROM Project, Evaluation   WHERE Project.evaluation_id=Evaluation.evaluation_id")
-
-            cur.execute("SELECT * FROM overview_project")
-            column_names=[i[0] for i in cur.description]
-           
-            view1=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            cur.execute("DROP VIEW overview_project")
-
-           
-     
-            cur.close()
-            return render_template("showview2.html",tablename1=tablename1,view1 = view1,pageTitle = "Second View")
-           
-        
-        
-                                                            
-    except Exception as e:
-        ## if the connection to the database fails, return HTTP response 500
-        flash(str(e), "danger")
-        abort(500)
-       
- 
-@app.route("/newfield", methods = ["GET", "POST"]) ## "GET" by default
-def createfield():
-    
-    #Create new student in the database
-    
-    form = FieldForm()
-    ## when the form is submitted
-    if(request.method == "POST" and form.validate_on_submit()):
-        newfield = form.__dict__
-        field=newfield['field'].data
-        
-        query="INSERT INTO Research_Field (field_name) VALUES ('{}')".format(field)
-     
-        try:
-            cur = db.connection.cursor()
-            cur.execute(query)
-            db.connection.commit()
-            cur.close()
-            flash("Field inserted successfully", "success")
-            return redirect(url_for("index"))
-        except Exception as e: ## OperationalError
-            flash(str(e), "danger")
-
-    ## else, response for GET request
-    return render_template("newfield.html", pageTitle = "Create New Field", form = form)
-    
-@app.route("/allfields")
-def getALLFIELDS():
-       
-        try:
-           
-            ## create connection to database
-            cur = db.connection.cursor()
-            ## execute query
-            cur.execute("SELECT * FROM Research_Field")
-            
-            column_names = [i[0] for i in cur.description]
-           
-            table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            cur.close()
-
-            return render_template("allfields.html",table=table,tablename1="Fields",pageTitle="Show all Research Fields")
-                                   
-        except Exception as e:
-            print(e)
-            return redirect(url_for("index"))               
-
-"""
 @app.route("/answers_ui")
 def getAnswersui():
     try:
@@ -580,14 +472,6 @@ def getAnswersS(questionnaire_id):
         print(e)
         return {'success':'ok'}
 
-@app.route("/BadRequest")
-def badrequest():
-    try:
-        return render_template("Badrequest400.html",pageTitle="Landing Page")
-                         
-    except Exception as e:
-        print(e)
-        return render_template("Badrequest400.html",pageTitle="Landing Page")
         
 @app.errorhandler(404)
 def page_not_found(e):

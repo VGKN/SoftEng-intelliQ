@@ -18,13 +18,13 @@
                         <div class="form-group">
                           <label for="exampleInputUsername1">Category</label>
                           <input type="text" class="form-control" name="Category">
+                          <p style="color:red">Invalid Category</p>
                         </div>
                         <input type="submit" class="btn btn-primary" name="submit_button" value="Check"> <input type="submit" class="btn btn-primary" name="submit_button" value="See all Questionnaires">
                     </form>
                 </div>
             </div>
-        </div>  
-		
+        </div> 
 
         {% for cont in res %}
 		</div>
@@ -33,7 +33,7 @@
             <div class="card" id="card-container-layout">
                 <div class="card-body" id="card">
                     <h4 class="card-title">{{cont.questionnaire_title}}</h4>
-                    <a class="btn btn-primary" id="show-btn" href="/firstanswer/{{cont.questionnaireid}}">Answer it</a>
+                    <a class="btn btn-primary" id="show-btn" href="/answering">Answer it</a>
                 </div>
             </div>
         </div>
