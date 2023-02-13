@@ -32,6 +32,16 @@ def index():
         print(e)
         abort(500)
 
+@app.route("/error")
+def getBase():
+    try:
+        
+        return render_template("error.html")
+            
+    except Exception as e:
+        print(e)
+        abort(500)
+
 
 @app.route("/user", methods=['GET', 'POST'])
 def getUser():
@@ -145,8 +155,7 @@ def getAnswering(qid,questionid,session):
             print(e)
             return render_template("base.html")
 
-
-@app.route("/next/<string:qid>/<string:questionid>/<string:session>", methods=['GET', 'POST'])
+@app.route("/next/<string:qid>/<string:questionid>/<string:session>", methods=['POST'])
 def getNext(qid,questionid,session):
     try:
         
@@ -177,13 +186,9 @@ def getNext(qid,questionid,session):
                 return redirect(url_for("getAnswered",session=session))   
            
             return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
-        elif request.method=="POST" and not form.validate_on_submit():
-            
-            return redirect(url_for ("getAnswering",qid=qid,questionid=questionid,session=session))
 
     except Exception as e:
-        print('hello')
-        return render_template("base.html")
+        return redirect(url_for("getBase"))
 
 
 @app.route("/answered/<string:session>")
@@ -195,7 +200,6 @@ def getAnswered(session):
     except Exception as e:
         print(e)
         return render_template("base.html")
-
 
 @app.route("/summary/<string:session>")
 def getSummary(session):
@@ -234,7 +238,6 @@ def Admin():
     except Exception as e:
         print(e)
         return render_template("base.html")
-
 
 @app.route("/keyword", methods=['GET', 'POST'])
 def Keyword():
@@ -275,20 +278,23 @@ def Keyword():
         print(e)
         return render_template("base.html")
     
-@app.route('/inserting/<string:name>', methods = ['GET'])  
+@app.route('/inserting/<string:name>/<string:state>', methods = ['GET'])  
 def success(name):  
     if request.method == 'GET':
        return render_template("Acknowledgement.html", name=name, state=state)
 
   
 #redirection upon successfull upload of the allowed files
-@app.route('/success/<string:name>/<string:state>', methods = ['GET'])  
-def inserting(name, state):  
+@app.route('/success/<string:name>', methods = ['GET'])  
+def inserting(name):  
     if request.method == 'GET':
-        #####CRUD
-        #if successful insert then state ="successfully uploaded"
-        #else tate ="unsuccessfully uploaded"
-       redirect(url_for('success', name=filename, state=state))
+        try:
+        
+        except MySQLdb.Error as e:
+            
+        #if successful insert then state ="successfully added questionnaire"
+        #else state ="questionnaire was not added to the database"
+        #redirect(url_for('success', name=filename, state=state))
     
 #process of file upload in /questionnaire_upd
 def allowed_file(filename):
@@ -313,7 +319,7 @@ def upload_file():
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('inserting', name=filename))
-    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
+    return render_template("questionnaire_upd.html")
 
 # create and Download json File with all answers of questionnaire
 
@@ -399,7 +405,6 @@ def Questions(QuestionnaireID):
             print(e)
             return render_template("base.html")
 
-
 @app.route("/getquestionnaires/<string:QuestionnaireID>/<string:Question_ID>")
 def Answers(QuestionnaireID, Question_ID):
         try:
@@ -417,13 +422,13 @@ def Answers(QuestionnaireID, Question_ID):
             for x in Answers: 
                 l.append(x['O_ID'])
             print(l)
-            dic={}
+            
+            dic={}                
             for i in l:
                 if i not in dic.keys():
                     dic[i]=1
                 else:
-                    dic[i]+=1
-                    
+                    dic[i]+=1        
             query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
             cur.execute(query)
             column_names = [i[0] for i in cur.description]
@@ -433,6 +438,7 @@ def Answers(QuestionnaireID, Question_ID):
                 for y in dic.keys():
                     if x['Opt_ID']==y:
                         x['Count']=dic[y]
+                        
             print(Answers)
             print(dic)
 
@@ -444,7 +450,7 @@ def Answers(QuestionnaireID, Question_ID):
             print(e)
             return render_template("base.html")
         
-        
+     
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
 def Questionss():
     try:
