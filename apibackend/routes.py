@@ -275,7 +275,7 @@ def download(filename):
     return send_file(path, as_attachment=True)
 
     
-@app.route('/test/<string:QuestionnaireID>')
+@app.route('/dnld/<string:QuestionnaireID>')
 def mkjson(QuestionnaireID):
     mydict={}
     mydict['questionnaireID']=QuestionnaireID
@@ -301,13 +301,13 @@ def mkjson(QuestionnaireID):
             helpdic['ans']=queryreturn[1]
             maindic['answers'].append(helpdic)
         questions.append(maindic)
-        #session.append(mysessions)
     mydict['questions']=questions
-    #print(mydict)
-    File1 = open("QQ000.json", "w")
-    File1.write("\nWriting to file:)")
+    path = './apibackend/'+QuestionnaireID+'.json'
+    File1 = open(path, "w+")
+    json.dump(mydict, File1)
     File1.close()
-    return  jsonify(mydict)
+    path = QuestionnaireID+'.json'
+    return  redirect (url_for ("download",filename=path))
 
 
    
