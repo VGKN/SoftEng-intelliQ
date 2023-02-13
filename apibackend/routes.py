@@ -21,15 +21,12 @@ def index():
             admin_password = request.form.get("password")
             if admin_username == '' or admin_password == '':
                 return render_template("BadRequest400.html",pageTitle="Landing Page")
-            
-            #elif admin_username != 'admin1' or admin_password != '1234':
-            #    return render_template("Notauthorized401.html",pageTitle="Landing Page")
 
             else:
                 return render_template("admin.html", pageTitle="Landing Page")
         else:
             return render_template("base.html", pageTitle="Landing Page")
-         #
+            
     except Exception as e:
         print(e)
         abort(500)
@@ -40,9 +37,7 @@ def getUser():
     try:
         if request.method == 'POST':
             if request.form['submit_button'] == 'See all Questionnaires':
-                #return render_template("base.html",pageTitle="Landing Page")
-                cur = db.connection.cursor()
-                #query1="select Questionnaire_Title from questionnaire"  
+                cur = db.connection.cursor()  
                 cur.execute("select questionnaire_title, questionnaireid from questionnaire")
 
                 collnames = [k[0] for k in cur.description]
@@ -110,7 +105,7 @@ def getFirst(qid):
         cur.close()
 
         return redirect(url_for("getAnswering", qid=qid, questionid=questionid, session=session))
-             #                      
+                                 
     except Exception as e:
         print(e)
         return render_template("base.html")
@@ -142,7 +137,7 @@ def getAnswering(qid,questionid,session):
             cur.close()
 
             return render_template("answering.html", qid=qid, questionid=questionid, session=session,question=question, options=options, form=form)
-             #                      
+                                 
     except Exception as e:
             print(e)
             return render_template("base.html")
@@ -179,23 +174,10 @@ def getNext(qid,questionid,session):
            
             return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
         elif request.method=="POST" and not form.validate_on_submit():
-            '''cur = db.connection.cursor()   
-            cur.execute("select next_q from questions_options where optid='P01A1'")
             
-
-            column_names=[i[0] for i in cur.description]
-        
-            res=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            print(res)
-            next = res[0]['next_q']
-            #next='Q01'
-            #print(res)
-
-            #cur.close()'''
             return redirect(url_for ("getAnswering",qid=qid,questionid=questionid,session=session))
 
     except Exception as e:
-        ## if the connection to the database fails, return HTTP response 500
         print('hello')
         return render_template("base.html")
 
@@ -204,7 +186,7 @@ def getAnswered(session):
     try:
 
         return render_template("answered.html", session=session)
-         #                      
+                             
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
@@ -213,19 +195,29 @@ def getAnswered(session):
 def getSummary(session):
     try:
         cur = db.connection.cursor()
-        cur.execute("select q_id, o_id from session_questions_options where s_id = '{}'".format(session))
+
+        cur.execute("select qtext from question where question_id in (select q_id from session_questions_options where s_id = '{}')".format(session))
 
         column_names = [i[0] for i in cur.description]
      
         res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
 
-        print(res)
+        cur.execute("select opt_text from options where opt_id in (select o_id from session_questions_options where s_id = '{}')".format(session))
+
+        col_names = [j[0] for j in cur.description]
+     
+        result = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+
+        for i, dic in enumerate(res):
+            dic['opt_text']=result[i]['opt_text']
+
+        cur.close()
 
         return render_template("summary.html", res=res)
-         #                      
+                             
     except Exception as e:
         print(e)
-        return render_template("base.html",pageTitle="Landing Page")
+        return render_template("base.html")
 
 @app.route("/admin")
 def getOrgs():
