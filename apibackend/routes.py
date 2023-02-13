@@ -540,9 +540,9 @@ def getAnswersS(questionnaire_id):
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
-    return render_template("errors/404.html", pageTitle = "Not Found"),404
+    return render_template("NotFound404.html", pageTitle = "Not Found"),404
 
 @app.errorhandler(500)
 def server_error(e):
-    return render_template("errors/500.html", pageTitle = "Internal Server Error"),500
+    return render_template("Error500.html", pageTitle = "Internal Server Error"),500
 
