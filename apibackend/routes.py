@@ -375,7 +375,7 @@ def Answers(QuestionnaireID, Question_ID):
             column_names = [i[0] for i in cur.description]
      
             Answers = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
-            """l=[]
+            l=[]
             for x in Answers: 
                 l.append(x['O_ID'])
             print(l)
