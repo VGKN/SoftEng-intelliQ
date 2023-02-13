@@ -639,38 +639,51 @@ def questionnaire_upd(questionnaire_id):
     
     
 @app.route("/admin/resetall", methods=["POST"])
-def getAnswersS(questionnaire_id):
+def postResetAll():
     try:
         if request.method == 'POST':
-         cur = db.connection.cursor()
-         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
-         #column_names = [i[0] for i in cur.description]
-         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-         #return jsonify(table)
-         cur.close()
-         return jsonify({'status':'ok'})
-         #   
+            cur = db.connection.cursor()
+
+            cur.execute("DELETE FROM Questionnaire_Keywords")
+            cur.execute("DELETE FROM Questions_Options")
+            cur.execute("DELETE FROM Session_Questions_Options")
+            cur.execute("DELETE FROM Question")
+            cur.execute("DELETE FROM Sesion")
+            cur.execute("DELETE FROM Questionnaire")
+            cur.execute("DELETE FROM Keywords")
+            cur.execute("DELETE FROM Options")
+
+            db.connection.commit()
+
+            cur.close()
+
+            return jsonify({'status':'OK'})
+
         else:
-            return jsonify({'status':'failed', 'reason': 'GET method unsupported'})               
+            return jsonify({'status':'failed', 'reason': '<GET method not supported>'})               
     except Exception as e:
         print(e)
-        return jsonify({'status':'failed', 'reason': 'Cannot connect to database'})
+        return jsonify({'status':'failed', 'reason': 'Queries could not be handled correctly to delete the data of intelliQ database'})
 
 
 
 
 @app.route("/admin/resetq/<string:questionnaireid>", methods=['POST'])
-def resetq():
+def resetq(questionnaireid):
 
-    if request.method=='GET':
+    if request.method=='POST':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+            query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
+            cur.execute(query)
+            db.connection.commit()
+            cur.close()
+            return jsonify({'status':'OK'})
         except Exception as e:
             print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ not running'}
+            return jsonify({'status':'failed','reason':'<Connection With Database Error>'})
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ not running on Apache Web Server'}
+        return jsonify({'status':'failed', 'reason':'<GET methon unsupported>'})
     
     
     
@@ -736,12 +749,50 @@ def hhhhhhhealthcheck():
     
     
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
-def hhhhhhealthcheck():
+def doanswer(questionnaierid,questionid,session,optionid):
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+
+            query="select session_id from sesion"
+
+            cur.execute(query)
+
+            column_names = [j[0] for j in cur.description]
+            res = [dict(zip(col_names, entry)) for entry in cur.fetchall()]
+
+            for n in  :
+                if session == res[n]['session_id']:
+                    return jsonify({'status':'fail', 'database':'the session is already in use'})
+
+            query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
+
+            cur.execute(query1)
+
+            col_names = [i[0] for i in cur.description]
+            result = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+
+            if  res[0]['o_id'] != '': 
+                return jsonify({'status':'fail', 'database':'the answer is already in the database'})
+        
+            else:
+                z = string.ascii_letters
+                for _ in range(10):
+                    user = ''.join(random.choice(s) for _ in range(10))
+                
+                query2="insert into sesion (session_id, questionnaireid, userstring) values ('{}','{}','{}')".format(session, questionnaireid, user)
+                query3="insert into session_questions_options (s_id, q_id, o_id) values ('{}','{}','{}')".format(session, questionid, optionid)
+
+                cur.execute(query1)
+                cur.execute(query2)
+
+                db.connection.commit()
+
+                cur.close()
+
+
+
         except Exception as e:
             print(e)
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
