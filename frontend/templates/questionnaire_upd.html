@@ -1,6 +1,10 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<br>
+<br>
+<br>
+
 <div class="container" id="row-container" style="width: 600px;">
 <div class="row" id="row" >
     <div class="col-md-12" >
@@ -10,8 +14,8 @@
                 <p class="card-text" id="paragraph">Upload your .json file here.</p>
                 <h1>{{name}}</h1>
                 <form action = "/questionnaire_upd" method = "post" enctype="multipart/form-data">  
-                    <input type="file" name="file" >  
-                    <input type = "submit" value="Upload">  
+                    <input type="file"  name="file" >  
+                    <input type = "submit"  value="Upload">  
                 </form>
             </div>
         </div>

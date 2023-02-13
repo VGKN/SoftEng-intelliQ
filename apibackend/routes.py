@@ -34,8 +34,8 @@ def index():
 
 @app.route("/user", methods=['GET', 'POST'])
 def getUser():
-
-    '''if request.method == 'POST':
+    try:
+        '''if request.method == 'POST':
             if request.form['submit_button'] == 'See all Questionnaires':
                 #return render_template("base.html",pageTitle="Landing Page")
                 cur = db.connection.cursor()
@@ -77,7 +77,6 @@ def getUser():
         print(e)
         return render_template("user.html",pageTitle="Landing Page")'''
 
-    try:
         cur = db.connection.cursor()
         cur.execute("select questionnaire_title, questionnaireid from questionnaire")
 
