@@ -17,8 +17,8 @@ def index():
             if admin_username == '' or admin_password == '':
                 return render_template("BadRequest400.html",pageTitle="Landing Page")
             
-            elif admin_username != 'admin1' or admin_password != '1234':
-                return render_template("Notauthorized401.html",pageTitle="Landing Page")
+            #elif admin_username != 'admin1' or admin_password != '1234':
+            #    return render_template("Notauthorized401.html",pageTitle="Landing Page")
 
             else:
                 return render_template("admin.html",pageTitle="Landing Page")    
