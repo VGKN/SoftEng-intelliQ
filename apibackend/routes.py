@@ -35,7 +35,7 @@ def index():
         print(e)
         abort(500)
 
-.
+
 @app.route("/user", methods=['GET', 'POST'])
 def getUser():
     try:
