@@ -268,14 +268,14 @@ def Keyword():
         print(e)
         return render_template("base.html", pageTitle="Landing Page")
     
-@app.route('/inserting/<string:name>', methods = ['GET'])  
+@app.route('/inserting/<string:name>/<string:state>', methods = ['GET'])  
 def success(name):  
     if request.method == 'GET':
        return render_template("Acknowledgement.html", name=name, state=state)
 
   
 #redirection upon successfull upload of the allowed files
-@app.route('/success/<string:name>/<string:state>', methods = ['GET'])  
+@app.route('/success/<string:name>', methods = ['GET'])  
 def inserting(name, state):  
     if request.method == 'GET':
         #####CRUD
