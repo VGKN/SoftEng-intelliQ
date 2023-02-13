@@ -665,18 +665,22 @@ def postResetAll():
 
 
 
-@app.route("/admin/reset/<string:questionnaireid>", methods=['GET', 'POST'])
-def hhealthcheck():
+@app.route("/admin/resetq/<string:questionnaireid>", methods=['GET'])
+def resetq(questionnaireid):
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+            query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
+            cur.execute(query)
+            db.connection.commit()
+            cur.close()
+            return jsonify({'status':'OK'})
         except Exception as e:
             print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ not running'}
+            return jsonify({'status':'failed','reason':'<Connection With Database Error>'})
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ not running on Apache Web Server'}
+        return jsonify({'status':'failed', 'reason':'<GET methon unsupported>'})
     
     
     
