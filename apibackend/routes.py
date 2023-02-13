@@ -522,46 +522,6 @@ def getAdmins():
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
         
-        
-@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-@app.route('/dnld/<string:QuestionnaireID>')
-def mkjson(QuestionnaireID):
-    mydict={}
-    mydict['questionnaireID']=QuestionnaireID
-    cur = db.connection.cursor()
-    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
-    cur.execute(query1)
-    myquestions=[]
-    for queryreturn in cur.fetchall():
-        myquestions.append(queryreturn[0])
-
-    #print(myquestions)
-    questions=[]
-    for qqid in myquestions:
-        query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
-        cur.execute(query2)
-        x=cur.fetchall()     
-        maindic={}
-        helpdic={}
-        maindic['questionid']=qqid
-        maindic['answers']=[]
-        for queryreturn in x:
-            helpdic['session']=queryreturn[0]
-            helpdic['ans']=queryreturn[1]
-            maindic['answers'].append(helpdic)
-        questions.append(maindic)
-    mydict['questions']=questions
-    path = './apibackend/'+QuestionnaireID+'.json'
-    File1 = open(path, "w+")
-    json.dump(mydict, File1)
-    File1.close()
-    path = QuestionnaireID+'.json'
-    return  redirect (url_for ("download",filename=path))           
-            except Exception as e:
-                        ## if the connection to the database fails, return HTTP response 500
-                flash(str(e), "danger")
-                abort(500)
-        
     #else: 
        # try:
             ## create connection to database
@@ -770,17 +730,39 @@ def hhhhealthcheck():
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     
     
+@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
+def getquestionanswers(questionnaireID, questionID):
+    mydict={}
+    mydict['questionnaireID']=questionnaireID
+    cur = db.connection.cursor()
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
+    cur.execute(query1)
+    myquestions=[]
+  
+    for queryreturn in cur.fetchall():
+        myquestions.append(queryreturn[0])
     
-@app.route("/getquestionanswers/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
-def hhhealthcheck():
-
-    if request.method=='GET':
-        try:
-            cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
-        except Exception as e:
-            print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-    else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(questionID)
+    cur.execute(query2)
+    x=cur.fetchall()     
+    maindic={}
+    helpdic={}
+    maindic['questionid']=questionID
+    maindic['answers']=[]
+    for queryreturn in x:
+        helpdic['session']=queryreturn[0]
+        helpdic['ans']=queryreturn[1]
+        maindic['answers'].append(helpdic)
+    questions.append(maindic)
+    mydict['questions']=questions
+    path = './apibackend/'+QuestionnaireID+'.json'
+    File1 = open(path, "w+")
+    json.dump(mydict, File1)
+    File1.close()
+    path = QuestionnaireID+'.json'
+    return  redirect (url_for ("download",filename=path))           
+            except Exception as e:
+                        ## if the connection to the database fails, return HTTP response 500
+                flash(str(e), "danger")
+                abort(500)
 
