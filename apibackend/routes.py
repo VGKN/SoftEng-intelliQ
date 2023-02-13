@@ -411,13 +411,13 @@ def Answers(QuestionnaireID, Question_ID):
             for x in Answers: 
                 l.append(x['O_ID'])
             print(l)
-            dic={}
+            
+            dic={}                
             for i in l:
                 if i not in dic.keys():
                     dic[i]=1
                 else:
-                    dic[i]+=1
-                    
+                    dic[i]+=1        
             query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
             cur.execute(query)
             column_names = [i[0] for i in cur.description]
@@ -427,6 +427,7 @@ def Answers(QuestionnaireID, Question_ID):
                 for y in dic.keys():
                     if x['Opt_ID']==y:
                         x['Count']=dic[y]
+                        
             print(Answers)
             print(dic)
 
