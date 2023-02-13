@@ -524,12 +524,39 @@ def getAdmins():
         
         
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questionss():
-    try:
-        if request.method=="GET":
-            try:
-                return render_template("admin.html")
-                                                                
+@app.route('/dnld/<string:QuestionnaireID>')
+def mkjson(QuestionnaireID):
+    mydict={}
+    mydict['questionnaireID']=QuestionnaireID
+    cur = db.connection.cursor()
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
+    cur.execute(query1)
+    myquestions=[]
+    for queryreturn in cur.fetchall():
+        myquestions.append(queryreturn[0])
+
+    #print(myquestions)
+    questions=[]
+    for qqid in myquestions:
+        query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
+        cur.execute(query2)
+        x=cur.fetchall()     
+        maindic={}
+        helpdic={}
+        maindic['questionid']=qqid
+        maindic['answers']=[]
+        for queryreturn in x:
+            helpdic['session']=queryreturn[0]
+            helpdic['ans']=queryreturn[1]
+            maindic['answers'].append(helpdic)
+        questions.append(maindic)
+    mydict['questions']=questions
+    path = './apibackend/'+QuestionnaireID+'.json'
+    File1 = open(path, "w+")
+    json.dump(mydict, File1)
+    File1.close()
+    path = QuestionnaireID+'.json'
+    return  redirect (url_for ("download",filename=path))           
             except Exception as e:
                         ## if the connection to the database fails, return HTTP response 500
                 flash(str(e), "danger")
