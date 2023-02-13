@@ -93,11 +93,21 @@ def getFirst(qid):
         x = cur.fetchall()
         questionid = x[0][0]
 
-        cur.close()
-
         s = string.ascii_letters
         for _ in range(10):
             session = ''.join(random.choice(s) for _ in range(4))
+
+        print(type(session))
+
+        z = string.ascii_letters
+        for _ in range(10):
+            user = ''.join(random.choice(s) for _ in range(10))
+        
+        query = "insert into sesion (session_id, questionnaireid, userstring) values ('{}', '{}', '{}')".format(session, qid, user)
+        cur.execute(query)
+        db.connection.commit()
+
+        cur.close()
 
         return redirect(url_for("getAnswering", qid=qid, questionid=questionid, session=session))
              #                      
@@ -143,20 +153,16 @@ def getNext(qid,questionid,session):
         
         form=MyForm()
 
-        cur = db.connection.cursor()
-
-        query1="select questionnaire_title from questionnaire where questionnaireid = '{}'".format(qid)
-        query2="select qtext from question where question_id = '{}'".format(questionid)
-
-        cur.execute(query1)
-        column_names=[i[0] for i in cur.description]
-        
-        =[dict(zip(column_names, entry)) for entry in cur.fetchall()]
-
         if request.method=="POST" and form.validate_on_submit():
             un = request.form['options']
-            query3="select opt_text from options where opt_id = '{}'".format(un)
             
+            cur = db.connection.cursor()
+
+            query2="insert into session_questions_options (q_id,s_id,o_id) values ('{}','{}','{}')".format(questionid,session,un)
+            cur.execute(query2)
+
+            db.connection.commit()
+
             query = "select next_q from questions_options where optid='{}'".format(un)
 
             cur.execute(query)
@@ -169,7 +175,7 @@ def getNext(qid,questionid,session):
             cur.close()
 
             if next == questionid:
-                return redirect(url_for("getAnswered"))   
+                return redirect(url_for("getAnswered",session=session))   
            
             return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
         elif request.method=="POST" and not form.validate_on_submit():
@@ -193,19 +199,29 @@ def getNext(qid,questionid,session):
         print('hello')
         return render_template("base.html")
 
-@app.route("/answered")
-def getAnswered():
+@app.route("/answered/<string:session>")
+def getAnswered(session):
     try:
-        #cur = db.connection.cursor()
-        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
 
-        #column_names = [i[0] for i in cur.description]
+        return render_template("answered.html", session=session)
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+
+@app.route("/summary/<string:session>")
+def getSummary(session):
+    try:
+        cur = db.connection.cursor()
+        cur.execute("select * from session_questions_options where s_id = '{}'".format(session))
+
+        column_names = [i[0] for i in cur.description]
      
-        #res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
 
-        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+        print(res)
 
-        return render_template("answered.html", pageTitle="Welcome user")
+        return render_template("summary.html")
          #                      
     except Exception as e:
         print(e)
