@@ -637,23 +637,30 @@ def questionnaire_upd(questionnaire_id):
     
     
     
-@app.route("/admin/resetall", methods=["POST"])
-def getAnswersS(questionnaire_id):
+@app.route("/admin/resetall", methods=["GET"])
+def postResetAll():
     try:
-        if request.method == 'POST':
-         cur = db.connection.cursor()
-         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
-         #column_names = [i[0] for i in cur.description]
-         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-         #return jsonify(table)
-         cur.close()
-         return jsonify({'status':'ok'})
-         #   
+        if request.method == 'GET':
+            cur = db.connection.cursor()
+
+            cur.execute("DELETE FROM Questionnaire_Keywords")
+            cur.execute("DELETE FROM Questions_Options")
+            cur.execute("DELETE FROM Session_Questions_Options")
+            cur.execute("DELETE FROM Question")
+            cur.execute("DELETE FROM Sesion")
+            cur.execute("DELETE FROM Questionnaire")
+            cur.execute("DELETE FROM Keywords")
+            cur.execute("DELETE FROM Options")
+
+            cur.close()
+
+            return jsonify({'status':'OK'})
+
         else:
-            return jsonify({'status':'failed', 'reason': 'GET method unsupported'})               
+            return jsonify({'status':'failed', 'reason': '<GET method not supported>'})               
     except Exception as e:
         print(e)
-        return jsonify({'status':'failed', 'reason': 'Cannot connect to database'})
+        return jsonify({'status':'failed', 'reason': 'Queries could not be handled correctly to delete the data of intelliQ database'})
 
 
 
