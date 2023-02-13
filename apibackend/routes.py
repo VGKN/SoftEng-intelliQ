@@ -597,12 +597,12 @@ def healthcheck():
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+            return jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'})
         except Exception as e:
             print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
                                  
 
 
@@ -647,19 +647,19 @@ def getAnswersS(questionnaire_id):
          #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
          #return jsonify(table)
          cur.close()
-         return {'status':'ok'}
+         return jsonify({'status':'ok'})
          #   
         else:
-            return {'status':'failed', 'reason': 'GET method unsupported'}                   
+            return jsonify({'status':'failed', 'reason': 'GET method unsupported'})               
     except Exception as e:
         print(e)
-        return {'status':'failed', 'reason': 'Cannot connect to database'}
+        return jsonify({'status':'failed', 'reason': 'Cannot connect to database'})
 
 
 
 
 @app.route("/admin/reset/<string:questionnaireid>", methods=['GET', 'POST'])
-def healthcheck():
+def hhealthcheck():
 
     if request.method=='GET':
         try:
@@ -667,14 +667,14 @@ def healthcheck():
             return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
         except Exception as e:
             print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ not running'}
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ not running on Apache Web Server'}
     
     
     
 @app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
-def healthcheck():
+def hhhhhhhhhealthcheck():
 
     if request.method=='GET':
         try:
@@ -687,7 +687,7 @@ def healthcheck():
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
-def healthcheck():
+def hhhhhhhealthcheck():
 
     if request.method=='GET':
         try:
@@ -702,7 +702,7 @@ def healthcheck():
     
     
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
-def healthcheck():
+def hhhhhhealthcheck():
 
     if request.method=='GET':
         try:
@@ -717,7 +717,7 @@ def healthcheck():
     
     
 @app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
-def healthcheck():
+def hhhhealthcheck():
 
     if request.method=='GET':
         try:
@@ -732,7 +732,7 @@ def healthcheck():
     
     
 @app.route("/getquestionanswers/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
-def healthcheck():
+def hhhealthcheck():
 
     if request.method=='GET':
         try:
