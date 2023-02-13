@@ -6,8 +6,6 @@ from jinja2 import Template
 import os
 import random
 import string
-import json
-from collections import OrderedDict
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
@@ -41,7 +39,7 @@ def index():
 def getUser():
     try:
         if request.method == 'POST':
-            '''if request.form['submit_button'] == 'See all Questionnaires':
+            if request.form['submit_button'] == 'See all Questionnaires':
                 #return render_template("base.html",pageTitle="Landing Page")
                 cur = db.connection.cursor()
                 #query1="select Questionnaire_Title from questionnaire"  
@@ -80,22 +78,6 @@ def getUser():
                               
     except Exception as e:
         print(e)
-        return render_template("user.html",pageTitle="Landing Page")'''
-
-        cur = db.connection.cursor()
-        cur.execute("select questionnaire_title, questionnaireid from questionnaire")
-
-        column_names = [i[0] for i in cur.description]
-     
-        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-        print(res)
-
-
-
-        return render_template("user.html", res=res)
-         #                      
-    except Exception as e:
-        print(e)
         return render_template("base.html")
 
 @app.route("/firstanswer/<string:qid>",methods=["GET","POST"])
@@ -111,11 +93,21 @@ def getFirst(qid):
         x = cur.fetchall()
         questionid = x[0][0]
 
-        cur.close()
-
         s = string.ascii_letters
         for _ in range(10):
             session = ''.join(random.choice(s) for _ in range(4))
+
+        print(type(session))
+
+        z = string.ascii_letters
+        for _ in range(10):
+            user = ''.join(random.choice(s) for _ in range(10))
+        
+        query = "insert into sesion (session_id, questionnaireid, userstring) values ('{}', '{}', '{}')".format(session, qid, user)
+        cur.execute(query)
+        db.connection.commit()
+
+        cur.close()
 
         return redirect(url_for("getAnswering", qid=qid, questionid=questionid, session=session))
              #                      
@@ -161,16 +153,16 @@ def getNext(qid,questionid,session):
         
         form=MyForm()
 
-        cur = db.connection.cursor()
-
-        query1="select questionnaire_title from questionnaire where questionnaireid = '{}'".format(qid)
-        query2="select qtext from question where question_id = '{}'".format(questionid)
-        query3="select"
-
         if request.method=="POST" and form.validate_on_submit():
             un = request.form['options']
             
             cur = db.connection.cursor()
+
+            query2="insert into session_questions_options (q_id,s_id,o_id) values ('{}','{}','{}')".format(questionid,session,un)
+            cur.execute(query2)
+
+            db.connection.commit()
+
             query = "select next_q from questions_options where optid='{}'".format(un)
 
             cur.execute(query)
@@ -183,7 +175,7 @@ def getNext(qid,questionid,session):
             cur.close()
 
             if next == questionid:
-                return redirect(url_for("getAnswered"))   
+                return redirect(url_for("getAnswered",session=session))   
            
             return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
         elif request.method=="POST" and not form.validate_on_submit():
@@ -207,19 +199,29 @@ def getNext(qid,questionid,session):
         print('hello')
         return render_template("base.html")
 
-@app.route("/answered")
-def getAnswered():
+@app.route("/answered/<string:session>")
+def getAnswered(session):
     try:
-        #cur = db.connection.cursor()
-        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
 
-        #column_names = [i[0] for i in cur.description]
+        return render_template("answered.html", session=session)
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+
+@app.route("/summary/<string:session>")
+def getSummary(session):
+    try:
+        cur = db.connection.cursor()
+        cur.execute("select q_id, o_id from session_questions_options where s_id = '{}'".format(session))
+
+        column_names = [i[0] for i in cur.description]
      
-        #res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
 
-        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+        print(res)
 
-        return render_template("answered.html", pageTitle="Welcome user")
+        return render_template("summary.html", res=res)
          #                      
     except Exception as e:
         print(e)
@@ -365,11 +367,10 @@ def Answers(QuestionnaireID, Question_ID):
         try:
             
             cur = db.connection.cursor()
-            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
-            #query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
+            
+            query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
 
-            cur.execute(query)
-            #cur.execute(query1)
+            cur.execute(query1)
 
             column_names = [i[0] for i in cur.description]
      
@@ -384,13 +385,22 @@ def Answers(QuestionnaireID, Question_ID):
                     dic[i]=1
                 else:
                     dic[i]+=1
-    
-            print(Answers)"""
-
+                    
+            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            cur.execute(query)
+            column_names = [i[0] for i in cur.description]
+     
+            Answers = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+            for x in Answers:
+                for y in dic.keys():
+                    if x['Opt_ID']==y:
+                        x['Count']=dic[y]
+            print(Answers)
+            print(dic)
 
             cur.close()
 
-            return render_template("getanswers.html",Answers=Answers)
+            return render_template("getanswers.html",Answers=Answers,QuestionnaireID=QuestionnaireID)
                                                                 
         except Exception as e:
             print(e)
