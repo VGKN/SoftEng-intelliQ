@@ -263,9 +263,8 @@ def mkjson(QuestionnaireID):
     cur = db.connection.cursor()
     query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
     cur.execute(query1)
-    x=cur.fetchall()
     myquestions=[]
-    for queryreturn in x:
+    for queryreturn in cur.fetchall():
         myquestions.append(queryreturn[0])
 
     #print(myquestions)
@@ -274,7 +273,7 @@ def mkjson(QuestionnaireID):
         query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
         cur.execute(query2)
         print(cur.fetchall())
-        break
+        for queryreturn in 
     return  mydict
 
 
