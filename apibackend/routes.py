@@ -6,8 +6,6 @@ from jinja2 import Template
 import os
 import random
 import string
-import json
-from collections import OrderedDict
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
@@ -77,7 +75,7 @@ def getUser():
                     return render_template("Nodata402.html")
 
         return render_template("user.html")
-
+                              
     except Exception as e:
         print(e)
         return render_template("base.html")
@@ -95,11 +93,21 @@ def getFirst(qid):
         x = cur.fetchall()
         questionid = x[0][0]
 
-        cur.close()
-
         s = string.ascii_letters
         for _ in range(10):
             session = ''.join(random.choice(s) for _ in range(4))
+
+        print(type(session))
+
+        z = string.ascii_letters
+        for _ in range(10):
+            user = ''.join(random.choice(s) for _ in range(10))
+        
+        query = "insert into sesion (session_id, questionnaireid, userstring) values ('{}', '{}', '{}')".format(session, qid, user)
+        cur.execute(query)
+        db.connection.commit()
+
+        cur.close()
 
         return redirect(url_for("getAnswering", qid=qid, questionid=questionid, session=session))
              #                      
@@ -145,16 +153,16 @@ def getNext(qid,questionid,session):
         
         form=MyForm()
 
-        cur = db.connection.cursor()
-
-        query1="select questionnaire_title from questionnaire where questionnaireid = '{}'".format(qid)
-        query2="select qtext from question where question_id = '{}'".format(questionid)
-        query3="select"
-
         if request.method=="POST" and form.validate_on_submit():
             un = request.form['options']
             
             cur = db.connection.cursor()
+
+            query2="insert into session_questions_options (q_id,s_id,o_id) values ('{}','{}','{}')".format(questionid,session,un)
+            cur.execute(query2)
+
+            db.connection.commit()
+
             query = "select next_q from questions_options where optid='{}'".format(un)
 
             cur.execute(query)
@@ -167,7 +175,7 @@ def getNext(qid,questionid,session):
             cur.close()
 
             if next == questionid:
-                return redirect(url_for("getAnswered"))   
+                return redirect(url_for("getAnswered",session=session))   
            
             return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
         elif request.method=="POST" and not form.validate_on_submit():
@@ -191,19 +199,29 @@ def getNext(qid,questionid,session):
         print('hello')
         return render_template("base.html")
 
-@app.route("/answered")
-def getAnswered():
+@app.route("/answered/<string:session>")
+def getAnswered(session):
     try:
-        #cur = db.connection.cursor()
-        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
 
-        #column_names = [i[0] for i in cur.description]
+        return render_template("answered.html", session=session)
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html",pageTitle="Landing Page")
+
+@app.route("/summary/<string:session>")
+def getSummary(session):
+    try:
+        cur = db.connection.cursor()
+        cur.execute("select q_id, o_id from session_questions_options where s_id = '{}'".format(session))
+
+        column_names = [i[0] for i in cur.description]
      
-        #res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
 
-        #cur.execute("select Qtext from question where questionnaire_id = {}".format(number))
+        print(res)
 
-        return render_template("answered.html", pageTitle="Welcome user")
+        return render_template("summary.html", res=res)
          #                      
     except Exception as e:
         print(e)
@@ -257,11 +275,20 @@ def Keyword():
         print(e)
         return render_template("base.html", pageTitle="Landing Page")
     
+@app.route('/inserting/<string:name>', methods = ['GET'])  
+def success(name):  
+    if request.method == 'GET':
+       return render_template("Acknowledgement.html", name=name, state=state)
+
+  
 #redirection upon successfull upload of the allowed files
-@app.route('/success', methods = ['GET'])  
-def success():  
-    if request.method == 'GET': 
-       return render_template("Acknowledgement.html")
+@app.route('/success/<string:name>/<string:state>', methods = ['GET'])  
+def inserting(name, state):  
+    if request.method == 'GET':
+        #####CRUD
+        #if successful insert then state ="successfully uploaded"
+        #else tate ="unsuccessfully uploaded"
+       redirect(url_for('success', name=filename, state=state))
     
 #process of file upload in /questionnaire_upd
 def allowed_file(filename):
@@ -285,26 +312,20 @@ def upload_file():
             filename = secure_filename(file.filename)
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('success', name=filename))
+            return redirect(url_for('inserting', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
 # create and Download json File with all answers of questionnaire
 
 
-@app.route('/uploads/<string:q>', methods=['GET', 'POST'])
-def download(q):
-    path = q+'.json'
-    File1 = open("QQ000.json", "w")
-    File1.write("\nWriting to file:)")
-    File1.close()
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    path = filename
     print(path)
     return send_file(path, as_attachment=True)
 
-
-
     
-
-@app.route('/test/<string:QuestionnaireID>')
+@app.route('/dnld/<string:QuestionnaireID>')
 def mkjson(QuestionnaireID):
     mydict={}
     mydict['questionnaireID']=QuestionnaireID
@@ -330,10 +351,13 @@ def mkjson(QuestionnaireID):
             helpdic['ans']=queryreturn[1]
             maindic['answers'].append(helpdic)
         questions.append(maindic)
-        #session.append(mysessions)
     mydict['questions']=questions
-    #print(mydict)
-    return  jsonify(mydict)
+    path = './apibackend/'+QuestionnaireID+'.json'
+    File1 = open(path, "w+")
+    json.dump(mydict, File1)
+    File1.close()
+    path = QuestionnaireID+'.json'
+    return  redirect (url_for ("download",filename=path))
 
 
    
@@ -382,10 +406,9 @@ def Answers(QuestionnaireID, Question_ID):
         try:
             
             cur = db.connection.cursor()
-            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            
             query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
 
-            cur.execute(query)
             cur.execute(query1)
 
             column_names = [i[0] for i in cur.description]
@@ -401,13 +424,22 @@ def Answers(QuestionnaireID, Question_ID):
                     dic[i]=1
                 else:
                     dic[i]+=1
-    
+                    
+            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            cur.execute(query)
+            column_names = [i[0] for i in cur.description]
+     
+            Answers = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+            for x in Answers:
+                for y in dic.keys():
+                    if x['Opt_ID']==y:
+                        x['Count']=dic[y]
             print(Answers)
-
+            print(dic)
 
             cur.close()
 
-            return render_template("getanswers.html",Answers=Answers)
+            return render_template("getanswers.html",Answers=Answers,QuestionnaireID=QuestionnaireID)
                                                                 
         except Exception as e:
             print(e)
@@ -563,9 +595,9 @@ def getAnswersS(questionnaire_id):
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
-    return render_template("errors/404.html", pageTitle = "Not Found"),404
+    return render_template("NotFound404.html", pageTitle = "Not Found"),404
 
 @app.errorhandler(500)
 def server_error(e):
-    return render_template("errors/500.html", pageTitle = "Internal Server Error"),500
+    return render_template("Error500.html", pageTitle = "Internal Server Error"),500
 

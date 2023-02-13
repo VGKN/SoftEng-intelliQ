@@ -4,14 +4,19 @@
 
 
 {% for cont in Answers %}
-
-<center><div class="container" id="row-container" style="width: 1900px;">
+<center>
+<div class="container" id="row-container" style="width: 1900px;">
   <div class="col-md-22">
     <div class="card" id="card-container-layout">
         <div class="card-body" id="card">
-            <h4 class="card-title">{{cont.Opt_text}}</h4>
+            <h4 class="card-title">The answer '{{cont.Opt_text}}' was given {{cont.Count}} times </h4>
+			
         </div>
     </div>
 </div></center>
+
 {% endfor %}
+<center>
+<a class="btn btn-primary" id="show-btn" href="/getquestionnaires/{{QuestionnaireID}}">Back</a>
+</center>
 {% endblock content%}
