@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, abort
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm
@@ -6,6 +6,8 @@ from jinja2 import Template
 import os
 import random
 import string
+import json
+from collections import OrderedDict
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
@@ -268,67 +270,27 @@ def mkjson(QuestionnaireID):
         myquestions.append(queryreturn[0])
 
     #print(myquestions)
-
+    questions=[]
     for qqid in myquestions:
         query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
         cur.execute(query2)
-        mysessions=[]
-        for queryreturn in cur.fetchall():
-            mysessions.append(queryreturn)
-    return  mydict
+        x=cur.fetchall()     
+        maindic={}
+        helpdic={}
+        maindic['questionid']=qqid
+        maindic['answers']=[]
+        for queryreturn in x:
+            helpdic['session']=queryreturn[0]
+            helpdic['ans']=queryreturn[1]
+            maindic['answers'].append(helpdic)
+        questions.append(maindic)
+        #session.append(mysessions)
+    mydict['questions']=questions
+    #print(mydict)
+    return  jsonify(mydict)
 
 
-    #
-
-    #column_names = [i[0] for i in cur.description]
-
-    #Question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
-    #x = Question[0]['Question_ID']
-    #query2 = ("select S_ID from session_questions_options where Q_ID = '{}'").format(x)
-
-    #print(x)
-
-    #cur.execute(query2)
-
-    #col_names = [j[0] for j in cur.description]
-
-    #ession = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
-
-    #y = cur.fetchall()
-
-    #cur.execute(query3)
-
-    #col_names = [z[0] for z in cur.description]
-
-    #ans = [dict(zip(col_names, entry3)) for entry3 in cur.fetchall()]
-
-    #cur.close()
-
-    #answer = {"sessionid": [], "answerid": []};
-
-   #w = 0
-    #for w in questions:
-        #w+=1
-    
-    #h = 0
-    #for h in session:
-        #h+=1
-        
-    #answers = [[0 for x in range(w)] for y in range(h)] 
-    #questions = {"questionid": [], "answerr": []}
-    #for q in Question:
-        #for s in session:
-            #answer["sessionid"].append["session"]
-            #answer["answerid"].append["ans"]
-            #answers[q][s] = answer
-        #questions["questionid"].append["answers[q][]"]
-
-    #finalfile = {
-        #'QuestionnaireID': '{}'.format(QuestionnaireID),
-        #'Questions': questions
-    #}   
-    #print(finalfile)
-    #return jsonify(finalfile)
+   
 
 
 @app.route("/getquestionnaires")

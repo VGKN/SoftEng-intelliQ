@@ -1,7 +1,7 @@
 ## This file is ran automatically the first time a Python program imports the package dbdemo
 from flask import Flask
 from flask_mysqldb import MySQL
-
+import json
 
 #The UPLOAD_FOLDER is where we will store the uploaded files
 # the ALLOWED_EXTENSIONS is the set of allowed file extensions.
@@ -16,9 +16,10 @@ ALLOWED_EXTENSIONS = {'json', 'csv'}
 app = Flask(__name__, template_folder= '../frontend/templates')
 
 ## configuration of database
-import json
+
 app.config.from_file("config.json",load=json.load)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['JSON_SORT_KEYS'] = False
 
 ## secret key for sessions (signed cookies). Flask uses it to protect the contents of the user session against tampering.
 ## token for csrf protection of forms.
