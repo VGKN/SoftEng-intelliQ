@@ -24,19 +24,5 @@
                 </div>
             </div>
         </div>  
-		
-
-        {% for cont in res %}
-		</div>
-		 <div class="row" id="row-2">
-		  <div class="col-md-12">
-            <div class="card" id="card-container-layout">
-                <div class="card-body" id="card">
-                    <h4 class="card-title">{{cont.questionnaire_title}}</h4>
-                    <a class="btn btn-primary" id="show-btn" href="/firstanswer/{{cont.questionnaireid}}">Answer it</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
 		 
 {% endblock content%}

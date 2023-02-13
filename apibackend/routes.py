@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, abort
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm
@@ -6,17 +6,21 @@ from jinja2 import Template
 import os
 import random
 import string
+import json
+from collections import OrderedDict
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
 from flask import current_app
 
+
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
     try:
         if request.method == 'POST':
-            admin_username=request.form.get("Username")
-            admin_password=request.form.get("password")
+            admin_username = request.form.get("Username")
+            admin_password = request.form.get("password")
             if admin_username == '' or admin_password == '':
                 return render_template("BadRequest400.html",pageTitle="Landing Page")
             
@@ -24,27 +28,28 @@ def index():
             #    return render_template("Notauthorized401.html",pageTitle="Landing Page")
 
             else:
-                return render_template("admin.html",pageTitle="Landing Page")    
+                return render_template("admin.html", pageTitle="Landing Page")
         else:
-            return render_template("base.html",pageTitle="Landing Page")    
-         #                      
+            return render_template("base.html", pageTitle="Landing Page")
+         #
     except Exception as e:
         print(e)
         abort(500)
 
+
 @app.route("/user", methods=['GET', 'POST'])
 def getUser():
     try:
-        '''if request.method == 'POST':
-            if request.form['submit_button'] == 'See all Questionnaires':
+        if request.method == 'POST':
+            '''if request.form['submit_button'] == 'See all Questionnaires':
                 #return render_template("base.html",pageTitle="Landing Page")
                 cur = db.connection.cursor()
-                query1="select Questionnaire_Title from questionnaire"  
-                cur.execute(query1)
+                #query1="select Questionnaire_Title from questionnaire"  
+                cur.execute("select questionnaire_title, questionnaireid from questionnaire")
 
                 collnames = [k[0] for k in cur.description]
                 result = [dict(zip(collnames, entry)) for entry in cur.fetchall()]
-                return render_template("all_questionnaires.html", result=result, pageTitle="Welcome user")
+                return render_template("all_questionnaires.html", result=result)
 
             elif request.form['submit_button'] == 'Check':
                 category=request.form.get("Category")
@@ -60,18 +65,18 @@ def getUser():
                         if category == keyword:
                          k=1
 
-                query = "select Questionnaire_Title from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(category)
+                query = "select Questionnaire_Title, questionnaireid from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(category)
                 cur.execute(query)
 
                 col_names = [j[0] for j in cur.description]
                 res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
 
                 if k:
-                    return render_template("questionnaire_list.html", res=res, pageTitle="Welcome user")
+                    return render_template("questionnaire_list.html", res=res)
                 else:
-                    return render_template("Nodata402.html",pageTitle="Landing Page")
+                    return render_template("Nodata402.html")
 
-        return render_template("user.html",pageTitle="Landing Page")
+        return render_template("user.html")
                               
     except Exception as e:
         print(e)
@@ -92,7 +97,6 @@ def getUser():
     except Exception as e:
         print(e)
         return render_template("base.html")
-
 
 @app.route("/firstanswer/<string:qid>",methods=["GET","POST"])
 def getFirst(qid):  
@@ -154,35 +158,53 @@ def getAnswering(qid,questionid,session):
 @app.route("/next/<string:qid>/<string:questionid>/<string:session>", methods=['GET', 'POST'])
 def getNext(qid,questionid,session):
     try:
+        
+        form=MyForm()
+
+        cur = db.connection.cursor()
+
+        query1="select questionnaire_title from questionnaire where questionnaireid = '{}'".format(qid)
+        query2="select qtext from question where question_id = '{}'".format(questionid)
+        query3="select"
+
         if request.method=="POST" and form.validate_on_submit():
             un = request.form['options']
             
             cur = db.connection.cursor()
-            query = "select next_q from questions_options where optid='P01A1'"#.format(un)
-            #print(query)
-            cur.execute("select next_q from questions_options where optid='P01A1'")
-            print(query)
+            query = "select next_q from questions_options where optid='{}'".format(un)
+
+            cur.execute(query)
+            
 
             column_names=[i[0] for i in cur.description]
         
             res=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            next = res[0][0]
-            print(res)
-
+            next = res[0]['next_q']
             cur.close()
 
-
+            if next == questionid:
+                return redirect(url_for("getAnswered"))   
+           
             return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
-        else:
-            next = 'Q01'
+        elif request.method=="POST" and not form.validate_on_submit():
+            '''cur = db.connection.cursor()   
+            cur.execute("select next_q from questions_options where optid='P01A1'")
+            
 
+            column_names=[i[0] for i in cur.description]
+        
+            res=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
+            print(res)
+            next = res[0]['next_q']
+            #next='Q01'
+            #print(res)
 
-            return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
-
+            #cur.close()'''
+            return redirect(url_for ("getAnswering",qid=qid,questionid=questionid,session=session))
 
     except Exception as e:
         ## if the connection to the database fails, return HTTP response 500
-        #print(e)
+        print('hello')
         return render_template("base.html")
 
 @app.route("/answered")
@@ -243,12 +265,48 @@ def upload_file():
             return redirect(url_for('success', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
-#Download File
+# create and Download json File with all answers of questionnaire
+
+
 @app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
     path = filename
-    # Returning file from appended path
     return send_file(path, as_attachment=True)
+
+
+@app.route('/test/<string:QuestionnaireID>')
+def mkjson(QuestionnaireID):
+    mydict={}
+    mydict['questionnaireID']=QuestionnaireID
+    cur = db.connection.cursor()
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
+    cur.execute(query1)
+    myquestions=[]
+    for queryreturn in cur.fetchall():
+        myquestions.append(queryreturn[0])
+
+    #print(myquestions)
+    questions=[]
+    for qqid in myquestions:
+        query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
+        cur.execute(query2)
+        x=cur.fetchall()     
+        maindic={}
+        helpdic={}
+        maindic['questionid']=qqid
+        maindic['answers']=[]
+        for queryreturn in x:
+            helpdic['session']=queryreturn[0]
+            helpdic['ans']=queryreturn[1]
+            maindic['answers'].append(helpdic)
+        questions.append(maindic)
+        #session.append(mysessions)
+    mydict['questions']=questions
+    #print(mydict)
+    return  jsonify(mydict)
+
+
+   
 
 
 @app.route("/getquestionnaires")
