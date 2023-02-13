@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
 from flask import current_app
-import pandas as pd
+
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -279,20 +279,21 @@ def download(filename):
     return send_file(path, as_attachment=True)
 
 
-@app.route('/test')
-def mkjson():
+@app.route('/test/<string:QuestionnaireID>')
+def mkjson(QuestionnaireID):
     cur = db.connection.cursor()
-    query1 = ("select Question_ID from Question where QuestionaireID = QuestionnaireID")
-    query2 = ("select S_ID from session_questions_options where Q_ID = Question_ID")
-    query3 = ("select O_ID from session_questions_options where (S_ID = session and Q_ID = Question_ID")
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
+    query3 = ("select O_ID from session_questions_options where (S_ID = session and Q_ID = Question_ID)")
 
     cur.execute(query1)
 
     column_names = [i[0] for i in cur.description]
 
     Question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+    x = Question[0]['Question_ID']
+    query2 = ("select S_ID from session_questions_options where Q_ID = '{}'").format(x)
 
-    x = cur.fetchall()
+    print(x)
 
     cur.execute(query2)
 
@@ -312,10 +313,18 @@ def mkjson():
 
     answer = {"sessionid": [], "answerid": []};
 
-    answers[][]
+    w = 0
+    for w in questions:
+        w+=1
+    
+    h = 0
+    for h in session:
+        h+=1
+        
+    answers = [[0 for x in range(w)] for y in range(h)] 
     questions = {"questionid": [], "answerr": []}
-    for q in Question
-        for s in session
+    for q in Question:
+        for s in session:
             answer["sessionid"].append["session"]
             answer["answerid"].append["ans"]
             answers[q][s] = answer
@@ -325,6 +334,7 @@ def mkjson():
         'QuestionnaireID': '{}'.format(QuestionnaireID),
         'Questions': questions
     }   
+    print(finalfile)
     return jsonify(finalfile)
 
 
