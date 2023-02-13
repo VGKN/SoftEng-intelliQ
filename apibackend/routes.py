@@ -28,35 +28,42 @@ def index():
 def getUser():
     try:
         if request.method == 'POST':
-            category=request.form.get("Category")
-            cur = db.connection.cursor()
-            cur.execute("select Keyword from Keywords")
+            if request.form['submit_button'] == 'See all Questionnaires':
+                #return render_template("base.html",pageTitle="Landing Page")
+                cur = db.connection.cursor()
+                query1="select Questionnaire_Title from questionnaire"  
+                cur.execute(query1)
 
-            column_names = [i[0] for i in cur.description]
-            x = cur.fetchall()
+                collnames = [k[0] for k in cur.description]
+                result = [dict(zip(collnames, entry)) for entry in cur.fetchall()]
+                return render_template("all_questionnaires.html", result=result, pageTitle="Welcome user")
 
-            k=0
-            for keywords in x:
-                for keyword in keywords:
-                    if category == keyword:
-                        k=1
+            elif request.form['submit_button'] == 'Check':
+                category=request.form.get("Category")
+                cur = db.connection.cursor()
+                cur.execute("select Keyword from Keywords")
 
-            cur.close()
-            cur = db.connection.cursor()
+                column_names = [i[0] for i in cur.description]
+                x = cur.fetchall()
 
-            query = "select Questionnaire_Title from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(category)
-            cur.execute(query)
+                k=0
+                for keywords in x:
+                    for keyword in keywords:
+                        if category == keyword:
+                         k=1
 
-            col_names = [j[0] for j in cur.description]
-            res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+                query = "select Questionnaire_Title from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(category)
+                cur.execute(query)
 
-            if k:
-                return render_template("questionnaire_list.html", res=res, pageTitle="Welcome user")
-            else:
-                return render_template("Nodata402.html",pageTitle="Landing Page")
+                col_names = [j[0] for j in cur.description]
+                res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
 
-        else:
-            return render_template("user.html", pageTitle="Welcome user")
+                if k:
+                    return render_template("questionnaire_list.html", res=res, pageTitle="Welcome user")
+                else:
+                    return render_template("Nodata402.html",pageTitle="Landing Page")
+
+        return render_template("user.html",pageTitle="Landing Page")
                               
     except Exception as e:
         print(e)
