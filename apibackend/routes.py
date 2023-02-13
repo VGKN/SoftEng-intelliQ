@@ -356,10 +356,9 @@ def Answers(QuestionnaireID, Question_ID):
         try:
             
             cur = db.connection.cursor()
-            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            
             query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
 
-            cur.execute(query)
             cur.execute(query1)
 
             column_names = [i[0] for i in cur.description]
@@ -375,13 +374,22 @@ def Answers(QuestionnaireID, Question_ID):
                     dic[i]=1
                 else:
                     dic[i]+=1
-    
+                    
+            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            cur.execute(query)
+            column_names = [i[0] for i in cur.description]
+     
+            Answers = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+            for x in Answers:
+                for y in dic.keys():
+                    if x['Opt_ID']==y:
+                        x['Count']=dic[y]
             print(Answers)
-
+            print(dic)
 
             cur.close()
 
-            return render_template("getanswers.html",Answers=Answers)
+            return render_template("getanswers.html",Answers=Answers,QuestionnaireID=QuestionnaireID)
                                                                 
         except Exception as e:
             print(e)
