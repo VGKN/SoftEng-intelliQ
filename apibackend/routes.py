@@ -32,6 +32,16 @@ def index():
         print(e)
         abort(500)
 
+@app.route("/error")
+def getBase():
+    try:
+        
+        return render_template("error.html")
+            
+    except Exception as e:
+        print(e)
+        abort(500)
+
 
 @app.route("/user", methods=['GET', 'POST'])
 def getUser():
@@ -143,7 +153,7 @@ def getAnswering(qid,questionid,session):
             print(e)
             return render_template("base.html")
 
-@app.route("/next/<string:qid>/<string:questionid>/<string:session>", methods=['GET', 'POST'])
+@app.route("/next/<string:qid>/<string:questionid>/<string:session>", methods=['POST'])
 def getNext(qid,questionid,session):
     try:
         
@@ -174,13 +184,9 @@ def getNext(qid,questionid,session):
                 return redirect(url_for("getAnswered",session=session))   
            
             return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
-        elif request.method=="POST" and not form.validate_on_submit():
-            
-            return redirect(url_for ("getAnswering",qid=qid,questionid=questionid,session=session))
 
     except Exception as e:
-        print('hello')
-        return render_template("base.html")
+        return redirect(url_for("getBase"))
 
 @app.route("/answered/<string:session>")
 def getAnswered(session):

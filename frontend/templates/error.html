@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+<div class="container" id="row-container" style="width: 500px;" >
+    {% include "flash_messages.html" %}
+
+        <div class="row" id="row" >
+         <div class="col-md-12" >
+            <div class="card" id="card-container-layout" >
+                <div class="card-body" id="card" >
+                    <h4 class="card-title">You can't change your option please restart.</h4>
+                    <p class="card-text" id="paragraph">You will be redirected to the home page<br></p>
+                    <a class="btn btn-primary" id="show-btn" href="/">Understandable!</a>
+                </div>
+            </div>
+        </div>
+{% endblock content%}
