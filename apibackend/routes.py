@@ -364,22 +364,25 @@ def questionnaire_upd(questionnaire_id):
         print(e)
         return {'success':'ok'}
 
-    """
-@app.route("/getsessionanswers/<int:questionnaire_id>", methods=["GET"])
+    
+@app.route("/admin/resetall", methods=["POST"])
 def getAnswersS(questionnaire_id):
     try:
+        if request.method == 'POST':
          #cur = db.connection.cursor()
          #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
          #column_names = [i[0] for i in cur.description]
          #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
          #return jsonify(table)
          return {'success':'ok'}
-         #                      
+         #   
+        else:
+            return {'status':'failed', 'reason': 'GET method unsupported'}                   
     except Exception as e:
         print(e)
-        return {'success':'ok'}
+        return {'status':'failed', 'reason': 'Cannot connect to database'}
 
-
+    """
 @app.route("/getsessionanswers/<int:questionnaire_id>", methods=["GET"])
 def getAnswersS(questionnaire_id):
     try:
