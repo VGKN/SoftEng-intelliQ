@@ -1,0 +1,43 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+<div class="container" id="row-container" style="width: 500px;" >
+    {% include "flash_messages.html" %}
+
+        <div class="row" id="row" >
+         <div class="col-md-12" >
+            <div class="card" id="card-container-layout" >
+                <div class="card-body" id="card" >
+                    <h4 class="card-title">I am a user</h4>
+                    <p class="card-text" id="paragraph">I can only answer Questionnaires<br></p>
+                    <a class="btn btn-primary" id="show-btn" href="/user">Let's go</a>
+                </div>
+            </div>
+        </div>
+
+        </div>
+         <div class="row" id="row-2" >
+          <div class="col-md-12" >
+            <div class="card" id="card-container-layout" >
+                <div class="card-body" id="card" >
+                    <h4 class="card-title">I am an Admin</h4>
+                    <p class="card-text" id="paragraph">I create Questionnaires but i need to insert my credentials first.<br></p>
+                    <form action="/" method = "POST">
+                        <div class="form-group" >
+                          <label for="exampleInputEmail1">Username</label>
+                          <input type="text" class="form-control" name="Username">
+                        </div>
+                        <div class="form-group" >
+                          <label for="exampleInputPassword1">Password</label>
+                          <input type="text" class="form-control" name="password">
+                          <p style="color:red">Unauthorized User</p>
+                          <input class="btn btn-primary" type="submit" value="Sign In">
+                    </form>
+                </div>
+            </div>
+        </div>
+         </div>
+
+{% endblock content%}

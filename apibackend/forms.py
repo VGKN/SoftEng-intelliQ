@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, RadioField
 from wtforms.validators import DataRequired, Email
 
 ## when passed as a parameter to a template, an object of this class will be rendered as a regular HTML form

@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from flask_mysqldb import MySQL
-# initially created by __init__.py, need to be used here
-from apibackend import app, db, ALLOWED_EXTENSIONS
-from apibackend.forms import MyForm, FieldForm, ProjectForm
+from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
+from apibackend.forms import MyForm,FieldForm,ProjectForm
+from jinja2 import Template
 import os
+import random
+import string
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
@@ -18,7 +20,10 @@ def index():
             admin_username = request.form.get("Username")
             admin_password = request.form.get("password")
             if admin_username == '' or admin_password == '':
-                return render_template("BadRequest400.html", pageTitle="Landing Page")
+                return render_template("BadRequest400.html",pageTitle="Landing Page")
+            
+            #elif admin_username != 'admin1' or admin_password != '1234':
+            #    return render_template("Notauthorized401.html",pageTitle="Landing Page")
 
             else:
                 return render_template("admin.html", pageTitle="Landing Page")
@@ -32,84 +37,174 @@ def index():
 
 @app.route("/user", methods=['GET', 'POST'])
 def getUser():
-    try:
-        if request.method == 'POST':
-            category = request.form.get("Category")
-            cur = db.connection.cursor()
-            cur.execute("select Keyword from Keywords")
 
-            column_names = [i[0] for i in cur.description]
-            x = cur.fetchall()
+    '''if request.method == 'POST':
+            if request.form['submit_button'] == 'See all Questionnaires':
+                #return render_template("base.html",pageTitle="Landing Page")
+                cur = db.connection.cursor()
+                query1="select Questionnaire_Title from questionnaire"  
+                cur.execute(query1)
 
-            k = 0
-            for keywords in x:
-                for keyword in keywords:
-                    if category == keyword:
-                        k = 1
+                collnames = [k[0] for k in cur.description]
+                result = [dict(zip(collnames, entry)) for entry in cur.fetchall()]
+                return render_template("all_questionnaires.html", result=result, pageTitle="Welcome user")
 
-            cur.close()
-            cur = db.connection.cursor()
+            elif request.form['submit_button'] == 'Check':
+                category=request.form.get("Category")
+                cur = db.connection.cursor()
+                cur.execute("select Keyword from Keywords")
 
-            query = "select Questionnaire_Title from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(
-                category)
-            cur.execute(query)
+                column_names = [i[0] for i in cur.description]
+                x = cur.fetchall()
 
-            col_names = [j[0] for j in cur.description]
-            res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+                k=0
+                for keywords in x:
+                    for keyword in keywords:
+                        if category == keyword:
+                         k=1
 
-            if k:
-                return render_template("questionnaire_list.html", res=res, pageTitle="Welcome user")
-            else:
-                return render_template("Nodata402.html", pageTitle="Landing Page")
+                query = "select Questionnaire_Title from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(category)
+                cur.execute(query)
 
-        else:
-            return render_template("user.html", pageTitle="Welcome user")
+                col_names = [j[0] for j in cur.description]
+                res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
 
+                if k:
+                    return render_template("questionnaire_list.html", res=res, pageTitle="Welcome user")
+                else:
+                    return render_template("Nodata402.html",pageTitle="Landing Page")
+
+        return render_template("user.html",pageTitle="Landing Page")
+                              
     except Exception as e:
         print(e)
-        return render_template("user.html", pageTitle="Landing Page")
+        return render_template("user.html",pageTitle="Landing Page")'''
 
-
-@app.route("/answering")
-def getAnswering():
     try:
         cur = db.connection.cursor()
-        questionnairee = 'QQ000'
-
-        query = "select Qtext from Question where QuestionaireID ='{}' limit 1".format(
-            questionnairee)
-        print(query)
-        cur.execute(query)
+        cur.execute("select questionnaire_title, questionnaireid from questionnaire")
 
         column_names = [i[0] for i in cur.description]
+     
+        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
+        #print(res)
 
-        question = [dict(zip(column_names, entry1))
-                         for entry1 in cur.fetchall()]
 
-        query1 = "select question_id from question where questionaireid = '{}' limit 1".format(
-            questionnairee)
-        cur.execute(query1)
 
-        x = cur.fetchall()
-        myx = x[0][0]
-
-        query2 = "select Opt_text from options where opt_id in (select optid from questions_options where questionid = '{}') ".format(
-            myx)
-        cur.execute(query2)
-
-        col_names = [j[0] for j in cur.description]
-
-        options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
-        print(options)
-
-        cur.close()
-
-        return render_template("answering.html", question=question, options=options)
-         #
+        return render_template("user.html", res=res)
+         #                      
     except Exception as e:
         print(e)
         return render_template("base.html")
 
+
+@app.route("/firstanswer/<string:qid>",methods=["GET","POST"])
+def getFirst(qid):  
+        
+
+    try:
+        cur = db.connection.cursor()
+
+        query1 = "select question_id from question where questionaireid = '{}' limit 1".format(qid)
+        cur.execute(query1)
+
+        x = cur.fetchall()
+        questionid = x[0][0]
+
+        cur.close()
+
+        s = string.ascii_letters
+        for _ in range(10):
+            session = ''.join(random.choice(s) for _ in range(4))
+
+        return redirect(url_for("getAnswering", qid=qid, questionid=questionid, session=session))
+             #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html")
+
+@app.route("/answering/<string:qid>/<string:questionid>/<string:session>",methods=["GET","POST"])
+def getAnswering(qid,questionid,session):  
+
+    try:
+        
+            form = MyForm()
+            cur = db.connection.cursor()
+        
+            query = "select Qtext from Question where Question_ID ='{}'".format(questionid)
+            cur.execute(query)
+        
+
+            column_names = [i[0] for i in cur.description]
+     
+            question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+
+            query2 = "select Opt_text, Opt_ID from options where opt_id in (select optid from questions_options where questionid = '{}') ".format(questionid) 
+            cur.execute(query2)
+
+            col_names = [j[0] for j in cur.description]
+
+            options = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
+
+
+            cur.close()
+
+            return render_template("answering.html", qid=qid, questionid=questionid, session=session,question=question, options=options, form=form)
+             #                      
+    except Exception as e:
+            print(e)
+            return render_template("base.html")
+
+@app.route("/next/<string:qid>/<string:questionid>/<string:session>", methods=['GET', 'POST'])
+def getNext(qid,questionid,session):
+    try:
+        
+        form=MyForm()
+        if request.method=="POST" and form.validate_on_submit():
+            un = request.form['options']
+            #print(un)
+            
+            cur = db.connection.cursor()
+            query = "select next_q from questions_options where optid='{}'".format(un)
+
+            cur.execute(query)
+            
+
+            column_names=[i[0] for i in cur.description]
+        
+            res=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
+            next = res[0]['next_q']
+            #print(res)
+
+            cur.close()
+            
+           
+            return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
+        elif request.method=="GET":
+            cur = db.connection.cursor()   
+            cur.execute("select next_q from questions_options where optid='P01A1'")
+            
+
+            column_names=[i[0] for i in cur.description]
+        
+            res=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
+            print(res)
+            next = res[0]['next_q']
+            #next='Q01'
+            #print(res)
+
+            #cur.close()
+            return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
+            
+        else:
+            return redirect(url_for ("getAnswering",qid=qid,questionid=questionid,session=session))
+            
+
+
+    except Exception as e:
+        ## if the connection to the database fails, return HTTP response 500
+        print('hello')
+        return render_template("base.html")
 
 @app.route("/answered")
 def getAnswered():
