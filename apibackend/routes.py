@@ -6,8 +6,6 @@ from jinja2 import Template
 import os
 import random
 import string
-import json
-from collections import OrderedDict
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
@@ -41,7 +39,7 @@ def index():
 def getUser():
     try:
         if request.method == 'POST':
-            '''if request.form['submit_button'] == 'See all Questionnaires':
+            if request.form['submit_button'] == 'See all Questionnaires':
                 #return render_template("base.html",pageTitle="Landing Page")
                 cur = db.connection.cursor()
                 #query1="select Questionnaire_Title from questionnaire"  
@@ -78,22 +76,6 @@ def getUser():
 
         return render_template("user.html")
                               
-    except Exception as e:
-        print(e)
-        return render_template("user.html",pageTitle="Landing Page")'''
-
-        cur = db.connection.cursor()
-        cur.execute("select questionnaire_title, questionnaireid from questionnaire")
-
-        column_names = [i[0] for i in cur.description]
-     
-        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-        print(res)
-
-
-
-        return render_template("user.html", res=res)
-         #                      
     except Exception as e:
         print(e)
         return render_template("base.html")
@@ -231,7 +213,7 @@ def getAnswered(session):
 def getSummary(session):
     try:
         cur = db.connection.cursor()
-        cur.execute("select * from session_questions_options where s_id = '{}'".format(session))
+        cur.execute("select q_id, o_id from session_questions_options where s_id = '{}'".format(session))
 
         column_names = [i[0] for i in cur.description]
      
@@ -239,7 +221,7 @@ def getSummary(session):
 
         print(res)
 
-        return render_template("summary.html")
+        return render_template("summary.html", res=res)
          #                      
     except Exception as e:
         print(e)
