@@ -652,6 +652,8 @@ def postResetAll():
             cur.execute("DELETE FROM Keywords")
             cur.execute("DELETE FROM Options")
 
+            db.connection.commit()
+
             cur.close()
 
             return jsonify({'status':'OK'})
