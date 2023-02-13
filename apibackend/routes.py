@@ -84,7 +84,7 @@ def getUser():
         column_names = [i[0] for i in cur.description]
      
         res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-        print(res)
+        #print(res)
 
 
 
@@ -155,35 +155,52 @@ def getAnswering(qid,questionid,session):
 @app.route("/next/<string:qid>/<string:questionid>/<string:session>", methods=['GET', 'POST'])
 def getNext(qid,questionid,session):
     try:
+        
+        form=MyForm()
         if request.method=="POST" and form.validate_on_submit():
             un = request.form['options']
+            #print(un)
             
             cur = db.connection.cursor()
-            query = "select next_q from questions_options where optid='P01A1'"#.format(un)
-            #print(query)
-            cur.execute("select next_q from questions_options where optid='P01A1'")
-            print(query)
+            query = "select next_q from questions_options where optid='{}'".format(un)
+
+            cur.execute(query)
+            
 
             column_names=[i[0] for i in cur.description]
         
             res=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
-            next = res[0][0]
-            print(res)
+            next = res[0]['next_q']
+            #print(res)
 
             cur.close()
-
-
+            
+           
             return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
+        elif request.method=="GET":
+            cur = db.connection.cursor()   
+            cur.execute("select next_q from questions_options where optid='P01A1'")
+            
+
+            column_names=[i[0] for i in cur.description]
+        
+            res=[dict(zip(column_names, entry)) for entry in cur.fetchall()]
+            print(res)
+            next = res[0]['next_q']
+            #next='Q01'
+            #print(res)
+
+            #cur.close()
+            return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
+            
         else:
-            next = 'Q01'
-
-
-            return redirect(url_for ("getAnswering",qid=qid,questionid=next,session=session))
+            return redirect(url_for ("getAnswering",qid=qid,questionid=questionid,session=session))
+            
 
 
     except Exception as e:
         ## if the connection to the database fails, return HTTP response 500
-        #print(e)
+        print('hello')
         return render_template("base.html")
 
 @app.route("/answered")
