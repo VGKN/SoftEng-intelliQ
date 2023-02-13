@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
-from apibackend.forms import MyForm,FieldForm,ProjectForm
+from apibackend.forms import MyForm,FieldForm,ProjectForm,QuestionForm
 from jinja2 import Template
+import json 
 import os
 import random
 import string
@@ -23,7 +24,7 @@ def index():
                 return render_template("BadRequest400.html",pageTitle="Landing Page")
 
             else:
-                return render_template("admin.html", pageTitle="Landing Page")
+                return redirect(url_for("Admin"))
         else:
             return render_template("base.html", pageTitle="Landing Page")
             
@@ -220,19 +221,67 @@ def getSummary(session):
         return render_template("base.html")
 
 @app.route("/admin")
-def getOrgs():
+def Admin():
     try:
-        return render_template("admin.html", pageTitle="Admin", name= "admin name")
+        return render_template("admin.html", pageTitle="Landing Page")
          #                      
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
+
+@app.route("/keyword", methods=['GET', 'POST'])
+def Keyword():
+    try:
+        if request.method == 'POST':
+            q_keyword = request.form.get("Question_keywords")
+            if q_keyword == '':
+                return render_template("emptykeyword.html", pageTitle="Landing Page")
+
+            else:
+                cur = db.connection.cursor()
+                cur.execute("select Keyword from Keywords")
+
+                column_names = [i[0] for i in cur.description]
+                x = cur.fetchall()
+
+                k=0
+                for keywords in x:
+                    for keyword in keywords:
+                        if q_keyword == keyword:
+                         k=1
+
+                if k:
+                    query="select Question_ID, Qtext from Question where QuestionaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(q_keyword)
+                    cur.execute(query)
+
+                    col_names = [i[0] for i in cur.description]
+                    res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+                    return render_template("keywordresults.html", pageTitle="Landing Page", res=res)
+
+                else:
+                    return render_template("badquestionrequest.html", pageTitle="Landing Page")
+
+        else:
+            return render_template("keywordquestions.html", pageTitle="Landing Page")
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html", pageTitle="Landing Page")
     
+@app.route('/inserting/<string:name>', methods = ['GET'])  
+def success(name):  
+    if request.method == 'GET':
+       return render_template("Acknowledgement.html", name=name, state=state)
+
+  
 #redirection upon successfull upload of the allowed files
-@app.route('/success', methods = ['GET'])  
-def success():  
-    if request.method == 'GET': 
-       return render_template("Acknowledgement.html")
+@app.route('/success/<string:name>/<string:state>', methods = ['GET'])  
+def inserting(name, state):  
+    if request.method == 'GET':
+        #####CRUD
+        #if successful insert then state ="successfully uploaded"
+        #else tate ="unsuccessfully uploaded"
+       redirect(url_for('success', name=filename, state=state))
     
 #process of file upload in /questionnaire_upd
 def allowed_file(filename):
@@ -256,7 +305,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('success', name=filename))
+            return redirect(url_for('inserting', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
 # create and Download json File with all answers of questionnaire
@@ -350,10 +399,9 @@ def Answers(QuestionnaireID, Question_ID):
         try:
             
             cur = db.connection.cursor()
-            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            
             query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
 
-            cur.execute(query)
             cur.execute(query1)
 
             column_names = [i[0] for i in cur.description]
@@ -369,13 +417,22 @@ def Answers(QuestionnaireID, Question_ID):
                     dic[i]=1
                 else:
                     dic[i]+=1
-    
+                    
+            query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
+            cur.execute(query)
+            column_names = [i[0] for i in cur.description]
+     
+            Answers = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+            for x in Answers:
+                for y in dic.keys():
+                    if x['Opt_ID']==y:
+                        x['Count']=dic[y]
             print(Answers)
-
+            print(dic)
 
             cur.close()
 
-            return render_template("getanswers.html",Answers=Answers)
+            return render_template("getanswers.html",Answers=Answers,QuestionnaireID=QuestionnaireID)
                                                                 
         except Exception as e:
             print(e)

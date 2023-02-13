@@ -24,5 +24,9 @@ class ProjectForm(FlaskForm):
     admin_username=StringField(label="Admin Username")
     admin_password=StringField(label="Admin Password")
     submit = SubmitField("Submit")
+
+class QuestionForm(FlaskForm):
+    q_keyword=StringField(label="Question Keyword")
+    submit = SubmitField("Submit")
     
     

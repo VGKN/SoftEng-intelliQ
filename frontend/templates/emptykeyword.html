@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br>
+<br>
+<br>
+
+<div class="container" id="row-container" style="width: 500px;">
+    {% include "flash_messages.html" %}
+
+		<div class="row" id="row">
+		 <div class="col-md-12">
+            <div class="card" id="card-container-layout">
+                <div class="card-body" id="card">
+                    <h4 class="card-title">See keyword related Questions</h4>
+                    <p class="card-text" id="paragraph">Type the keyword related to the questions<br> you want to see</p>
+                    <form action="/keyword" method = "POST">
+                        <div class="form-group">
+                          <label for="exampleInputUsername1">Keyword</label>
+                          <input type="text" class="form-control" name="Question_keywords">
+                          <p style="color:red">Keyword required</p>
+                        </div>
+                        <input type="submit" class="btn btn-primary" name="submit_button" value="Show questions">
+                    </form>
+                </div>
+            </div>
+        </div>  
+		 
+{% endblock content%}
