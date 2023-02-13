@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+{% for cont in res %}
+
+<center><div class="container" id="row-container" style="width: 1900px;">
+  <div class="col-md-22">
+    <div class="card" id="card-container-layout">
+        <div class="card-body" id="card">
+            <h4 class="card-title">{{cont.Question_ID}}</h4>
+            <p class="card-text" id="paragraph">{{cont.Qtext}}</p>
+        </div>
+    </div>
+</div></center>
+{% endfor %}
+{% endblock content%}

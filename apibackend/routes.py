@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
-from apibackend.forms import MyForm,FieldForm,ProjectForm
+from apibackend.forms import MyForm,FieldForm,ProjectForm,QuestionForm
 from jinja2 import Template
 import os
 import random
@@ -28,7 +28,7 @@ def index():
             #    return render_template("Notauthorized401.html",pageTitle="Landing Page")
 
             else:
-                return render_template("admin.html", pageTitle="Landing Page")
+                return redirect(url_for("Admin"))
         else:
             return render_template("base.html", pageTitle="Landing Page")
          #
@@ -41,10 +41,10 @@ def index():
 def getUser():
     try:
         if request.method == 'POST':
-            '''if request.form['submit_button'] == 'See all Questionnaires':
+            if request.form['submit_button'] == 'See all Questionnaires':
                 #return render_template("base.html",pageTitle="Landing Page")
                 cur = db.connection.cursor()
-                #query1="select Questionnaire_Title from questionnaire"  
+                #query1="select Questionnaire_Title from questionnaire"
                 cur.execute("select questionnaire_title, questionnaireid from questionnaire")
 
                 collnames = [k[0] for k in cur.description]
@@ -77,23 +77,7 @@ def getUser():
                     return render_template("Nodata402.html")
 
         return render_template("user.html")
-                              
-    except Exception as e:
-        print(e)
-        return render_template("user.html",pageTitle="Landing Page")'''
 
-        cur = db.connection.cursor()
-        cur.execute("select questionnaire_title, questionnaireid from questionnaire")
-
-        column_names = [i[0] for i in cur.description]
-     
-        res = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-        print(res)
-
-
-
-        return render_template("user.html", res=res)
-         #                      
     except Exception as e:
         print(e)
         return render_template("base.html")
@@ -226,13 +210,52 @@ def getAnswered():
         return render_template("base.html",pageTitle="Landing Page")
 
 @app.route("/admin")
-def getOrgs():
+def Admin():
     try:
-        return render_template("admin.html", pageTitle="Admin", name= "admin name")
+        return render_template("admin.html", pageTitle="Landing Page")
          #                      
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
+
+@app.route("/keyword", methods=['GET', 'POST'])
+def Keyword():
+    try:
+        if request.method == 'POST':
+            q_keyword = request.form.get("Question_keywords")
+            if q_keyword == '':
+                return render_template("emptykeyword.html", pageTitle="Landing Page")
+
+            else:
+                cur = db.connection.cursor()
+                cur.execute("select Keyword from Keywords")
+
+                column_names = [i[0] for i in cur.description]
+                x = cur.fetchall()
+
+                k=0
+                for keywords in x:
+                    for keyword in keywords:
+                        if q_keyword == keyword:
+                         k=1
+
+                if k:
+                    query="select Question_ID, Qtext from Question where QuestionaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(q_keyword)
+                    cur.execute(query)
+
+                    col_names = [i[0] for i in cur.description]
+                    res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+                    return render_template("keywordresults.html", pageTitle="Landing Page", res=res)
+
+                else:
+                    return render_template("badquestionrequest.html", pageTitle="Landing Page")
+
+        else:
+            return render_template("keywordquestions.html", pageTitle="Landing Page")
+         #                      
+    except Exception as e:
+        print(e)
+        return render_template("base.html", pageTitle="Landing Page")
     
 #redirection upon successfull upload of the allowed files
 @app.route('/success', methods = ['GET'])  
