@@ -340,6 +340,7 @@ def healthcheck():
 
 @app.route("/admin/questionnaire_upd", methods=["POST"])
 def questionnaire_upd(questionnaire_id):
+    '''
     try:
          if request.method == 'POST':
         # check if the post request has the file part
@@ -363,7 +364,8 @@ def questionnaire_upd(questionnaire_id):
     except Exception as e:
         print(e)
         return {'success':'ok'}
-
+    '''
+    return 0
     
 @app.route("/admin/resetall", methods=["POST"])
 def getAnswersS(questionnaire_id):
@@ -374,7 +376,7 @@ def getAnswersS(questionnaire_id):
          #column_names = [i[0] for i in cur.description]
          #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
          #return jsonify(table)
-         return {'success':'ok'}
+         return {'status':'ok'}
          #   
         else:
             return {'status':'failed', 'reason': 'GET method unsupported'}                   
