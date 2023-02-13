@@ -658,8 +658,8 @@ def getAnswersS(questionnaire_id):
 
 
 
-@app.route("/admin/reset/<string:questionnaireid>", methods=['GET', 'POST'])
-def healthcheck():
+@app.route("/admin/resetq/<string:questionnaireid>", methods=['POST'])
+def resetq():
 
     if request.method=='GET':
         try:
