@@ -278,23 +278,96 @@ def Keyword():
         print(e)
         return render_template("base.html")
     
-@app.route('/inserting/<string:name>/<string:state>', methods = ['GET'])  
-def success(name):  
+@app.route('/upload/<string:name>/<string:state>', methods = ['GET'])  
+def success(name,state):  
     if request.method == 'GET':
        return render_template("Acknowledgement.html", name=name, state=state)
 
   
 #redirection upon successfull upload of the allowed files
-@app.route('/success/<string:name>', methods = ['GET'])  
+@app.route('/inserting/<string:name>', methods = ['GET'])  
 def inserting(name):  
     if request.method == 'GET':
         try:
-            pass
-        except MySQLdb.Error as e:
-            pass
+            path='./apibackend/'+name
+            with open(path,'r', encoding='utf-8') as file:
+                data=json.load(file)
+                cur= db.connection.cursor()
+                query="INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle'])
+                cur.execute(query)
+                cur.execute("Select Keyword from keywords")
+                Keywords=cur.fetchall()
+                for keyword in data['keywords']:
+                    if keyword not in Keywords:
+                        query="INSERT INTO Keywords (keyword) VALUES ('{}');".format(keyword)
+                        cur.execute(query)
+                    query="INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('{}','{}');".format(data['questionnaireID'],keyword)
+                    cur.execute(query)
+                for questions in data['questions']:
+                    
+                    myx=[]
+                    myy=[]
+                    qtext=[]
+                    texts=[]
+                    x=questions['qtext'].find("[*")
+                    myx.append(x)
+                    y=questions['qtext'].find("]",x+2)
+                    myy.append(y)
+                    
+                    while(x!=-1):
+                        qtext.append(questions['qtext'][x+2:y])
+                        x=questions['qtext'].find("[*", y)
+                        myx.append(x)
+                        y=questions['qtext'].find("]",x+2)
+                        myy.append(y)
+                    print(qtext)
+                    if len(qtext)!=0:
+                        for question in data['questions']:
+                            if question['qID ']==qtext[1]:
+                                texts.append(question['qtext'])
+                            for options in question['options']:
+                                if options['optID']==qtext[0]:
+                                    texts.append(options['opttxt'])
+                        print(myx,myy)
+                        print(texts)
+                        questiontext=questions['qtext'][0:myx[0]]+"\\'"+texts[1]+"\\'"+questions['qtext'][myy[0]+1:myx[1]] +"\\'"+texts[0]+"\\'"+questions['qtext'][myy[1]+1:]          
+                        print(questions)
+                        query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questiontext,questions['required'],questions['type'],data['questionnaireID'])
+                    else:
+                        query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID'])
+                    cur.execute(query)  
+                     
+        except Exception as e:
+            print(e)
+            print('hello')
+    return render_template('error500.html')
+'''
+                '''
+            
         #if successful insert then state ="successfully added questionnaire"
         #else state ="questionnaire was not added to the database"
         #redirect(url_for('success', name=filename, state=state))
+    
+               
+             
+'''              
+booll=0
+nextq=''
+    """for option in questions['options']:
+       X.append("INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt']))
+       if option['nextqID']=='-':
+            nextq=questions['qID ']
+       else:
+            nextq=option['nextqID']
+       Z.append("INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq))
+
+s = string.ascii_letters
+for _ in range(10):
+    c = ''.join(random.choice(s) for _ in range(8))
+   
+'''
+
+   
     
 #process of file upload in /questionnaire_upd
 def allowed_file(filename):
@@ -316,7 +389,7 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            print(filename)
+            #print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('inserting', name=filename))
     return render_template("questionnaire_upd.html")
