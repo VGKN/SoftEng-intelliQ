@@ -623,11 +623,12 @@ def questionnaire_upd(questionnaire_id):
 def getAnswersS(questionnaire_id):
     try:
         if request.method == 'POST':
-         #cur = db.connection.cursor()
+         cur = db.connection.cursor()
          #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
          #column_names = [i[0] for i in cur.description]
          #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
          #return jsonify(table)
+         cur.close()
          return {'status':'ok'}
          #   
         else:
