@@ -281,61 +281,77 @@ def download(filename):
 
 @app.route('/test/<string:QuestionnaireID>')
 def mkjson(QuestionnaireID):
+    mydict={}
+    mydict['questionnaireID']=QuestionnaireID
     cur = db.connection.cursor()
     query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
-    query3 = ("select O_ID from session_questions_options where (S_ID = session and Q_ID = Question_ID)")
-
     cur.execute(query1)
+    x=cur.fetchall()
+    myquestions=[]
+    for queryreturn in x:
+        myquestions.append(queryreturn[0])
 
-    column_names = [i[0] for i in cur.description]
+    #print(myquestions)
 
-    Question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
-    x = Question[0]['Question_ID']
-    query2 = ("select S_ID from session_questions_options where Q_ID = '{}'").format(x)
+    for qqid in myquestions:
+        query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
+        cur.execute(query2)
+        print(cur.fetchall())
+        break
+    return  mydict
 
-    print(x)
 
-    cur.execute(query2)
+    #
 
-    col_names = [j[0] for j in cur.description]
+    #column_names = [i[0] for i in cur.description]
 
-    session = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
+    #Question = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
+    #x = Question[0]['Question_ID']
+    #query2 = ("select S_ID from session_questions_options where Q_ID = '{}'").format(x)
 
-    y = cur.fetchall()
+    #print(x)
 
-    cur.execute(query3)
+    #cur.execute(query2)
 
-    col_names = [z[0] for z in cur.description]
+    #col_names = [j[0] for j in cur.description]
 
-    ans = [dict(zip(col_names, entry3)) for entry3 in cur.fetchall()]
+    #ession = [dict(zip(col_names, entry2)) for entry2 in cur.fetchall()]
 
-    cur.close()
+    #y = cur.fetchall()
 
-    answer = {"sessionid": [], "answerid": []};
+    #cur.execute(query3)
 
-    w = 0
-    for w in questions:
-        w+=1
+    #col_names = [z[0] for z in cur.description]
+
+    #ans = [dict(zip(col_names, entry3)) for entry3 in cur.fetchall()]
+
+    #cur.close()
+
+    #answer = {"sessionid": [], "answerid": []};
+
+   #w = 0
+    #for w in questions:
+        #w+=1
     
-    h = 0
-    for h in session:
-        h+=1
+    #h = 0
+    #for h in session:
+        #h+=1
         
-    answers = [[0 for x in range(w)] for y in range(h)] 
-    questions = {"questionid": [], "answerr": []}
-    for q in Question:
-        for s in session:
-            answer["sessionid"].append["session"]
-            answer["answerid"].append["ans"]
-            answers[q][s] = answer
-        questions["questionid"].append["answers[q][]"]
+    #answers = [[0 for x in range(w)] for y in range(h)] 
+    #questions = {"questionid": [], "answerr": []}
+    #for q in Question:
+        #for s in session:
+            #answer["sessionid"].append["session"]
+            #answer["answerid"].append["ans"]
+            #answers[q][s] = answer
+        #questions["questionid"].append["answers[q][]"]
 
-    finalfile = {
-        'QuestionnaireID': '{}'.format(QuestionnaireID),
-        'Questions': questions
-    }   
-    print(finalfile)
-    return jsonify(finalfile)
+    #finalfile = {
+        #'QuestionnaireID': '{}'.format(QuestionnaireID),
+        #'Questions': questions
+    #}   
+    #print(finalfile)
+    #return jsonify(finalfile)
 
 
 @app.route("/getquestionnaires")
