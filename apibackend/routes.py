@@ -282,11 +282,15 @@ def success(name):
   
 #redirection upon successfull upload of the allowed files
 @app.route('/success/<string:name>', methods = ['GET'])  
-def inserting(name, state):  
+def inserting(name):  
     if request.method == 'GET':
+        try:
+        
+        except MySQLdb.Error as e:
+            
         #if successful insert then state ="successfully added questionnaire"
-        #else tate ="questionnaire was not added to the database"
-       redirect(url_for('success', name=filename, state=state))
+        #else state ="questionnaire was not added to the database"
+        #redirect(url_for('success', name=filename, state=state))
     
 #process of file upload in /questionnaire_upd
 def allowed_file(filename):
