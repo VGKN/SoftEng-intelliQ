@@ -233,12 +233,21 @@ def getOrgs():
     except Exception as e:
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
-    
+
+@app.route('/inserting/<string:name>', methods = ['GET'])  
+def success(name):  
+    if request.method == 'GET':
+       return render_template("Acknowledgement.html", name=name, state=state)
+
+  
 #redirection upon successfull upload of the allowed files
-@app.route('/success', methods = ['GET'])  
-def success():  
-    if request.method == 'GET': 
-       return render_template("Acknowledgement.html")
+@app.route('/success/<string:name>/<string:state>', methods = ['GET'])  
+def inserting(name, state):  
+    if request.method == 'GET':
+        #####CRUD
+        #if successful insert then state ="successfully uploaded"
+        #else tate ="unsuccessfully uploaded"
+       redirect(url_for('success', name=filename, state=state))
     
 #process of file upload in /questionnaire_upd
 def allowed_file(filename):
@@ -262,7 +271,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('success', name=filename))
+            return redirect(url_for('inserting', name=filename))
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
 
 # create and Download json File with all answers of questionnaire
@@ -357,15 +366,15 @@ def Answers(QuestionnaireID, Question_ID):
             
             cur = db.connection.cursor()
             query="select Opt_text, Opt_ID from options where Opt_ID in (select O_ID from session_questions_options where Q_ID = '{}')".format(Question_ID)
-            query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
+            #query1="select O_ID from session_questions_options where Q_ID = '{}'".format(Question_ID)
 
             cur.execute(query)
-            cur.execute(query1)
+            #cur.execute(query1)
 
             column_names = [i[0] for i in cur.description]
      
             Answers = [dict(zip(column_names, entry1)) for entry1 in cur.fetchall()]
-            l=[]
+            """l=[]
             for x in Answers: 
                 l.append(x['O_ID'])
             print(l)
@@ -376,7 +385,7 @@ def Answers(QuestionnaireID, Question_ID):
                 else:
                     dic[i]+=1
     
-            print(Answers)
+            print(Answers)"""
 
 
             cur.close()
