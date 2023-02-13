@@ -674,17 +674,75 @@ def resetq():
     
     
 @app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
-def hhhhhhhhhealthcheck():
+def QQID(questionnaireid):
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+
+            query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query1)
+
+            title={}
+            title['QuestionnaireID']=questionnaireid
+            title['Questionnaire_Title'] = cur.fetchall()[0][0]
+
+            query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query2)
+
+            col2_names = [i[0] for i in cur.description] 
+            res2 = [dict(zip(col2_names, entry2)) for entry2 in cur.fetchall()]
+
+            query3 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionaireID = '{}'".format(questionnaireid)
+            cur.execute(query3)
+            
+            col3_names = [j[0] for j in cur.description] 
+            res3 = [dict(zip(col3_names, entry3)) for entry3 in cur.fetchall()]
+
+            #return jsonify(titles)
+            return json.dumps(res2, ensure_ascii=False, indent=4, sort_keys=True)
+
         except Exception as e:
             print(e)
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+
+
+'''@app.route('/dnld/<string:QuestionnaireID>')
+def mkjson(QuestionnaireID):
+    mydict={}
+    mydict['questionnaireID']=QuestionnaireID
+    cur = db.connection.cursor()
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
+    cur.execute(query1)
+    myquestions=[]
+    for queryreturn in cur.fetchall():
+        myquestions.append(queryreturn[0])
+
+    #print(myquestions)
+    questions=[]
+    for qqid in myquestions:
+        query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
+        cur.execute(query2)
+        x=cur.fetchall()     
+        maindic={}
+        helpdic={}
+        maindic['questionid']=qqid
+        maindic['answers']=[]
+        for queryreturn in x:
+            helpdic['session']=queryreturn[0]
+            helpdic['ans']=queryreturn[1]
+            maindic['answers'].append(helpdic)
+        questions.append(maindic)
+    mydict['questions']=questions
+    path = './apibackend/'+QuestionnaireID+'.json'
+    File1 = open(path, "w+")
+    json.dump(mydict, File1)
+    File1.close()
+    path = QuestionnaireID+'.json'
+    return  redirect (url_for ("download",filename=path))'''
+
     
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
 def hhhhhhhealthcheck():
