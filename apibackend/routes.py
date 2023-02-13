@@ -637,10 +637,10 @@ def questionnaire_upd(questionnaire_id):
     
     
     
-@app.route("/admin/resetall", methods=["GET"])
+@app.route("/admin/resetall", methods=["POST"])
 def postResetAll():
     try:
-        if request.method == 'GET':
+        if request.method == 'POST':
             cur = db.connection.cursor()
 
             cur.execute("DELETE FROM Questionnaire_Keywords")
