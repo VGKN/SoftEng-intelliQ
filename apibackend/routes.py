@@ -654,7 +654,50 @@ def getAnswersS(questionnaire_id):
 
 
 
-    """       
+    """     
+@app.route("/user", methods=['GET', 'POST'])
+def getUser():
+    try:
+        if request.method == 'POST':
+            if request.form['submit_button'] == 'See all Questionnaires':
+                cur = db.connection.cursor()  
+                cur.execute("select questionnaire_title, questionnaireid from questionnaire")
+
+                collnames = [k[0] for k in cur.description]
+                result = [dict(zip(collnames, entry)) for entry in cur.fetchall()]
+                return render_template("all_questionnaires.html", result=result)
+
+            elif request.form['submit_button'] == 'Check':
+                category=request.form.get("Category")
+                cur = db.connection.cursor()
+                cur.execute("select Keyword from Keywords")
+
+                column_names = [i[0] for i in cur.description]
+                x = cur.fetchall()
+
+                k=0
+                for keywords in x:
+                    for keyword in keywords:
+                        if category == keyword:
+                         k=1
+
+                query = "select Questionnaire_Title, questionnaireid from Questionnaire where QuestionnaireID in (select QuestionnaireQuestionnaireID from Questionnaire_Keywords where KeywordsKeyword = '{}')".format(category)
+                cur.execute(query)
+
+                col_names = [j[0] for j in cur.description]
+                res = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
+
+                if k:
+                    return render_template("questionnaire_list.html", res=res)
+                else:
+                    return render_template("Nodata402.html")
+
+        return render_template("user.html")
+                              
+    except Exception as e:
+        print(e)
+        return render_template("base.html")
+    
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
