@@ -147,12 +147,16 @@ def getNext(qid,questionid,session):
 
         query1="select questionnaire_title from questionnaire where questionnaireid = '{}'".format(qid)
         query2="select qtext from question where question_id = '{}'".format(questionid)
-        query3="select"
+
+        cur.execute(query1)
+        column_names=[i[0] for i in cur.description]
+        
+        =[dict(zip(column_names, entry)) for entry in cur.fetchall()]
 
         if request.method=="POST" and form.validate_on_submit():
             un = request.form['options']
+            query3="select opt_text from options where opt_id = '{}'".format(un)
             
-            cur = db.connection.cursor()
             query = "select next_q from questions_options where optid='{}'".format(un)
 
             cur.execute(query)
