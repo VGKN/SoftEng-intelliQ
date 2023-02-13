@@ -10,7 +10,7 @@ DELETE FROM Options;
 DELETE FROM User;
 
 
-INSERT INTO Admin (Aid, Last_name, First_name, Telephone) VALUES (1,'Tiz', 'Ali', 6944343432);INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01aA1','<20');
+INSERT INTO Admin (Aid, Last_name, First_name, Telephone) VALUES (1,'Tiz', 'Ali', 6944343432);
 INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('QQ001','Thoughts on Formula 1 Racing',1);
 INSERT INTO Keywords (keyword) VALUES ('motorsports');
 INSERT INTO Keywords (keyword) VALUES ('driving');
