@@ -571,7 +571,21 @@ def getAnswers():
         print(e)
         return render_template("getsessionanswers.html",pageTitle="Landing Page")
         
-        
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template("NotFound404.html", pageTitle = "Not Found"),404
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template("Error500.html", pageTitle = "Internal Server Error"),500
+
+
+
+
+
 #--------------------------------------------------------------------------------#      
 #--------------------------------------------------------------------------------#       
 #------------------------------------API-----------------------------------------#   
@@ -590,7 +604,7 @@ def healthcheck():
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
                                  
-   
+
 
 @app.route("/admin/questionnaire_upd", methods=["POST"])
 def questionnaire_upd(questionnaire_id):
@@ -621,6 +635,8 @@ def questionnaire_upd(questionnaire_id):
     '''
     return 0
     
+    
+    
 @app.route("/admin/resetall", methods=["POST"])
 def getAnswersS(questionnaire_id):
     try:
@@ -639,31 +655,92 @@ def getAnswersS(questionnaire_id):
         print(e)
         return {'status':'failed', 'reason': 'Cannot connect to database'}
 
-    """
-@app.route("/getsessionanswers/<int:questionnaire_id>", methods=["GET"])
-def getAnswersS(questionnaire_id):
-    try:
-         #cur = db.connection.cursor()
-         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
-         #column_names = [i[0] for i in cur.description]
-         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-         #return jsonify(table)
-         return {'success':'ok'}
-         #                      
-    except Exception as e:
-        print(e)
-        return {'success':'ok'}
 
 
 
-    """     
+@app.route("/admin/reset/<string:questionnaireid>", methods=['GET', 'POST'])
+def healthcheck():
 
-@app.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return render_template("NotFound404.html", pageTitle = "Not Found"),404
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    
+    
+    
+@app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
+def healthcheck():
 
-@app.errorhandler(500)
-def server_error(e):
-    return render_template("Error500.html", pageTitle = "Internal Server Error"),500
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    
+@app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
+def healthcheck():
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    
+    
+    
+@app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
+def healthcheck():
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    
+    
+    
+@app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
+def healthcheck():
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    
+    
+    
+@app.route("/getquestionanswers/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
+def healthcheck():
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
 
