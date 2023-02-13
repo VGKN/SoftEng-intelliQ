@@ -13,18 +13,20 @@
             <div class="card" id="card-container-layout" >
                 <div class="card-body" id="card" >
                     <h4 class="card-title">{{ q.Qtext }}</h4>
-                    {% for o in options %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                          {{o.Opt_text}}
-                        </label>
-                      </div>
-                      {% endfor %}
+                    <form action="/next/{{qid}}/{{questionid}}/{{session}}" name="MyForm" method="POST">
+                      {{ form.hidden_tag() }}
+                      {% for o in options %}
+                     <p>  
+                     <input type="radio" name="options" id="option1" value="{{o.Opt_ID}}">  {{o.Opt_text}} </input><br>
+                     </p>
+                     {% endfor %}
+                     {{ form.submit(class = "btn btn-primary btn-submit-custom") }}
+                     </form>
                       {% endfor %}
                 </div>
-                <a class="btn btn-primary" id="show-btn" href="/nextq">Submit</a>
             </div>
         </div> 
 		 
 {% endblock content%}
+
+
