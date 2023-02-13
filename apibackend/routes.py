@@ -289,9 +289,9 @@ def success(name):
 def inserting(name):  
     if request.method == 'GET':
         try:
-        
+            pass
         except MySQLdb.Error as e:
-            
+            pass
         #if successful insert then state ="successfully added questionnaire"
         #else state ="questionnaire was not added to the database"
         #redirect(url_for('success', name=filename, state=state))
