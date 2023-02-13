@@ -17,7 +17,7 @@
                       {{ form.hidden_tag() }}
                       {% for o in options %}
                      <p>  
-                     <input type="radio" name="options" id="option1" value="{{o.Opt_ID}} ">  {{o.Opt_text}} </input><br>
+                     <input type="radio" name="options" id="option1" value="{{o.Opt_ID}}">  {{o.Opt_text}} </input><br>
                      </p>
                      {% endfor %}
                      {{ form.submit(class = "btn btn-primary btn-submit-custom") }}
