@@ -268,11 +268,18 @@ def upload_file():
 # create and Download json File with all answers of questionnaire
 
 
-@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
-def download(filename):
-    path = filename
+@app.route('/uploads/<string:q>', methods=['GET', 'POST'])
+def download(q):
+    path = q+'.json'
+    File1 = open("QQ000.json", "w")
+    File1.write("\nWriting to file:)")
+    File1.close()
+    print(path)
     return send_file(path, as_attachment=True)
 
+
+
+    
 
 @app.route('/test/<string:QuestionnaireID>')
 def mkjson(QuestionnaireID):
