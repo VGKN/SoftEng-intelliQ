@@ -839,7 +839,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 cur.execute(query1)
 
                 if len(cur.fetchall()) != 0:
-                    resp=jsonify({'status':'failed','dberror':'Question is already answered by this session'})
+                    resp=jsonify({'status':'failed','dberror':'Bad request'})
                     resp.status_code=400
                     return resp
                 
