@@ -523,19 +523,6 @@ def getAdmins():
         print(e)
         return render_template("base.html",pageTitle="Landing Page")
         
-        
-@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questionss():
-    try:
-        if request.method=="GET":
-            try:
-                return render_template("admin.html")
-                                                                
-            except Exception as e:
-                        ## if the connection to the database fails, return HTTP response 500
-                flash(str(e), "danger")
-                abort(500)
-        
     #else: 
        # try:
             ## create connection to database
@@ -770,7 +757,7 @@ def QQQID(questionnaierid,questionid):
     
     
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
-def doanswer(questionnaierid,questionid,session,optionid):
+def doanswer(questionnaireid,questionid,session,optionid):
 
     if request.method=='GET':
         try:
@@ -780,37 +767,44 @@ def doanswer(questionnaierid,questionid,session,optionid):
 
             cur.execute(query)
 
-            column_names = [j[0] for j in cur.description]
-            res = [dict(zip(col_names, entry)) for entry in cur.fetchall()]
+            ses=list()
 
-            for n in  :
-                if session == res[n]['session_id']:
-                    return jsonify({'status':'fail', 'database':'the session is already in use'})
+            for n in cur.fetchall():
+                ses.append(n[0])
 
-            query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
-
-            cur.execute(query1)
-
-            col_names = [i[0] for i in cur.description]
-            result = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
-
-            if  res[0]['o_id'] != '': 
-                return jsonify({'status':'fail', 'database':'the answer is already in the database'})
-        
-            else:
-                z = string.ascii_letters
-                for _ in range(10):
-                    user = ''.join(random.choice(s) for _ in range(10))
-                
-                query2="insert into sesion (session_id, questionnaireid, userstring) values ('{}','{}','{}')".format(session, questionnaireid, user)
-                query3="insert into session_questions_options (s_id, q_id, o_id) values ('{}','{}','{}')".format(session, questionid, optionid)
+            active = 0
+            
+            for n in ses:
+                if session == n:
+                    active = 1
+                        
+            if active == 1:
+                query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
 
                 cur.execute(query1)
+
+                if len(cur.fetchall()) != 0:
+                    return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+                
+            elif active == 0:    
+                z = string.ascii_letters
+                for _ in range(10):
+                    user = ''.join(random.choice(z) for _ in range(10))
+                        
+                query2="insert into sesion (session_id, questionnaireid, userstring) values ('{}','{}','{}')".format(session, questionnaireid, user)
+
                 cur.execute(query2)
 
-                db.connection.commit()
+                        
+            query3="insert into session_questions_options (s_id, q_id, o_id) values ('{}','{}','{}')".format(session, questionid, optionid)
 
-                cur.close()
+            cur.execute(query3)
+
+            db.connection.commit()
+
+            cur.close()
+            
+            return {'status':'ok'}
 
 
 
@@ -820,7 +814,9 @@ def doanswer(questionnaierid,questionid,session,optionid):
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     
-    
+
+from operator import itemgetter
+
     
 @app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
 def hhhhealthcheck():
@@ -836,17 +832,40 @@ def hhhhealthcheck():
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     
     
+@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
+def getquestionanswers(questionnaireID, questionID):
+
+    cur = db.connection.cursor()
     
-@app.route("/getquestionanswers/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
-def hhhealthcheck():
-
-    if request.method=='GET':
-        try:
-            cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
-        except Exception as e:
-            print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-    else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
+    cur.execute(query1)
+    
+    myquestions=[]
+    for queryreturn in cur.fetchall():
+        myquestions.append(queryreturn[0])
+        
+    query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(questionID)
+    cur.execute(query2)
+    x=cur.fetchall()
+    x=list(x)
+ 
+    def sort_tuples(tup):
+        # Sort the tuples by the second item using the itemgetter function
+        return sorted(tup, key=itemgetter(1))
+    
+    y =sort_tuples(x)
+    
+  
+    maindic={}
+    maindic['QuestionnaireID']= questionnaireID
+    maindic['questionid']=questionID
+    maindic['answers']=[]
+ 
+    for queryreturn in y:
+        helpdic={}
+        helpdic['session']=queryreturn[0]
+        helpdic['ans']=queryreturn[1]
+        maindic['answers'].append(helpdic)
+    jsonify(maindic)
+    print(maindic)
+    return maindic
