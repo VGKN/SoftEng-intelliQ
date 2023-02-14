@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
 from flask import current_app
+from collections import ChainMap
 
 
 
@@ -674,18 +675,51 @@ def resetq(questionnaireid):
     
     
 @app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
-def hhhhhhhhhealthcheck():
+def QQID(questionnaireid):
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+
+            query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query1)
+
+            title={}
+            title['QuestionnaireID']=questionnaireid
+            title['Questionnaire_Title'] = cur.fetchall()[0][0]
+
+            query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query2)
+
+            x=cur.fetchall()
+            print(x)
+            res2=[]
+
+            for tup in x:
+                res2.append(tup[0])
+
+            print(res2)
+            title['keywords']=res2
+
+            query3 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionaireID = '{}'".format(questionnaireid)
+            cur.execute(query3)
+            
+            col3_names = [j[0] for j in cur.description] 
+            res3 = [dict(zip(col3_names, entry3)) for entry3 in cur.fetchall()]
+
+            print(col3_names)
+            title['questions']=res3
+
+            return json.dumps(title, ensure_ascii=False, indent=4, sort_keys=True)
+
+
         except Exception as e:
             print(e)
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-    
+
+
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
 def hhhhhhhealthcheck():
 
@@ -702,12 +736,57 @@ def hhhhhhhealthcheck():
     
     
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
-def hhhhhhealthcheck():
+def doanswer(questionnaireid,questionid,session,optionid):
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+
+            query="select session_id from sesion"
+
+            cur.execute(query)
+
+            ses=list()
+
+            for n in cur.fetchall():
+                ses.append(n[0])
+
+            active = 0
+            
+            for n in ses:
+                if session == n:
+                    active = 1
+                        
+            if active == 1:
+                query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
+
+                cur.execute(query1)
+
+                if len(cur.fetchall()) != 0:
+                    return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+                
+            elif active == 0:    
+                z = string.ascii_letters
+                for _ in range(10):
+                    user = ''.join(random.choice(z) for _ in range(10))
+                        
+                query2="insert into sesion (session_id, questionnaireid, userstring) values ('{}','{}','{}')".format(session, questionnaireid, user)
+
+                cur.execute(query2)
+
+                        
+            query3="insert into session_questions_options (s_id, q_id, o_id) values ('{}','{}','{}')".format(session, questionid, optionid)
+
+            cur.execute(query3)
+
+            db.connection.commit()
+
+            cur.close()
+            
+            return {'status':'ok'}
+
+
+
         except Exception as e:
             print(e)
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
