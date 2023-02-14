@@ -824,8 +824,9 @@ def getsessinoanswers(questionnaireid, session):
     
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
 def getquestionanswers(questionnaireID, questionID):
-    if request.method=='GET':
-        try:
+    try:
+        if request.method=='GET':
+      
             cur = db.connection.cursor()
             
             query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
