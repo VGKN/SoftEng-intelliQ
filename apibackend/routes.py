@@ -565,7 +565,6 @@ def questionnaire_upd():
                 success=True
             else:
                 errors[file.filename]='FILE TYPE IS NOT ALLOWED'
-        print(len(errors))
         if success and errors:
             errors['message']='File succesfully uploaded'
             resp=jsonify(errors)
@@ -579,7 +578,77 @@ def questionnaire_upd():
             resp=jsonify(errors)
             resp.status_code=500
             return resp
-                        
+'''        
+    path='./apibackend/'+name
+            with open(path,'r', encoding='utf-8') as file:
+                data=json.load(file)
+                cur= db.connection.cursor()
+                query="INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle'])
+                cur.execute(query)
+                cur.execute("Select Keyword from keywords")
+                Keywords=cur.fetchall()
+                for keyword in data['keywords']:
+                    if keyword not in Keywords:
+                        query="INSERT INTO Keywords (keyword) VALUES ('{}');".format(keyword)
+                        cur.execute(query)
+                    query="INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('{}','{}');".format(data['questionnaireID'],keyword)
+                    cur.execute(query)
+                for questions in data['questions']:
+                    
+                    myx=[]
+                    myy=[]
+                    qtext=[]
+                    texts=[]
+                    x=questions['qtext'].find("[*")
+                    myx.append(x)
+                    y=questions['qtext'].find("]",x+2)
+                    myy.append(y)
+                    
+                    while(x!=-1):
+                        qtext.append(questions['qtext'][x+2:y])
+                        x=questions['qtext'].find("[*", y)
+                        myx.append(x)
+                        y=questions['qtext'].find("]",x+2)
+                        myy.append(y)
+                    print(qtext)
+                    if len(qtext)!=0:
+                        for question in data['questions']:
+                            if question['qID ']==qtext[1]:
+                                texts.append(question['qtext'])
+                            for options in question['options']:
+                                if options['optID']==qtext[0]:
+                                    texts.append(options['opttxt'])
+                        print(myx,myy)
+                        print(texts)
+                        questiontext=questions['qtext'][0:myx[0]]+"\\'"+texts[1]+"\\'"+questions['qtext'][myy[0]+1:myx[1]] +"\\'"+texts[0]+"\\'"+questions['qtext'][myy[1]+1:]          
+                        print(questions)
+                        query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questiontext,questions['required'],questions['type'],data['questionnaireID'])
+                    else:
+                        query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID'])
+                    cur.execute(query)  
+                    nextq=''
+                for questions in data['questions']:
+                    for option in questions['options']:
+                        query="INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt'])
+                        cur.execute(query)
+                        if option['nextqID']=='-':
+                            nextq=questions['qID ']
+                        else:
+                            nextq=option['nextqID']
+                        query="INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq)
+                        cur.execute(query)
+            db.connection.commit()
+            state ="successfully added questionnaire"
+            print(state)
+            return redirect(url_for('success', name=name, state=state))
+        except Exception as e:
+            print(e)
+            print('hello')
+            state ="questionnaire was not added to the database due to error with the format of the json file"
+            print(state)
+            return redirect(url_for('success', name=name, state=state))
+    return render_template('error500.html')   
+    '''
     except Exception as e:
         print(e)
         return {'success':'ok'}
