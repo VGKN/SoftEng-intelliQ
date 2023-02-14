@@ -705,13 +705,11 @@ def QQID(questionnaireid):
             cur.execute(query2)
 
             x=cur.fetchall()
-            print(x)
             res2=[]
 
             for tup in x:
                 res2.append(tup[0])
 
-            print(res2)
             title['keywords']=res2
 
             query3 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionaireID = '{}'".format(questionnaireid)
@@ -720,7 +718,6 @@ def QQID(questionnaireid):
             col3_names = [j[0] for j in cur.description] 
             res3 = [dict(zip(col3_names, entry3)) for entry3 in cur.fetchall()]
 
-            print(col3_names)
             title['questions']=res3
 
             return json.dumps(title, ensure_ascii=False, indent=4, sort_keys=True)
@@ -734,12 +731,36 @@ def QQID(questionnaireid):
 
 
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
-def hhhhhhhealthcheck():
+def QQQID(questionnaierid,questionid):
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+            cur.execute(query1)
+
+            title={}
+            title['QuestionnaireID']=questionnaireid
+
+            query1 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionID = '{}'".format(questionid)
+            cur.execute(query1)
+
+            x = cur.fetchall()
+            print(x)
+            
+            #col1_names = [i[0] for i in cur.description] 
+            #res1 = [dict(zip(col1_names, entry1)) for entry1 in cur.fetchall()]
+
+
+            title['Question_Specifics']=res1
+
+            query2 = "select Opt_Text from Options where Opt_ID in (select OptID from Questions_Options where QuestionID = '{}') UNION select Opt_ID, Next_Q from Questions_Options where QuestionID = '{}'".format(questionid)
+            cur.execute(query2)
+            
+            col2_names = [j[0] for j in cur.description] 
+            res2 = [dict(zip(col2_names, entry2)) for entry2 in cur.fetchall()]
+
+
+
         except Exception as e:
             print(e)
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
