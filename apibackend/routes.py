@@ -1,12 +1,12 @@
+import json 
+import os
+import random
+import string
 from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm,QuestionForm
 from jinja2 import Template
-import json 
-import os
-import random
-import string
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
@@ -616,10 +616,10 @@ def postResetAll():
 
 
 
-@app.route("/admin/resetq/<string:questionnaireid>", methods=['GET','POST'])
+@app.route("/admin/resetq/<string:questionnaireid>", methods=['POST'])
 def resetq(questionnaireid):
 
-    if request.method=='GET':
+    if request.method=='POST':
         try:
             cur = db.connection.cursor()
             query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
@@ -633,7 +633,7 @@ def resetq(questionnaireid):
             print(e)
             return jsonify({'status':'failed','reason':'<Connection With Database Error>'})
     else:
-        return jsonify({'status':'failed', 'reason':'<GET methon unsupported>'})
+        return jsonify({'status':'failed', 'reason':'<GET method unsupported>'})
     
     
     
@@ -722,7 +722,7 @@ def QQQID(questionnaierid,questionid):
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
 def doanswer(questionnaireid,questionid,session,optionid):
 
-    if request.method=='GET':
+    if request.method=='POST':
         try:
             cur = db.connection.cursor()
 
