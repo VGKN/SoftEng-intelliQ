@@ -776,7 +776,7 @@ def QQID(questionnaireid):
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
 
 
-@app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
+@app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET'])
 def QQQID(questionnaireid,questionid):
 
     if request.method=='GET':
