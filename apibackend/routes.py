@@ -11,6 +11,8 @@ from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
 from flask import current_app
+from collections import ChainMap
+from operator import itemgetter
 
 
 
@@ -27,7 +29,7 @@ def index():
                 return redirect(url_for("Admin"))
         else:
             return render_template("base.html")
-            
+        
     except Exception as e:
         print(e)
         abort(500)
@@ -514,24 +516,18 @@ def Answers(QuestionnaireID, Question_ID):
                                                                 
         except Exception as e:
             print(e)
-            return render_template("base.html")
+            return render_template("base.html",pageTitle="Landing Page")
+
+
         
-     
-@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questionss():
-    try:
-        if request.method=="GET":
-            try:
-                return render_template("admin.html")
-                                                                
-            except Exception as e:
-                        ## if the connection to the database fails, return HTTP response 500
-                flash(str(e), "danger")
-                abort(500)
-                        
-    except Exception as e:
-        print(e)
-        return render_template("base.html")
+    
+        return render_template("base.html",pageTitle="Landing Page")
+        
+        
+
+        
+        
+        
         
         
 @app.route("/admin/healthcheck", methods=['GET'])
@@ -540,14 +536,14 @@ def healthcheck():
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+            return jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'})
         except Exception as e:
             print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
                                  
-   
+
 
 @app.route("/admin/questionnaire_upd", methods=["POST"])
 def questionnaire_upd(questionnaire_id):
@@ -578,47 +574,278 @@ def questionnaire_upd(questionnaire_id):
     '''
     return 0
     
+    
+    
 @app.route("/admin/resetall", methods=["POST"])
-def getAnswersS(questionnaire_id):
+def postResetAll():
     try:
         if request.method == 'POST':
-         #cur = db.connection.cursor()
-         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
-         #column_names = [i[0] for i in cur.description]
-         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-         #return jsonify(table)
-         return {'status':'ok'}
-         #   
+            cur = db.connection.cursor()
+
+            cur.execute("DELETE FROM Questionnaire_Keywords")
+            cur.execute("DELETE FROM Questions_Options")
+            cur.execute("DELETE FROM Session_Questions_Options")
+            cur.execute("DELETE FROM Question")
+            cur.execute("DELETE FROM Sesion")
+            cur.execute("DELETE FROM Questionnaire")
+            cur.execute("DELETE FROM Keywords")
+            cur.execute("DELETE FROM Options")
+
+            db.connection.commit()
+
+            cur.close()
+
+            return jsonify({'status':'OK'})
+
         else:
-            return {'status':'failed', 'reason': 'GET method unsupported'}                   
+            return jsonify({'status':'failed', 'reason': '<GET method not supported>'})               
     except Exception as e:
         print(e)
-        return {'status':'failed', 'reason': 'Cannot connect to database'}
+        return jsonify({'status':'failed', 'reason': 'Queries could not be handled correctly to delete the data of intelliQ database'})
 
+
+
+
+@app.route("/admin/resetq/<string:questionnaireid>", methods=['POST'])
+def resetq(questionnaireid):
+
+    if request.method=='POST':
+        try:
+            cur = db.connection.cursor()
+            query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
+            cur.execute(query)
+            db.connection.commit()
+            cur.close()
+            return jsonify({'status':'OK'})
+        except Exception as e:
+            print(e)
+            return jsonify({'status':'failed','reason':'<Connection With Database Error>'})
+    else:
+        return jsonify({'status':'failed', 'reason':'<GET methon unsupported>'})
+    
+    
+    
+@app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
+def QQID(questionnaireid):
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+
+            query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query1)
+
+            title={}
+            title['QuestionnaireID']=questionnaireid
+            title['Questionnaire_Title'] = cur.fetchall()[0][0]
+
+            query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query2)
+
+            x=cur.fetchall()
+            res2=[]
+
+            for tup in x:
+                res2.append(tup[0])
+
+            title['keywords']=res2
+
+            query3 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionaireID = '{}'".format(questionnaireid)
+            cur.execute(query3)
+            
+            col3_names = [j[0] for j in cur.description] 
+            res3 = [dict(zip(col3_names, entry3)) for entry3 in cur.fetchall()]
+
+            title['questions']=res3
+
+            return json.dumps(title, ensure_ascii=False, indent=4, sort_keys=True)
+
+
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+
+"""
+@app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
+def QQQID(questionnaierid,questionid):
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            cur.execute(query1)
+
+            title={}
+            title['QuestionnaireID']=questionnairid
+
+            query1 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionID = '{}'".format(questionid)
+            cur.execute(query1)
+
+            x = cur.fetchall()
+            print(x)
+            
+            #col1_names = [i[0] for i in cur.description] 
+            #res1 = [dict(zip(col1_names, entry1)) for entry1 in cur.fetchall()]
+
+
+            title['Question_Specifics']=res1
+
+            query2 = "select Opt_Text from Options where Opt_ID in (select OptID from Questions_Options where QuestionID = '{}') UNION select Opt_ID, Next_Q from Questions_Options where QuestionID = '{}'".format(questionid)
+            cur.execute(query2)
+            
+            col2_names = [j[0] for j in cur.description] 
+            res2 = [dict(zip(col2_names, entry2)) for entry2 in cur.fetchall()]
+
+
+
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     """
-@app.route("/getsessionanswers/<int:questionnaire_id>", methods=["GET"])
-def getAnswersS(questionnaire_id):
-    try:
-         #cur = db.connection.cursor()
-         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
-         #column_names = [i[0] for i in cur.description]
-         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-         #return jsonify(table)
-         return {'success':'ok'}
-         #                      
-    except Exception as e:
-        print(e)
-        return {'success':'ok'}
+    
+    
+@app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
+def doanswer(questionnaireid,questionid,session,optionid):
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+
+            query="select session_id from sesion"
+
+            cur.execute(query)
+
+            ses=list()
+
+            for n in cur.fetchall():
+                ses.append(n[0])
+
+            active = 0
+            
+            for n in ses:
+                if session == n:
+                    active = 1
+                        
+            if active == 1:
+                query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
+
+                cur.execute(query1)
+
+                if len(cur.fetchall()) != 0:
+                    return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+                
+            elif active == 0:    
+                z = string.ascii_letters
+                for _ in range(10):
+                    user = ''.join(random.choice(z) for _ in range(10))
+                        
+                query2="insert into sesion (session_id, questionnaireid, userstring) values ('{}','{}','{}')".format(session, questionnaireid, user)
+
+                cur.execute(query2)
+
+                        
+            query3="insert into session_questions_options (s_id, q_id, o_id) values ('{}','{}','{}')".format(session, questionid, optionid)
+
+            cur.execute(query3)
+
+            db.connection.commit()
+
+            cur.close()
+            
+            return {'status':'ok'}
 
 
 
-    """       
-@app.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return render_template("NotFound404.html", pageTitle = "Not Found"),404
+        except Exception as e:
+            print(e)
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    else:
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    
 
-@app.errorhandler(500)
-def server_error(e):
-    return render_template("Error500.html", pageTitle = "Internal Server Error"),500
 
+
+
+
+    
+@app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
+def getsessinoanswers(questionnaireid, session):
+
+    cur = db.connection.cursor()
+    
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireid)
+    cur.execute(query1)
+    
+    myquestions=[]
+    for queryreturn in cur.fetchall():
+        myquestions.append(queryreturn[0])
+        
+    query2 = "select Q_ID,O_ID from session_questions_options where (S_ID = '{}')".format(session)
+    cur.execute(query2)
+    x=cur.fetchall()
+    x=list(x)
+ 
+    def sort_tuples(tup):
+        # Sort the tuples by the second item using the itemgetter function
+        return sorted(tup, key=itemgetter(0))
+    
+    y =sort_tuples(x)
+    
+  
+    maindic={}
+    maindic['QuestionnaireID']= questionnaireid
+    maindic['session']=session
+    maindic['answers']=[]
+ 
+    for queryreturn in y:
+        helpdic={}
+        helpdic['qID']=queryreturn[0]
+        helpdic['ans']=queryreturn[1]
+        maindic['answers'].append(helpdic)
+    jsonify(maindic)
+    #print(maindic)
+    return maindic
+    
+    
+    
+    
+@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
+def getquestionanswers(questionnaireID, questionID):
+
+    cur = db.connection.cursor()
+    
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
+    cur.execute(query1)
+    
+    myquestions=[]
+    for queryreturn in cur.fetchall():
+        myquestions.append(queryreturn[0])
+        
+    query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(questionID)
+    cur.execute(query2)
+    x=cur.fetchall()
+    x=list(x)
+ 
+    def sort_tuples(tup):
+        # Sort the tuples by the second item using the itemgetter function
+        return sorted(tup, key=itemgetter(1))
+    
+    y =sort_tuples(x)
+    
+  
+    maindic={}
+    maindic['QuestionnaireID']= questionnaireID
+    maindic['questionid']=questionID
+    maindic['answers']=[]
+ 
+    for queryreturn in y:
+        helpdic={}
+        helpdic['session']=queryreturn[0]
+        helpdic['ans']=queryreturn[1]
+        maindic['answers'].append(helpdic)
+    jsonify(maindic)
+    #print(maindic)
+    return maindic
