@@ -1,12 +1,12 @@
+import json 
+import os
+import random
+import string
 from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm,QuestionForm
 from jinja2 import Template
-import json 
-import os
-import random
-import string
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
@@ -551,43 +551,39 @@ def healthcheck():
 def questionnaire_upd():
    
     try:
+        success=False
+        errors={}
         if 'files' not in request.files:
-            resp=jsonify({'status':'No file part in request'})
+            resp=jsonify({'status':'No file part in request', 'state':success})
             resp.status_code=400
             return resp
         files=request.files.getlist('files')
-        return {'fileis':'filess'}
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename=secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+                success=True
+            else:
+                errors[file.filename]='FILE TYPE IS NOT ALLOWED'
+        print(len(errors))
+        if success and errors:
+            errors['message']='File succesfully uploaded'
+            resp=jsonify(errors)
+            resp.status_code=500
+            return resp
+        if success:
+            resp=jsonify({'message':'Files successfully uploaded'})
+            resp.status_code=200
+            return resp
+        else:
+            resp=jsonify(errors)
+            resp.status_code=500
+            return resp
+                        
     except Exception as e:
         print(e)
         return {'success':'ok'}
-    '''
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            print(filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('success', name=filename))
-        username = request.args.get('username')
-        password = request.args.get('password')
-    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
-         return {'success':'ok'}
-         #                      
-    except Exception as e:
-        print(e)
-        return {'success':'ok'}
-    
-    return 0
-    '''
+
     
     
 @app.route("/admin/resetall", methods=["POST"])
