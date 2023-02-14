@@ -2,6 +2,8 @@
 
 Tasks to be completed.
 
+## SETUP
+- [ ] Make shell scripts to automate building services, cloning repo, creating virtual environments etc @ntua-el19144
 ## POSTMAN
 
 - [ ] Create Postman Script to automatically test API functionality @ntua-el19188
@@ -9,6 +11,7 @@ Tasks to be completed.
 ## BACKEND
 
 - [ ] Implement remaining backend API endpoints @ntua-el19219
+- [ ] Accept csv format files and export them @ntua-el19144
 
 ## FRONTEND
 
@@ -16,17 +19,19 @@ Tasks to be completed.
 
 ## CLI
 - [ ] Create Command Line Tool @ntua-el19144
-    - [ ] Create python scripts to interact with endpoints @ntua-el19129
+- [ ] Finish last scopes @ntua-el19219
 
 ## DATABASE
 
-- [ ] Create another mock questionnaire@ntua-el19144
+- [ ] Create another mock questionnaire @ntua-el19144
 
-## VPP
+## DOCUMENTATION
 
 - [ ] Update VPP graphs @ntua-el19219
 - [ ] Update SRS doc @ntua-el19219
 - [ ] Create Stakeholders Requirements Specifications Doc @ntua-el19188
+- [ ] Create API documentation
+- [ ] Create installation documentation
 
 ## TEST
 
@@ -47,3 +52,4 @@ Tasks to be completed.
 - [x] Create Database
 - [x] Sync API with Postman
 - [x] Design Front end 
+- [x] Create python scripts to interact with endpoints
