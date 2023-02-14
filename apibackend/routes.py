@@ -2,7 +2,7 @@ import json
 import os
 import random
 import string
-from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, Response
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm,QuestionForm
@@ -538,12 +538,18 @@ def healthcheck():
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'})
+            resp=jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'}) 
+            resp.status_code=200
+            return resp
         except Exception as e:
             print(e)
-            return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'}), 400
+            resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+            resp.statsu_code=500
+            return resp
     else:
-        return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+        resp=jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+        resp.status_code=500
+        return resp
                                  
 
 
@@ -672,13 +678,20 @@ def postResetAll():
 
             cur.close()
 
-            return jsonify({'status':'OK'})
+            resp=jsonify({'status':'OK'})
+            resp.status_code=200
+            return resp 
+
 
         else:
-            return jsonify({'status':'failed', 'reason': '<GET method not supported>'})               
+            resp=jsonify({'status':'failed', 'reason': '<This method is not allowed>'})
+            resp.status_code=400
+            return resp              
     except Exception as e:
         print(e)
-        return jsonify({'status':'failed', 'reason': 'Queries could not be handled correctly to delete the data of intelliQ database'})
+        resp=jsonify({'status':'failed', 'reason': '<Database error>'})
+        resp.status_code=500
+        return resp
 
 
 
@@ -691,7 +704,7 @@ def resetq(questionnaireid):
             cur = db.connection.cursor()
             query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
             cur.execute(query)
-            query=  "delete from sesion where questionnaireid#='{}'".format(questionnaireid)
+            query=  "delete from sesion where questionnaireid='{}'".format(questionnaireid)
             cur.execute(query)
             db.connection.commit()
             cur.close()
@@ -814,7 +827,9 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 cur.execute(query1)
 
                 if len(cur.fetchall()) != 0:
-                    return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+                    resp=jsonify({'status':'failed','dberror':'Question is already answered by this session'})
+                    resp.status_code=400
+                    return resp
                 
             elif active == 0:    
                 z = string.ascii_letters
@@ -834,15 +849,21 @@ def doanswer(questionnaireid,questionid,session,optionid):
 
             cur.close()
             
-            return {'status':'ok'}
+            resp = jsonify()
+            resp.status_code=200
+            return resp
 
 
 
         except Exception as e:
             print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            resp=jsonify({'status':'failed','dberror':'Request not possible'})
+            resp.status_code=400
+            return resp
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        resp=jsonify({'status':'failed','server':'This method is not allowed'})
+        resp.status_code=400
+        return resp
     
 
 
