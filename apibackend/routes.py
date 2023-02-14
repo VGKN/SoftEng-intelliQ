@@ -549,9 +549,15 @@ def healthcheck():
 
 @app.route("/admin/questionnaire_upd", methods=["POST"])
 def questionnaire_upd(questionnaire_id):
-    '''
+    pass
+'''
     try:
-         if request.method == 'POST':
+        filename = request.file('filename')
+        return {'0':'0'}
+    except Exception as e:
+        print(e)
+        return {'success':'ok'}
+    if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -567,15 +573,17 @@ def questionnaire_upd(questionnaire_id):
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('success', name=filename))
+        username = request.args.get('username')
+        password = request.args.get('password')
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
          return {'success':'ok'}
          #                      
     except Exception as e:
         print(e)
         return {'success':'ok'}
-    '''
-    return 0
     
+    return 0
+'''    
     
     
 @app.route("/admin/resetall", methods=["POST"])
