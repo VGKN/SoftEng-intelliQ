@@ -822,10 +822,11 @@ def QQQID(questionnaireid,questionid):
             return jsonify(maindic)
 
         except Exception as e:
-            print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+            resp.status_code = 500
+            return resp
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        return {'status':'failed','reason':'Method Not Allowed'}
     
     
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
@@ -965,7 +966,7 @@ def getsessinoanswers(questionnaireid, session):
             resp.status_code = 500
             return resp
     else:
-        return {'status':'failed','dbconnection':'Method Not Allowed'}
+        return {'status':'failed','reason':'Method Not Allowed'}
    
     
     
@@ -1034,7 +1035,7 @@ def getquestionanswers(questionnaireID, questionID):
             cur.close()
             return maindic
         else:
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            return {'status':'failed','reason':'MySQL Database intelliQ running on Apache Web Server'}
     except Exception as e:
         resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
         resp.status_code = 500
