@@ -349,13 +349,14 @@ def inserting(name):
                         cur.execute(query)
             db.connection.commit()
             state ="successfully added questionnaire"
-            redirect(url_for('success', name=name, state=state))
+            print(state)
+            return redirect(url_for('success', name=name, state=state))
         except Exception as e:
             print(e)
             print('hello')
-            state ="questionnaire was not added to the database"
+            state ="questionnaire was not added to the database due to error with the format of the json file"
             print(state)
-            redirect(url_for('success', name=name, state=state))
+            return redirect(url_for('success', name=name, state=state))
     return render_template('error500.html')
               
         
@@ -414,10 +415,10 @@ def mkjson(QuestionnaireID):
         cur.execute(query2)
         x=cur.fetchall()     
         maindic={}
-        helpdic={}
         maindic['questionid']=qqid
         maindic['answers']=[]
         for queryreturn in x:
+            helpdic={}
             helpdic['session']=queryreturn[0]
             helpdic['ans']=queryreturn[1]
             maindic['answers'].append(helpdic)
