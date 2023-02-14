@@ -824,8 +824,9 @@ def getsessinoanswers(questionnaireid, session):
     
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
 def getquestionanswers(questionnaireID, questionID):
-    if request.method=='GET':
-        try:
+    try:
+        if request.method=='GET':
+        
             cur = db.connection.cursor()
             
             query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
@@ -859,8 +860,9 @@ def getquestionanswers(questionnaireID, questionID):
                 maindic['answers'].append(helpdic)
             jsonify(maindic)
             return maindic
+        else:
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     except Exception as e:
         print(e)
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-        else:
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+       
