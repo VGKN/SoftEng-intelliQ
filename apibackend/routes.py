@@ -888,7 +888,7 @@ def getsessinoanswers(questionnaireid, session):
         try:
             cur = db.connection.cursor()
             query0 = "select questionnaireid from questionnaire"
-            q1 ="select session_id fron sesion"
+            q1 ="select session_id from sesion"
             cur.execute(query0)
             x = cur.fetchall()
             
@@ -957,7 +957,7 @@ def getquestionanswers(questionnaireID, questionID):
         if request.method=='GET':
             cur = db.connection.cursor()
             query0 = "select questionnaireid from questionnaire"
-            q1 ="select question_id fron question"
+            q1 ="select question_id from question"
             cur.execute(query0)
             x = cur.fetchall()
             qids=[]
