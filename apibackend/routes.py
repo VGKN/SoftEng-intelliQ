@@ -887,56 +887,60 @@ def getsessinoanswers(questionnaireid, session):
     try:
         if request.method=='GET':
             try:
-            cur = db.connection.cursor()
-            query0 = "select questionnaireid from questionnaire"
-            q1 ="select session_id fron sesion"
-            cur.execute(query0)
-            x = cur.fetchall()
-            qids=[]
-            for n in x:
-                qids.append(n[0])
-            if questionnaireid not in qids:
-                resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
-                resp.status_code = 400
-                return resp
-            cur.execute(q1)
-            x = cur.fetchall()
-            sids=[]
-            if session not in sids:
-                resp = jsonify ({"status":"failed", "reason":"Session not found"})
-                resp.status_code = 400
-                return resp
-            
-            query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireid)
-            cur.execute(query1)
-    
-            myquestions=[]
-            for queryreturn in cur.fetchall():
-                myquestions.append(queryreturn[0])
-            
-            query2 = "select Q_ID,O_ID from session_questions_options where (S_ID = '{}')".format(session)
-            cur.execute(query2)
-            x=cur.fetchall()
-            x=list(x)
-    
-            def sort_tuples(tup):
-                return sorted(tup, key=itemgetter(0))
+                cur = db.connection.cursor()
+                query0 = "select questionnaireid from questionnaire"
+                q1 ="select session_id fron sesion"
+                cur.execute(query0)
+                x = cur.fetchall()
+                qids=[]
+                for n in x:
+                    qids.append(n[0])
+                if questionnaireid not in qids:
+                    resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
+                    resp.status_code = 400
+                    return resp
+                cur.execute(q1)
+                x = cur.fetchall()
+                sids=[]
+                if session not in sids:
+                    resp = jsonify ({"status":"failed", "reason":"Session not found"})
+                    resp.status_code = 400
+                    return resp
+                
+                query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireid)
+                cur.execute(query1)
         
-            y =sort_tuples(x)
+                myquestions=[]
+                for queryreturn in cur.fetchall():
+                    myquestions.append(queryreturn[0])
+                
+                query2 = "select Q_ID,O_ID from session_questions_options where (S_ID = '{}')".format(session)
+                cur.execute(query2)
+                x=cur.fetchall()
+                x=list(x)
         
-    
-            maindic={}
-            maindic['QuestionnaireID']= questionnaireid
-            maindic['session']=session
-            maindic['answers']=[]
-    
-            for queryreturn in y:
-                helpdic={}
-                helpdic['qID']=queryreturn[0]
-                helpdic['ans']=queryreturn[1]
-                maindic['answers'].append(helpdic)
-            jsonify(maindic)
-            return maindic
+                def sort_tuples(tup):
+                    return sorted(tup, key=itemgetter(0))
+            
+                y =sort_tuples(x)
+            
+        
+                maindic={}
+                maindic['QuestionnaireID']= questionnaireid
+                maindic['session']=session
+                maindic['answers']=[]
+        
+                for queryreturn in y:
+                    helpdic={}
+                    helpdic['qID']=queryreturn[0]
+                    helpdic['ans']=queryreturn[1]
+                    maindic['answers'].append(helpdic)
+                jsonify(maindic)
+                return maindic
+            except Exception as e:
+                resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+                resp.status_code = 500
+                return resp
         else:
             return {'status':'failed','dbconnection':'Method Not Allowed'}
     except Exception as e:
