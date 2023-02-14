@@ -714,7 +714,9 @@ def hhhhhhealthcheck():
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     
-    
+
+from operator import itemgetter
+
     
 @app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
 def hhhhealthcheck():
@@ -732,37 +734,38 @@ def hhhhealthcheck():
     
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
 def getquestionanswers(questionnaireID, questionID):
-    mydict={}
-    mydict['questionnaireID']=questionnaireID
+
     cur = db.connection.cursor()
+    
     query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
     cur.execute(query1)
+    
     myquestions=[]
-  
     for queryreturn in cur.fetchall():
         myquestions.append(queryreturn[0])
-    
+        
     query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(questionID)
     cur.execute(query2)
-    x=cur.fetchall()     
+    x=cur.fetchall()
+    x=list(x)
+ 
+    def sort_tuples(tup):
+        # Sort the tuples by the second item using the itemgetter function
+        return sorted(tup, key=itemgetter(1))
+    
+    y =sort_tuples(x)
+    
+  
     maindic={}
-    helpdic={}
+    maindic['QuestionnaireID']= questionnaireID
     maindic['questionid']=questionID
     maindic['answers']=[]
-    for queryreturn in x:
+ 
+    for queryreturn in y:
+        helpdic={}
         helpdic['session']=queryreturn[0]
         helpdic['ans']=queryreturn[1]
         maindic['answers'].append(helpdic)
-    questions.append(maindic)
-    mydict['questions']=questions
-    path = './apibackend/'+QuestionnaireID+'.json'
-    File1 = open(path, "w+")
-    json.dump(mydict, File1)
-    File1.close()
-    path = QuestionnaireID+'.json'
-    return  redirect (url_for ("download",filename=path))           
-            except Exception as e:
-                        ## if the connection to the database fails, return HTTP response 500
-                flash(str(e), "danger")
-                abort(500)
-
+    jsonify(maindic)
+    print(maindic)
+    return maindic
