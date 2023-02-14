@@ -525,12 +525,12 @@ def Answers(QuestionnaireID, Question_ID):
         
         
 
-#               ____     _____    _______    ________          __       ____    _                          #
-#             ||    \\  ||____|  ||_____||  |________|        //\\     ||   \\ |_|                         #
+#              ______    _____    _______    ________          __       ____    _                          #
+#             ||    \\  | ____|  | ______|  |________|        //\\     ||   \\ |_|                         #
 #             ||____//  ||____   ||______       ||           //__\\    ||___//  _                          #
-#             ||\\      ||____|  ||_____||      ||          //    \\   ||      | |                         #
+#             ||\\      | ____|  |______ |      ||          //    \\   ||      | |                         #
 #             || \\     ||____    ______||      ||         //      \\  ||      | |                         #
-#             ||  \\    ||____|  ||_____||      ||        //        \\ ||      |_|                         #
+#             ||  \\    |_____|  |_______|      ||        //        \\ ||      |_|                         #
 
 @app.route("/admin/healthcheck", methods=['GET'])
 def healthcheck():
@@ -548,10 +548,20 @@ def healthcheck():
 
 
 @app.route("/admin/questionnaire_upd", methods=["POST"])
-def questionnaire_upd(questionnaire_id):
-    '''
+def questionnaire_upd():
+   
     try:
-         if request.method == 'POST':
+        if 'files' not in request.files:
+            resp=jsonify({'status':'No file part in request'})
+            resp.status_code=400
+            return resp
+        files=request.files.getlist('files')
+        return {'fileis':'filess'}
+    except Exception as e:
+        print(e)
+        return {'success':'ok'}
+    '''
+    if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
@@ -567,15 +577,17 @@ def questionnaire_upd(questionnaire_id):
             print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('success', name=filename))
+        username = request.args.get('username')
+        password = request.args.get('password')
     return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
          return {'success':'ok'}
          #                      
     except Exception as e:
         print(e)
         return {'success':'ok'}
-    '''
-    return 0
     
+    return 0
+    '''
     
     
 @app.route("/admin/resetall", methods=["POST"])
