@@ -4,16 +4,15 @@ Tasks to be completed.
 
 ## POSTMAN
 
-- [ ] Sync API with Postman @ntua-el19219
+- [ ] Sync API with Postman @ntua-el19136
 
 ## BACKEND
 
-- [ ] Implement backend API endpoints @ntua-el19136
-- [ ] Make connection between frontend and backend
+- [ ] Implement remaining backend API endpoints @ntua-el19188 
 
 ## FRONTEND
 
-- [ ] Design Front end @ntua-el19136
+- [ ] Design Front end 
 
 ## CLI
 - [ ] Create Command Line Tool @ntua-el19144
@@ -21,7 +20,7 @@ Tasks to be completed.
 
 ## DATABASE
 
-- [ ] Create Database @ntua-el19188
+- [ ] Create another mock questionnaire@ntua-el19144
 
 ## VPP
 
@@ -43,3 +42,6 @@ Tasks to be completed.
 - [x] Test DDL schema @ntua-el19136
 - [x] DML Production @ntua-el19188
 - [x] Make Dummy Data
+- [x] Make connection between frontend and backend
+- [x] Implement frontend use-cases
+- [x] Create Database
