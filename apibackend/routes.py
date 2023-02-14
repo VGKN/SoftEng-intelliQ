@@ -922,7 +922,8 @@ def getsessinoanswers(questionnaireid, session):
             cur.execute(query2)
             x=cur.fetchall()
             x=list(x)
-    
+            
+            # Sort the tuples by the second item using the itemgetter function
             def sort_tuples(tup):
                 return sorted(tup, key=itemgetter(0))
         
@@ -955,11 +956,14 @@ def getsessinoanswers(questionnaireid, session):
 def getquestionanswers(questionnaireID, questionID):
     try:
         if request.method=='GET':
+            
             cur = db.connection.cursor()
             query0 = "select questionnaireid from questionnaire"
             q1 ="select question_id from question"
+            
             cur.execute(query0)
             x = cur.fetchall()
+            
             qids=[]
             for n in x:
                 qids.append(n[0])
@@ -967,9 +971,14 @@ def getquestionanswers(questionnaireID, questionID):
                 resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
                 resp.status_code = 400
                 return resp
+            
             cur.execute(q1)
             x = cur.fetchall()
+            
+            
             qqids=[]
+            for n in x:
+                qqids.append(n[0])
             if questionID not in qqids:
                 resp = jsonify ({"status":"failed", "reason":"Session not found"})
                 resp.status_code = 400
@@ -987,8 +996,8 @@ def getquestionanswers(questionnaireID, questionID):
             x=cur.fetchall()
             x=list(x)
         
+            # Sort the tuples by the second item using the itemgetter function
             def sort_tuples(tup):
-                # Sort the tuples by the second item using the itemgetter function
                 return sorted(tup, key=itemgetter(1))
             
             y =sort_tuples(x)
