@@ -762,7 +762,11 @@ def QQID(questionnaireid):
 
             title['questions']=res3
 
-            return json.dumps(title, ensure_ascii=False, indent=4, sort_keys=True)
+            #json.dumps(title, ensure_ascii=False, indent=4, sort_keys=True)
+            resp = jsonify (title)
+            resp.status_code = 200
+            return resp
+            #return json.dumps(title, ensure_ascii=False),200 
 
 
         except Exception as e:
