@@ -551,7 +551,7 @@ def healthcheck():
 def questionnaire_upd():
    
     try:
-        if 'files' not in requst.files:
+        if 'files' not in request.files:
             resp=jsonify({'status':'No file part in request'})
             resp.status_code=400
             return resp
