@@ -605,13 +605,15 @@ def postResetAll():
 
 
 
-@app.route("/admin/resetq/<string:questionnaireid>", methods=['POST'])
+@app.route("/admin/resetq/<string:questionnaireid>", methods=['GET','POST'])
 def resetq(questionnaireid):
 
-    if request.method=='POST':
+    if request.method=='GET':
         try:
             cur = db.connection.cursor()
             query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
+            cur.execute(query)
+            query=  "delete from sesion where questionnaireid#='{}'".format(questionnaireid)
             cur.execute(query)
             db.connection.commit()
             cur.close()
