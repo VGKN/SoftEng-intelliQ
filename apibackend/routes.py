@@ -715,7 +715,7 @@ def hhhhhhhealthcheck():
     
     
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
-def doanswer(questionnaierid,questionid,session,optionid):
+def doanswer(questionnaireid,questionid,session,optionid):
 
     if request.method=='GET':
         try:
@@ -725,37 +725,44 @@ def doanswer(questionnaierid,questionid,session,optionid):
 
             cur.execute(query)
 
-            column_names = [j[0] for j in cur.description]
-            res = [dict(zip(col_names, entry)) for entry in cur.fetchall()]
+            ses=list()
 
-            for n in  :
-                if session == res[n]['session_id']:
-                    return jsonify({'status':'fail', 'database':'the session is already in use'})
+            for n in cur.fetchall():
+                ses.append(n[0])
 
-            query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
-
-            cur.execute(query1)
-
-            col_names = [i[0] for i in cur.description]
-            result = [dict(zip(col_names, entry1)) for entry1 in cur.fetchall()]
-
-            if  res[0]['o_id'] != '': 
-                return jsonify({'status':'fail', 'database':'the answer is already in the database'})
-        
-            else:
-                z = string.ascii_letters
-                for _ in range(10):
-                    user = ''.join(random.choice(s) for _ in range(10))
-                
-                query2="insert into sesion (session_id, questionnaireid, userstring) values ('{}','{}','{}')".format(session, questionnaireid, user)
-                query3="insert into session_questions_options (s_id, q_id, o_id) values ('{}','{}','{}')".format(session, questionid, optionid)
+            active = 0
+            
+            for n in ses:
+                if session == n:
+                    active = 1
+                        
+            if active == 1:
+                query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
 
                 cur.execute(query1)
+
+                if len(cur.fetchall()) != 0:
+                    return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+                
+            elif active == 0:    
+                z = string.ascii_letters
+                for _ in range(10):
+                    user = ''.join(random.choice(z) for _ in range(10))
+                        
+                query2="insert into sesion (session_id, questionnaireid, userstring) values ('{}','{}','{}')".format(session, questionnaireid, user)
+
                 cur.execute(query2)
 
-                db.connection.commit()
+                        
+            query3="insert into session_questions_options (s_id, q_id, o_id) values ('{}','{}','{}')".format(session, questionid, optionid)
 
-                cur.close()
+            cur.execute(query3)
+
+            db.connection.commit()
+
+            cur.close()
+            
+            return {'status':'ok'}
 
 
 
