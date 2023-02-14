@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
 from flask import current_app
+from collections import ChainMap
 
 
 
@@ -687,18 +688,51 @@ def resetq(questionnaireid):
     
     
 @app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
-def hhhhhhhhhealthcheck():
+def QQID(questionnaireid):
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+
+            query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query1)
+
+            title={}
+            title['QuestionnaireID']=questionnaireid
+            title['Questionnaire_Title'] = cur.fetchall()[0][0]
+
+            query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query2)
+
+            x=cur.fetchall()
+            print(x)
+            res2=[]
+
+            for tup in x:
+                res2.append(tup[0])
+
+            print(res2)
+            title['keywords']=res2
+
+            query3 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionaireID = '{}'".format(questionnaireid)
+            cur.execute(query3)
+            
+            col3_names = [j[0] for j in cur.description] 
+            res3 = [dict(zip(col3_names, entry3)) for entry3 in cur.fetchall()]
+
+            print(col3_names)
+            title['questions']=res3
+
+            return json.dumps(title, ensure_ascii=False, indent=4, sort_keys=True)
+
+
         except Exception as e:
             print(e)
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-    
+
+
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
 def hhhhhhhealthcheck():
 
