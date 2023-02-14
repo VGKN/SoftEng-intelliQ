@@ -824,38 +824,38 @@ def getsessinoanswers(questionnaireid, session):
     
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
 def getquestionanswers(questionnaireID, questionID):
-
-    cur = db.connection.cursor()
-    
-    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
-    cur.execute(query1)
-    
-    myquestions=[]
-    for queryreturn in cur.fetchall():
-        myquestions.append(queryreturn[0])
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            
+            query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
+            cur.execute(query1)
+            
+            myquestions=[]
+            for queryreturn in cur.fetchall():
+                myquestions.append(queryreturn[0])
+                
+            query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(questionID)
+            cur.execute(query2)
+            x=cur.fetchall()
+            x=list(x)
         
-    query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(questionID)
-    cur.execute(query2)
-    x=cur.fetchall()
-    x=list(x)
- 
-    def sort_tuples(tup):
-        # Sort the tuples by the second item using the itemgetter function
-        return sorted(tup, key=itemgetter(1))
-    
-    y =sort_tuples(x)
-    
-  
-    maindic={}
-    maindic['QuestionnaireID']= questionnaireID
-    maindic['questionid']=questionID
-    maindic['answers']=[]
- 
-    for queryreturn in y:
-        helpdic={}
-        helpdic['session']=queryreturn[0]
-        helpdic['ans']=queryreturn[1]
-        maindic['answers'].append(helpdic)
-    jsonify(maindic)
-    #print(maindic)
-    return maindic
+            def sort_tuples(tup):
+                # Sort the tuples by the second item using the itemgetter function
+                return sorted(tup, key=itemgetter(1))
+            
+            y =sort_tuples(x)
+            
+        
+            maindic={}
+            maindic['QuestionnaireID']= questionnaireID
+            maindic['questionid']=questionID
+            maindic['answers']=[]
+        
+            for queryreturn in y:
+                helpdic={}
+                helpdic['session']=queryreturn[0]
+                helpdic['ans']=queryreturn[1]
+                maindic['answers'].append(helpdic)
+            jsonify(maindic)
+            return maindic
