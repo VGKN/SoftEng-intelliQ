@@ -726,7 +726,7 @@ def QQQID(questionnaierid,questionid):
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
 def doanswer(questionnaireid,questionid,session,optionid):
 
-    if request.method=='GET':
+    if request.method=='POST':
         try:
             cur = db.connection.cursor()
 
