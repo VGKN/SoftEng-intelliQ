@@ -549,14 +549,17 @@ def healthcheck():
 
 @app.route("/admin/questionnaire_upd", methods=["POST"])
 def questionnaire_upd(questionnaire_id):
-    pass
-'''
+   
     try:
-        filename = request.file('filename')
-        return {'0':'0'}
+        if 'files' not in requst.files:
+            resp=jsonify({'status':'No file part in request'})
+            resp.status_code=400
+            return resp
+        files=request.files.getlist('files')
     except Exception as e:
         print(e)
         return {'success':'ok'}
+    '''
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -583,7 +586,7 @@ def questionnaire_upd(questionnaire_id):
         return {'success':'ok'}
     
     return 0
-'''    
+    '''
     
     
 @app.route("/admin/resetall", methods=["POST"])
