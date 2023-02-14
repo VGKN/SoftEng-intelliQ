@@ -771,44 +771,57 @@ def QQID(questionnaireid):
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
 
-"""
+
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
-def QQQID(questionnaierid,questionid):
+def QQQID(questionnaireid,questionid):
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
+
+            query1 = "select Question_ID, Qtext, Qrequired, Qtype from Question where (Question_ID = '{}' and questionaireid = '{}')".format(questionid, questionnaireid)
             cur.execute(query1)
 
-            title={}
-            title['QuestionnaireID']=questionnairid
+            z = cur.fetchall()
+            print(z)
 
-            query1 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionID = '{}'".format(questionid)
-            cur.execute(query1)
+            z = list(z[0])
 
-            x = cur.fetchall()
-            print(x)
+            maindic={}
+            maindic['questionnaireID']= questionnaireid
+            maindic['qID']=questionid
+            maindic['qtext']=z[1]
+            maindic['required']=z[2]
+            maindic['type']=z[3]
+            maindic['options']=[]
+            print(maindic)
+            query2 = "select o.opt_id, o.opt_Text, q.next_q from Options as o join Questions_Options as q on (opt_id = optid) where Opt_ID in (select OptID from Questions_Options where QuestionID = '{}')".format(questionid)
             
-            #col1_names = [i[0] for i in cur.description] 
-            #res1 = [dict(zip(col1_names, entry1)) for entry1 in cur.fetchall()]
-
-
-            title['Question_Specifics']=res1
-
-            query2 = "select Opt_Text from Options where Opt_ID in (select OptID from Questions_Options where QuestionID = '{}') UNION select Opt_ID, Next_Q from Questions_Options where QuestionID = '{}'".format(questionid)
             cur.execute(query2)
+            x=cur.fetchall()
+            x=list(x)
             
-            col2_names = [j[0] for j in cur.description] 
-            res2 = [dict(zip(col2_names, entry2)) for entry2 in cur.fetchall()]
-
-
+            def sort_tuples(tup):
+                return sorted(tup, key=itemgetter(0))
+            
+            y = sort_tuples(x)
+        
+        
+            for queryreturn in y:
+                helpdic={}
+                helpdic['optID']=queryreturn[0]
+                helpdic['opttxt']=queryreturn[1]
+                helpdic['nextqID']=queryreturn[2]
+                maindic['options'].append(helpdic)
+              
+            cur.close()
+            return jsonify(maindic)
 
         except Exception as e:
             print(e)
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-    """
     
     
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
