@@ -4,15 +4,15 @@ Tasks to be completed.
 
 ## POSTMAN
 
-- [ ] Sync API with Postman @ntua-el19136
+- [ ] Create Postman Script to automatically test API functionality @ntua-el19188
 
 ## BACKEND
 
-- [ ] Implement remaining backend API endpoints @ntua-el19188 
+- [ ] Implement remaining backend API endpoints @ntua-el19219
 
 ## FRONTEND
 
-- [ ] Design Front end 
+- [ ] Make minor tweaks to Frontend templates @ntua-el219 
 
 ## CLI
 - [ ] Create Command Line Tool @ntua-el19144
@@ -31,7 +31,7 @@ Tasks to be completed.
 ## TEST
 
 - [ ] Implement CLI Functionality Tests @ntua-el19136
-- [ ] Implement API Functionality Tests @ntua-el19188
+- [ ] Implement API Functionality Tests @ntua-el19136
 
 # DONE
 - [x] Create  python script that establishes connection to database
@@ -45,3 +45,5 @@ Tasks to be completed.
 - [x] Make connection between frontend and backend
 - [x] Implement frontend use-cases
 - [x] Create Database
+- [x] Sync API with Postman
+- [x] Design Front end 
