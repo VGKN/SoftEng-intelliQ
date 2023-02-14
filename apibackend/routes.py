@@ -556,6 +556,7 @@ def questionnaire_upd(questionnaire_id):
             resp.status_code=400
             return resp
         files=request.files.getlist('files')
+        return {'fileis':files}
     except Exception as e:
         print(e)
         return {'success':'ok'}
