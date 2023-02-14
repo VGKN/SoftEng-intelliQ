@@ -43,9 +43,9 @@ Tasks to be completed.
 - [x] Figure out server that will host the database and the required credentials
 - [x] Form styles.css
 - [x] Updated README File
-- [x] DDL Production @ntua-el19136
-- [x] Test DDL schema @ntua-el19136
-- [x] DML Production @ntua-el19188
+- [x] DDL Production 
+- [x] Test DDL schema 
+- [x] DML Production 
 - [x] Make Dummy Data
 - [x] Make connection between frontend and backend
 - [x] Implement frontend use-cases
@@ -53,3 +53,4 @@ Tasks to be completed.
 - [x] Sync API with Postman
 - [x] Design Front end 
 - [x] Create python scripts to interact with endpoints
+- [x] Implement api endpoints
