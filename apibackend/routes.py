@@ -609,7 +609,7 @@ def postResetAll():
 
             cur.close()
 
-            return jsonify({'status':'OK'})
+            return jsonify({'status':'OK'}) 
 
         else:
             return jsonify({'status':'failed', 'reason': '<GET method not supported>'})               
@@ -628,7 +628,7 @@ def resetq(questionnaireid):
             cur = db.connection.cursor()
             query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
             cur.execute(query)
-            query=  "delete from sesion where questionnaireid#='{}'".format(questionnaireid)
+            query=  "delete from sesion where questionnaireid='{}'".format(questionnaireid)
             cur.execute(query)
             db.connection.commit()
             cur.close()
