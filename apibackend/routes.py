@@ -702,18 +702,30 @@ def resetq(questionnaireid):
     if request.method=='POST':
         try:
             cur = db.connection.cursor()
-            query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
-            cur.execute(query)
-            query=  "delete from sesion where questionnaireid='{}'".format(questionnaireid)
-            cur.execute(query)
-            db.connection.commit()
-            cur.close()
-            return jsonify({'status':'OK'})
+            query0 = "select questionnaireid from questionnaire"
+            cur.execute(query0)
+            x = cur.fetchall()
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire ID not found"})
+                resp.status_code = 400
+                return resp
+            else:
+                query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
+                cur.execute(query)
+                query=  "delete from sesion where questionnaireid='{}'".format(questionnaireid)
+                cur.execute(query)
+                db.connection.commit()
+                cur.close()
+                return jsonify({'status':'OK'})   
         except Exception as e:
-            print(e)
-            return jsonify({'status':'failed','reason':'<Connection With Database Error>'})
+            resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+            resp.status_code = 500
+            return resp   
     else:
-        return jsonify({'status':'failed', 'reason':'<GET method unsupported>'})
+        return jsonify({'status':'failed', 'reason':'Method Not Allowed'})
     
     
     
@@ -870,7 +882,6 @@ def doanswer(questionnaireid,questionid,session,optionid):
 
 
 
-    
 @app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
 def getsessinoanswers(questionnaireid, session):
     try:
@@ -913,9 +924,6 @@ def getsessinoanswers(questionnaireid, session):
     except Exception as e:
         print(e)
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-        
-    
-    
     
     
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
