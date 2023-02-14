@@ -336,39 +336,31 @@ def inserting(name):
                     else:
                         query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID'])
                     cur.execute(query)  
-                     
+                    nextq=''
+                for questions in data['questions']:
+                    for option in questions['options']:
+                        query="INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt'])
+                        cur.execute(query)
+                        if option['nextqID']=='-':
+                            nextq=questions['qID ']
+                        else:
+                            nextq=option['nextqID']
+                        query="INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq)
+                        cur.execute(query)
+            db.connection.commit()
+            state ="successfully added questionnaire"
+            redirect(url_for('success', name=name, state=state))
         except Exception as e:
             print(e)
             print('hello')
+            state ="questionnaire was not added to the database"
+            print(state)
+            redirect(url_for('success', name=name, state=state))
     return render_template('error500.html')
-'''
-                '''
-            
-        #if successful insert then state ="successfully added questionnaire"
-        #else state ="questionnaire was not added to the database"
-        #redirect(url_for('success', name=filename, state=state))
-    
-               
-             
-'''              
-booll=0
-nextq=''
-    """for option in questions['options']:
-       X.append("INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt']))
-       if option['nextqID']=='-':
-            nextq=questions['qID ']
-       else:
-            nextq=option['nextqID']
-       Z.append("INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq))
-
-s = string.ascii_letters
-for _ in range(10):
-    c = ''.join(random.choice(s) for _ in range(8))
-   
-'''
-
-   
-    
+              
+        
+          
+ 
 #process of file upload in /questionnaire_upd
 def allowed_file(filename):
     return '.' in filename and \
