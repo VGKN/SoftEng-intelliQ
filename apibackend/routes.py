@@ -882,15 +882,34 @@ def doanswer(questionnaireid,questionid,session,optionid):
 
 
 
-@app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
+@app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET'])
 def getsessinoanswers(questionnaireid, session):
     try:
         if request.method=='GET':
+            try:
             cur = db.connection.cursor()
-        
+            query0 = "select questionnaireid from questionnaire"
+            q1 ="select session_id fron sesion"
+            cur.execute(query0)
+            x = cur.fetchall()
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
+                resp.status_code = 400
+                return resp
+            cur.execute(q1)
+            x = cur.fetchall()
+            sids=[]
+            if session not in sids:
+                resp = jsonify ({"status":"failed", "reason":"Session not found"})
+                resp.status_code = 400
+                return resp
+            
             query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireid)
             cur.execute(query1)
-        
+    
             myquestions=[]
             for queryreturn in cur.fetchall():
                 myquestions.append(queryreturn[0])
@@ -918,15 +937,15 @@ def getsessinoanswers(questionnaireid, session):
                 maindic['answers'].append(helpdic)
             jsonify(maindic)
             return maindic
-
         else:
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            return {'status':'failed','dbconnection':'Method Not Allowed'}
     except Exception as e:
-        print(e)
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+        resp.status_code = 500
+        return resp
     
     
-@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
+@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=['GET'])
 def getquestionanswers(questionnaireID, questionID):
     try:
         if request.method=='GET':
@@ -967,6 +986,7 @@ def getquestionanswers(questionnaireID, questionID):
         else:
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     except Exception as e:
-        print(e)
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+        resp.status_code = 500
+        return resp
        
