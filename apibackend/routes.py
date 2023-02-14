@@ -781,15 +781,41 @@ def QQQID(questionnaireid,questionid):
 
     if request.method=='GET':
         try:
+            
             cur = db.connection.cursor()
+            
+            query0 = "select questionnaireid from questionnaire"
+            q1 ="select question_id from question"
+            
+            cur.execute(query0)
+            x = cur.fetchall()
+            
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q1)
+            x = cur.fetchall()
+            
+            
+            qqids=[]
+            for n in x:
+                qqids.append(n[0])
+            if questionid not in qqids:
+                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp.status_code = 400
+                return resp
 
             query1 = "select Question_ID, Qtext, Qrequired, Qtype from Question where (Question_ID = '{}' and questionaireid = '{}')".format(questionid, questionnaireid)
             cur.execute(query1)
 
             z = cur.fetchall()
-            print(z)
-
             z = list(z[0])
+
 
             maindic={}
             maindic['questionnaireID']= questionnaireid
