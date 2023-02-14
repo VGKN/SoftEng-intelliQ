@@ -980,7 +980,7 @@ def getquestionanswers(questionnaireID, questionID):
             for n in x:
                 qqids.append(n[0])
             if questionID not in qqids:
-                resp = jsonify ({"status":"failed", "reason":"Session not found"})
+                resp = jsonify ({"status":"failed", "reason":"Question not found"})
                 resp.status_code = 400
                 return resp
             
