@@ -25,11 +25,13 @@ Tasks to be completed.
 
 - [ ] Create another mock questionnaire @ntua-el19144
 
-## VPP
+## DOCUMENTATION
 
 - [ ] Update VPP graphs @ntua-el19219
 - [ ] Update SRS doc @ntua-el19219
 - [ ] Create Stakeholders Requirements Specifications Doc @ntua-el19188
+- [ ] Create API documentation
+- [ ] Create installation documentation
 
 ## TEST
 
