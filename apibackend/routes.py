@@ -541,7 +541,7 @@ def healthcheck():
             return jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'})
         except Exception as e:
             print(e)
-            return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+            return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'}), 400
     else:
         return jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
                                  
@@ -777,41 +777,45 @@ def doanswer(questionnaireid,questionid,session,optionid):
     
 @app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
 def getsessinoanswers(questionnaireid, session):
-
-    cur = db.connection.cursor()
-    
-    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireid)
-    cur.execute(query1)
-    
-    myquestions=[]
-    for queryreturn in cur.fetchall():
-        myquestions.append(queryreturn[0])
+    try:
+        if request.method=='GET':
+            cur = db.connection.cursor()
         
-    query2 = "select Q_ID,O_ID from session_questions_options where (S_ID = '{}')".format(session)
-    cur.execute(query2)
-    x=cur.fetchall()
-    x=list(x)
- 
-    def sort_tuples(tup):
-        # Sort the tuples by the second item using the itemgetter function
-        return sorted(tup, key=itemgetter(0))
+            query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireid)
+            cur.execute(query1)
+        
+            myquestions=[]
+            for queryreturn in cur.fetchall():
+                myquestions.append(queryreturn[0])
+            
+            query2 = "select Q_ID,O_ID from session_questions_options where (S_ID = '{}')".format(session)
+            cur.execute(query2)
+            x=cur.fetchall()
+            x=list(x)
     
-    y =sort_tuples(x)
+            def sort_tuples(tup):
+                return sorted(tup, key=itemgetter(0))
+        
+            y =sort_tuples(x)
+        
     
-  
-    maindic={}
-    maindic['QuestionnaireID']= questionnaireid
-    maindic['session']=session
-    maindic['answers']=[]
- 
-    for queryreturn in y:
-        helpdic={}
-        helpdic['qID']=queryreturn[0]
-        helpdic['ans']=queryreturn[1]
-        maindic['answers'].append(helpdic)
-    jsonify(maindic)
-    #print(maindic)
-    return maindic
+            maindic={}
+            maindic['QuestionnaireID']= questionnaireid
+            maindic['session']=session
+            maindic['answers']=[]
+    
+            for queryreturn in y:
+                helpdic={}
+                helpdic['qID']=queryreturn[0]
+                helpdic['ans']=queryreturn[1]
+                maindic['answers'].append(helpdic)
+            jsonify(maindic)
+            return maindic
+    except Exception as e:
+        print(e)
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        else:
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     
     
     
