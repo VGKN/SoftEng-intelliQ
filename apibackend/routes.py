@@ -617,7 +617,7 @@ def postResetAll():
 
 
         else:
-            resp=jsonify({'status':'failed', 'reason': '<This method is not supported>'})
+            resp=jsonify({'status':'failed', 'reason': '<This method is not allowed>'})
             resp.status_code=400
             return resp              
     except Exception as e:
@@ -760,7 +760,9 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 cur.execute(query1)
 
                 if len(cur.fetchall()) != 0:
-                    return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+                    resp=jsonify({'status':'failed','dberror':'Question is already answered by this session'})
+                    resp.status_code=400
+                    return resp
                 
             elif active == 0:    
                 z = string.ascii_letters
@@ -781,16 +783,20 @@ def doanswer(questionnaireid,questionid,session,optionid):
             cur.close()
             
             resp = jsonify()
-            resp.status_code=500
+            resp.status_code=200
             return resp
 
 
 
         except Exception as e:
             print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            resp=jsonify({'status':'failed','dberror':'Request not possible'})
+            resp.status_code=400
+            return resp
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        resp=jsonify({'status':'failed','server':'This method is not allowed'})
+        resp.status_code=400
+        return resp
     
 
 
