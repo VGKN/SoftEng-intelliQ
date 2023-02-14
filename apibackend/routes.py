@@ -548,7 +548,7 @@ def healthcheck():
 
 
 @app.route("/admin/questionnaire_upd", methods=["POST"])
-def questionnaire_upd(questionnaire_id):
+def questionnaire_upd():
    
     try:
         if 'files' not in requst.files:
