@@ -12,6 +12,7 @@ from flask import send_file
 from flask import send_from_directory
 from flask import current_app
 from collections import ChainMap
+from operator import itemgetter
 
 
 
@@ -716,7 +717,7 @@ def QQID(questionnaireid):
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
 
-
+"""
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET', 'POST'])
 def QQQID(questionnaierid,questionid):
 
@@ -726,7 +727,7 @@ def QQQID(questionnaierid,questionid):
             cur.execute(query1)
 
             title={}
-            title['QuestionnaireID']=questionnaireid
+            title['QuestionnaireID']=questionnairid
 
             query1 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionID = '{}'".format(questionid)
             cur.execute(query1)
@@ -753,7 +754,7 @@ def QQQID(questionnaierid,questionid):
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-    
+    """
     
     
 @app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
@@ -815,21 +816,50 @@ def doanswer(questionnaireid,questionid,session,optionid):
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     
 
-from operator import itemgetter
+
+
+
 
     
 @app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET', 'POST'])
-def hhhhealthcheck():
+def getsessinoanswers(questionnaireid, session):
 
-    if request.method=='GET':
-        try:
-            cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
-        except Exception as e:
-            print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-    else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    cur = db.connection.cursor()
+    
+    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireid)
+    cur.execute(query1)
+    
+    myquestions=[]
+    for queryreturn in cur.fetchall():
+        myquestions.append(queryreturn[0])
+        
+    query2 = "select Q_ID,O_ID from session_questions_options where (S_ID = '{}')".format(session)
+    cur.execute(query2)
+    x=cur.fetchall()
+    x=list(x)
+ 
+    def sort_tuples(tup):
+        # Sort the tuples by the second item using the itemgetter function
+        return sorted(tup, key=itemgetter(0))
+    
+    y =sort_tuples(x)
+    
+  
+    maindic={}
+    maindic['QuestionnaireID']= questionnaireid
+    maindic['session']=session
+    maindic['answers']=[]
+ 
+    for queryreturn in y:
+        helpdic={}
+        helpdic['qID']=queryreturn[0]
+        helpdic['ans']=queryreturn[1]
+        maindic['answers'].append(helpdic)
+    jsonify(maindic)
+    #print(maindic)
+    return maindic
+    
+    
     
     
 @app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
@@ -867,5 +897,5 @@ def getquestionanswers(questionnaireID, questionID):
         helpdic['ans']=queryreturn[1]
         maindic['answers'].append(helpdic)
     jsonify(maindic)
-    print(maindic)
+    #print(maindic)
     return maindic
