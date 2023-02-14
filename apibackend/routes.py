@@ -826,7 +826,7 @@ def getsessinoanswers(questionnaireid, session):
 def getquestionanswers(questionnaireID, questionID):
     try:
         if request.method=='GET':
-        
+
             cur = db.connection.cursor()
             
             query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
