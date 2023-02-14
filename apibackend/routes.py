@@ -859,4 +859,10 @@ def getquestionanswers(questionnaireID, questionID):
                 maindic['answers'].append(helpdic)
             jsonify(maindic)
             return maindic
+
+        else:
+            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+    except Exception as e:
+        print(e)
+        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
         
