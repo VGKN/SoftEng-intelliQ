@@ -41,7 +41,8 @@ CREATE TABLE Question (
     Qrequired VARCHAR(50) NOT NULL,
     Qtype VARCHAR(10) NOT NULL,
     QuestionaireID VARCHAR(50) NOT NULL, 
-    PRIMARY KEY(Question_ID)
+    PRIMARY KEY(Question_ID),
+    FOREIGN KEY (QuestionaireID) REFERENCES Questionnaire(QuestionnaireID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE Options (

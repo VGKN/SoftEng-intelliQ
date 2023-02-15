@@ -1,16 +1,18 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
-from flask_mysqldb import MySQL
-from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
-from apibackend.forms import MyForm,FieldForm,ProjectForm,QuestionForm
-from jinja2 import Template
 import json 
 import os
 import random
 import string
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, Response
+from flask_mysqldb import MySQL
+from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
+from apibackend.forms import MyForm,FieldForm,ProjectForm,QuestionForm
+from jinja2 import Template
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask import send_from_directory
 from flask import current_app
+from collections import ChainMap
+from operator import itemgetter
 
 
 
@@ -27,7 +29,7 @@ def index():
                 return redirect(url_for("Admin"))
         else:
             return render_template("base.html")
-            
+        
     except Exception as e:
         print(e)
         abort(500)
@@ -278,24 +280,90 @@ def Keyword():
         print(e)
         return render_template("base.html")
     
-@app.route('/inserting/<string:name>/<string:state>', methods = ['GET'])  
-def success(name):  
+@app.route('/upload/<string:name>/<string:state>', methods = ['GET'])  
+def success(name,state):  
     if request.method == 'GET':
        return render_template("Acknowledgement.html", name=name, state=state)
 
   
 #redirection upon successfull upload of the allowed files
-@app.route('/success/<string:name>', methods = ['GET'])  
+@app.route('/inserting/<string:name>', methods = ['GET'])  
 def inserting(name):  
     if request.method == 'GET':
         try:
-            pass
-        except MySQLdb.Error as e:
-            pass
-        #if successful insert then state ="successfully added questionnaire"
-        #else state ="questionnaire was not added to the database"
-        #redirect(url_for('success', name=filename, state=state))
-    
+            path='./apibackend/'+name
+            with open(path,'r', encoding='utf-8') as file:
+                data=json.load(file)
+                cur= db.connection.cursor()
+                query="INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle'])
+                cur.execute(query)
+                cur.execute("Select Keyword from keywords")
+                Keywords=cur.fetchall()
+                for keyword in data['keywords']:
+                    if keyword not in Keywords:
+                        query="INSERT INTO Keywords (keyword) VALUES ('{}');".format(keyword)
+                        cur.execute(query)
+                    query="INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('{}','{}');".format(data['questionnaireID'],keyword)
+                    cur.execute(query)
+                for questions in data['questions']:
+                    
+                    myx=[]
+                    myy=[]
+                    qtext=[]
+                    texts=[]
+                    x=questions['qtext'].find("[*")
+                    myx.append(x)
+                    y=questions['qtext'].find("]",x+2)
+                    myy.append(y)
+                    
+                    while(x!=-1):
+                        qtext.append(questions['qtext'][x+2:y])
+                        x=questions['qtext'].find("[*", y)
+                        myx.append(x)
+                        y=questions['qtext'].find("]",x+2)
+                        myy.append(y)
+                    print(qtext)
+                    if len(qtext)!=0:
+                        for question in data['questions']:
+                            if question['qID ']==qtext[1]:
+                                texts.append(question['qtext'])
+                            for options in question['options']:
+                                if options['optID']==qtext[0]:
+                                    texts.append(options['opttxt'])
+                        print(myx,myy)
+                        print(texts)
+                        questiontext=questions['qtext'][0:myx[0]]+"\\'"+texts[1]+"\\'"+questions['qtext'][myy[0]+1:myx[1]] +"\\'"+texts[0]+"\\'"+questions['qtext'][myy[1]+1:]          
+                        print(questions)
+                        query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questiontext,questions['required'],questions['type'],data['questionnaireID'])
+                    else:
+                        query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID'])
+                    cur.execute(query)  
+                    nextq=''
+                for questions in data['questions']:
+                    for option in questions['options']:
+                        query="INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt'])
+                        cur.execute(query)
+                        if option['nextqID']=='-':
+                            nextq=questions['qID ']
+                        else:
+                            nextq=option['nextqID']
+                        query="INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq)
+                        cur.execute(query)
+            db.connection.commit()
+            state ="successfully added questionnaire"
+            print(state)
+            return redirect(url_for('success', name=name, state=state))
+        except Exception as e:
+            print(e)
+            print('hello')
+            state ="questionnaire was not added to the database due to error with the format of the json file"
+            print(state)
+            return redirect(url_for('success', name=name, state=state))
+    return render_template('error500.html')
+              
+        
+          
+ 
 #process of file upload in /questionnaire_upd
 def allowed_file(filename):
     return '.' in filename and \
@@ -316,7 +384,7 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            print(filename)
+            #print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('inserting', name=filename))
     return render_template("questionnaire_upd.html")
@@ -349,10 +417,10 @@ def mkjson(QuestionnaireID):
         cur.execute(query2)
         x=cur.fetchall()     
         maindic={}
-        helpdic={}
         maindic['questionid']=qqid
         maindic['answers']=[]
         for queryreturn in x:
+            helpdic={}
             helpdic['session']=queryreturn[0]
             helpdic['ans']=queryreturn[1]
             maindic['answers'].append(helpdic)
@@ -448,111 +516,554 @@ def Answers(QuestionnaireID, Question_ID):
                                                                 
         except Exception as e:
             print(e)
-            return render_template("base.html")
+            return render_template("base.html",pageTitle="Landing Page")
+
+
         
-     
-@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=["GET"])
-def Questionss():
-    try:
-        if request.method=="GET":
-            try:
-                return render_template("admin.html")
-                                                                
-            except Exception as e:
-                        ## if the connection to the database fails, return HTTP response 500
-                flash(str(e), "danger")
-                abort(500)
-                        
-    except Exception as e:
-        print(e)
-        return render_template("base.html")
+    
+        return render_template("base.html",pageTitle="Landing Page")
         
         
+
+#              ______    _____    _______    ________          __       ____    _                          #
+#             ||    \\  | ____|  | ______|  |________|        //\\     ||   \\ |_|                         #
+#             ||____//  ||____   ||______       ||           //__\\    ||___//  _                          #
+#             ||\\      | ____|  |______ |      ||          //    \\   ||      | |                         #
+#             || \\     ||____    ______||      ||         //      \\  ||      | |                         #
+#             ||  \\    |_____|  |_______|      ||        //        \\ ||      |_|                         #
+
 @app.route("/admin/healthcheck", methods=['GET'])
 def healthcheck():
 
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
-            return {'success':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server' }
+            resp=jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'}) 
+            resp.status_code=200
+            return resp
+        except Exception as e:
+            print(e)
+            resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+            resp.statsu_code=500
+            return resp
+    else:
+        resp=jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+        resp.status_code=500
+        return resp
+                                 
+
+
+@app.route("/admin/questionnaire_upd", methods=["POST"])
+def questionnaire_upd():
+    if request.method=='POST':
+    
+        try:
+            success=False
+            errors={}
+            if 'file' not in request.files:
+                resp=jsonify({'status':'No file part in request', 'state':success})
+                resp.status_code=400
+                return resp
+            file=request.files.getlist('file')
+            count=0
+            
+            for fil in file:
+                count+=1
+                if fil and allowed_file(fil.filename):
+                    filename=secure_filename(fil.filename)
+                    fil.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+                    success=True
+                else:
+                    errors[fil.filename]='FILE TYPE IS NOT ALLOWED'
+            
+            if count !=1:
+                errors['message']='Server can only process one .json file'
+                resp=jsonify(errors)
+                resp.status_code=500
+                return resp
+            if success and errors:
+                errors['message']='File succesfully uploaded'
+                resp=jsonify(errors)
+                resp.status_code=500
+                return resp
+            if success:
+                path='./apibackend/'+fil.filename
+                with open(path,'r', encoding='utf-8') as file:
+                    data=json.load(file)
+                    cur= db.connection.cursor()
+                    query="INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle'])
+                    cur.execute(query)
+                    cur.execute("Select Keyword from keywords")
+                    Keywords=cur.fetchall()
+                    for keyword in data['keywords']:
+                        if keyword not in Keywords:
+                            query="INSERT INTO Keywords (keyword) VALUES ('{}');".format(keyword)
+                            cur.execute(query)
+                        query="INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('{}','{}');".format(data['questionnaireID'],keyword)
+                        cur.execute(query)
+                    for questions in data['questions']:
+                        myx=[]
+                        myy=[]
+                        qtext=[]
+                        texts=[]
+                        x=questions['qtext'].find("[*")
+                        myx.append(x)
+                        y=questions['qtext'].find("]",x+2)
+                        myy.append(y)
+                        while(x!=-1):
+                            qtext.append(questions['qtext'][x+2:y])
+                            x=questions['qtext'].find("[*", y)
+                            myx.append(x)
+                            y=questions['qtext'].find("]",x+2)
+                            myy.append(y)
+                        if len(qtext)!=0:
+                            for question in data['questions']:
+                                if question['qID ']==qtext[1]:
+                                    texts.append(question['qtext'])
+                                for options in question['options']:
+                                    if options['optID']==qtext[0]:
+                                        texts.append(options['opttxt'])
+                            questiontext=questions['qtext'][0:myx[0]]+"\\'"+texts[1]+"\\'"+questions['qtext'][myy[0]+1:myx[1]] +"\\'"+texts[0]+"\\'"+questions['qtext'][myy[1]+1:]          
+                            query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questiontext,questions['required'],questions['type'],data['questionnaireID'])
+                        else:
+                            query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID'])
+                        cur.execute(query)  
+                        nextq=''
+                    for questions in data['questions']:
+                        for option in questions['options']:
+                            query="INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt'])
+                            cur.execute(query)
+                            if option['nextqID']=='-':
+                                nextq=questions['qID ']
+                            else:
+                                nextq=option['nextqID']
+                            query="INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq)
+                            cur.execute(query)
+                    db.connection.commit()
+                    state ="successfully added questionnaire"
+                    resp=jsonify({'message':'Questionnaire successfully uploaded'})
+                    resp.status_code=200
+                    return resp
+            else:
+                resp=jsonify(errors)
+                resp.status_code=500
+                return resp      
+                
+        except Exception as e:
+            print(e)
+            resp=jsonify({'status':'Database Error'})
+            resp.status_code=500
+            return resp  
+    else:
+        resp=jsonify({'status':'No such method supported'})
+        resp.status_code=400
+        return resp  
+    
+@app.route("/admin/resetall", methods=["POST"])
+def postResetAll():
+    try:
+        if request.method == 'POST':
+            cur = db.connection.cursor()
+
+            cur.execute("DELETE FROM Questionnaire_Keywords")
+            cur.execute("DELETE FROM Questions_Options")
+            cur.execute("DELETE FROM Session_Questions_Options")
+            cur.execute("DELETE FROM Question")
+            cur.execute("DELETE FROM Sesion")
+            cur.execute("DELETE FROM Questionnaire")
+            cur.execute("DELETE FROM Keywords")
+            cur.execute("DELETE FROM Options")
+
+            db.connection.commit()
+
+            cur.close()
+
+            resp=jsonify({'status':'OK'})
+            resp.status_code=200
+            return resp 
+
+
+        else:
+            resp=jsonify({'status':'failed', 'reason': '<This method is not allowed>'})
+            resp.status_code=400
+            return resp              
+    except Exception as e:
+        print(e)
+        resp=jsonify({'status':'failed', 'reason': '<Database error>'})
+        resp.status_code=500
+        return resp
+
+
+
+
+@app.route("/admin/resetq/<string:questionnaireid>", methods=['POST'])
+def resetq(questionnaireid):
+
+    if request.method=='POST':
+        try:
+            cur = db.connection.cursor()
+            query0 = "select questionnaireid from questionnaire"
+            cur.execute(query0)
+            x = cur.fetchall()
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire ID not found"})
+                resp.status_code = 400
+                return resp
+            else:
+                query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
+                cur.execute(query)
+                query=  "delete from sesion where questionnaireid='{}'".format(questionnaireid)
+                cur.execute(query)
+                db.connection.commit()
+                cur.close()
+                return jsonify({'status':'OK'})   
+        except Exception as e:
+            resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+            resp.status_code = 500
+            return resp   
+    else:
+        return jsonify({'status':'failed', 'reason':'Method Not Allowed'})
+    
+    
+    
+@app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
+def QQID(questionnaireid):
+
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+
+            query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query1)
+
+            title={}
+            title['QuestionnaireID']=questionnaireid
+            title['Questionnaire_Title'] = cur.fetchall()[0][0]
+
+            query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
+            cur.execute(query2)
+
+            x=cur.fetchall()
+            res2=[]
+
+            for tup in x:
+                res2.append(tup[0])
+
+            title['keywords']=res2
+
+            query3 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionaireID = '{}'".format(questionnaireid)
+            cur.execute(query3)
+            
+            col3_names = [j[0] for j in cur.description] 
+            res3 = [dict(zip(col3_names, entry3)) for entry3 in cur.fetchall()]
+
+            title['questions']=res3
+
+            #json.dumps(title, ensure_ascii=False, indent=4, sort_keys=True)
+            resp = jsonify (title)
+            resp.status_code = 200
+            return resp
+            #return json.dumps(title, ensure_ascii=False),200 
+
+
         except Exception as e:
             print(e)
             return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
     else:
         return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
-                                 
-   
 
-@app.route("/admin/questionnaire_upd", methods=["POST"])
-def questionnaire_upd(questionnaire_id):
-    '''
-    try:
-         if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            print(filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('success', name=filename))
-    return render_template("questionnaire_upd.html",pageTitle="Upload Questionnaire")
-         return {'success':'ok'}
-         #                      
-    except Exception as e:
-        print(e)
-        return {'success':'ok'}
-    '''
-    return 0
+
+@app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET'])
+def QQQID(questionnaireid,questionid):
+
+    if request.method=='GET':
+        try:
+            
+            cur = db.connection.cursor()
+            
+            query0 = "select questionnaireid from questionnaire"
+            q1 ="select question_id from question"
+            
+            cur.execute(query0)
+            x = cur.fetchall()
+            
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q1)
+            x = cur.fetchall()
+            
+            
+            qqids=[]
+            for n in x:
+                qqids.append(n[0])
+            if questionid not in qqids:
+                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp.status_code = 400
+                return resp
+
+            query1 = "select Question_ID, Qtext, Qrequired, Qtype from Question where (Question_ID = '{}' and questionaireid = '{}')".format(questionid, questionnaireid)
+            cur.execute(query1)
+
+            z = cur.fetchall()
+            z = list(z[0])
+
+
+            maindic={}
+            maindic['questionnaireID']= questionnaireid
+            maindic['qID']=questionid
+            maindic['qtext']=z[1]
+            maindic['required']=z[2]
+            maindic['type']=z[3]
+            maindic['options']=[]
+            print(maindic)
+            query2 = "select o.opt_id, o.opt_Text, q.next_q from Options as o join Questions_Options as q on (opt_id = optid) where Opt_ID in (select OptID from Questions_Options where QuestionID = '{}')".format(questionid)
+            
+            cur.execute(query2)
+            x=cur.fetchall()
+            x=list(x)
+            
+            def sort_tuples(tup):
+                return sorted(tup, key=itemgetter(0))
+            
+            y = sort_tuples(x)
+        
+        
+            for queryreturn in y:
+                helpdic={}
+                helpdic['optID']=queryreturn[0]
+                helpdic['opttxt']=queryreturn[1]
+                helpdic['nextqID']=queryreturn[2]
+                maindic['options'].append(helpdic)
+              
+            cur.close()
+            return jsonify(maindic)
+
+        except Exception as e:
+            resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+            resp.status_code = 500
+            return resp
+    else:
+        return {'status':'failed','reason':'Method Not Allowed'}
     
-@app.route("/admin/resetall", methods=["POST"])
-def getAnswersS(questionnaire_id):
+    
+@app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
+def doanswer(questionnaireid,questionid,session,optionid):
+
+    if request.method=='POST':
+        try:
+            cur = db.connection.cursor()
+
+            query="select session_id from sesion"
+
+            cur.execute(query)
+
+            ses=list()
+
+            for n in cur.fetchall():
+                ses.append(n[0])
+
+            active = 0
+            
+            for n in ses:
+                if session == n:
+                    active = 1
+                        
+            if active == 1:
+                query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
+
+                cur.execute(query1)
+
+                if len(cur.fetchall()) != 0:
+                    resp=jsonify({'status':'failed','dberror':'Bad request'})
+                    resp.status_code=400
+                    return resp
+                
+            elif active == 0:    
+                z = string.ascii_letters
+                for _ in range(10):
+                    user = ''.join(random.choice(z) for _ in range(10))
+                        
+                query2="insert into sesion (session_id, questionnaireid, userstring) values ('{}','{}','{}')".format(session, questionnaireid, user)
+
+                cur.execute(query2)
+
+                        
+            query3="insert into session_questions_options (s_id, q_id, o_id) values ('{}','{}','{}')".format(session, questionid, optionid)
+
+            cur.execute(query3)
+
+            db.connection.commit()
+
+            cur.close()
+            
+            resp = jsonify()
+            resp.status_code=200
+            return resp
+
+
+
+        except Exception as e:
+            print(e)
+            resp=jsonify({'status':'failed','dberror':'Request not possible'})
+            resp.status_code=400
+            return resp
+    else:
+        resp=jsonify({'status':'failed','server':'This method is not allowed'})
+        resp.status_code=400
+        return resp
+    
+
+
+
+
+
+@app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET'])
+def getsessinoanswers(questionnaireid, session):
+    if request.method=='GET':
+        try:
+            cur = db.connection.cursor()
+            query0 = "select questionnaireid from questionnaire"
+            q1 ="select session_id from sesion"
+            cur.execute(query0)
+            x = cur.fetchall()
+            
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q1)
+            x = cur.fetchall()
+            
+            sids=[]
+            for n in x:
+                sids.append(n[0])
+            if session not in sids:
+                resp = jsonify ({"status":"failed", "reason":"Session not found"})
+                resp.status_code = 400
+                return resp
+            
+            query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireid)
+            cur.execute(query1)
+    
+            myquestions=[]
+            for queryreturn in cur.fetchall():
+                myquestions.append(queryreturn[0])
+            
+            query2 = "select Q_ID,O_ID from session_questions_options where (S_ID = '{}')".format(session)
+            cur.execute(query2)
+            x=cur.fetchall()
+            x=list(x)
+            
+            # Sort the tuples by the second item using the itemgetter function
+            def sort_tuples(tup):
+                return sorted(tup, key=itemgetter(0))
+        
+            y =sort_tuples(x)
+        
+    
+            maindic={}
+            maindic['QuestionnaireID']= questionnaireid
+            maindic['session']=session
+            maindic['answers']=[]
+    
+            for queryreturn in y:
+                helpdic={}
+                helpdic['qID']=queryreturn[0]
+                helpdic['ans']=queryreturn[1]
+                maindic['answers'].append(helpdic)
+            jsonify(maindic)
+            cur.close()
+            return maindic 
+        except Exception as e:
+            resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+            resp.status_code = 500
+            return resp
+    else:
+        return {'status':'failed','reason':'Method Not Allowed'}
+   
+    
+    
+@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=['GET'])
+def getquestionanswers(questionnaireID, questionID):
     try:
-        if request.method == 'POST':
-         #cur = db.connection.cursor()
-         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
-         #column_names = [i[0] for i in cur.description]
-         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-         #return jsonify(table)
-         return {'status':'ok'}
-         #   
+        if request.method=='GET':
+            
+            cur = db.connection.cursor()
+            query0 = "select questionnaireid from questionnaire"
+            q1 ="select question_id from question"
+            
+            cur.execute(query0)
+            x = cur.fetchall()
+            
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireID not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q1)
+            x = cur.fetchall()
+            
+            
+            qqids=[]
+            for n in x:
+                qqids.append(n[0])
+            if questionID not in qqids:
+                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp.status_code = 400
+                return resp
+            
+            query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(questionnaireID)
+            cur.execute(query1)
+            
+            myquestions=[]
+            for queryreturn in cur.fetchall():
+                myquestions.append(queryreturn[0])
+                
+            query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(questionID)
+            cur.execute(query2)
+            x=cur.fetchall()
+            x=list(x)
+        
+            # Sort the tuples by the second item using the itemgetter function
+            def sort_tuples(tup):
+                return sorted(tup, key=itemgetter(1))
+            
+            y =sort_tuples(x)
+            
+        
+            maindic={}
+            maindic['QuestionnaireID']= questionnaireID
+            maindic['questionid']=questionID
+            maindic['answers']=[]
+        
+            for queryreturn in y:
+                helpdic={}
+                helpdic['session']=queryreturn[0]
+                helpdic['ans']=queryreturn[1]
+                maindic['answers'].append(helpdic)
+            jsonify(maindic)
+            cur.close()
+            return maindic
         else:
-            return {'status':'failed', 'reason': 'GET method unsupported'}                   
+            return {'status':'failed','reason':'MySQL Database intelliQ running on Apache Web Server'}
     except Exception as e:
-        print(e)
-        return {'status':'failed', 'reason': 'Cannot connect to database'}
-
-    """
-@app.route("/getsessionanswers/<int:questionnaire_id>", methods=["GET"])
-def getAnswersS(questionnaire_id):
-    try:
-         #cur = db.connection.cursor()
-         #cur.execute("SELECT * from QUESTIONNAIRE where questionnaireid={}".format(questionnaire_id))
-         #column_names = [i[0] for i in cur.description]
-         #table = [dict(zip(column_names, entry)) for entry in cur.fetchall()]
-         #return jsonify(table)
-         return {'success':'ok'}
-         #                      
-    except Exception as e:
-        print(e)
-        return {'success':'ok'}
-
-
-
-    """       
-@app.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return render_template("NotFound404.html", pageTitle = "Not Found"),404
-
-@app.errorhandler(500)
-def server_error(e):
-    return render_template("Error500.html", pageTitle = "Internal Server Error"),500
-
+        resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+        resp.status_code = 500
+        return resp
+       
