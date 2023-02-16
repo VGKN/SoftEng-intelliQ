@@ -12,30 +12,20 @@ def test_healthcheck():
     command = [sys.executable,'healthcheck']
     out, err, exit_code= capture(command)
     assert b"200" in out
-
-def test_doanswer():
-    pass
-    
-def test_questionnaire():
-    pass
-    
-def test_question():
-    pass
+ 
+def test_resetall():  
+    command = [sys.executable,'resetall']
+    out, err, exit_code= capture(command)
+    assert b"200" in out
     
 def test_questionnaire_upd():
-    pass
-    
-def test_resetall():  
-	command = [sys.executable,'resetall']
-    out, err, exit_code= capture(command)
-    assert b"200" in out:
+    command = [sys.executable, "questionnaire_upd", "--source", 'test_q.json']
+    out, err, exitcode = capture(command)
+    assert b"200" in out
     
 def test_resetq():
-    pass
+    command = [sys.executable, "resetq",  "--questionnaire_id", 'QQ001']
+    out, err, exitcode = capture(command)
+    assert b"200" in out
     
-def test_getquestionanswers():
-    pass
- 
-def test_getsessionanswers():
-    pass
 
