@@ -735,19 +735,30 @@ def QQID(questionnaireid):
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
+            query0 = "select questionnaireid from questionnaire"
+            cur.execute(query0)
+            x = cur.fetchall()
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire ID not found"})
+                resp.status_code = 400
+                return resp
+            else:
 
-            query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
-            cur.execute(query1)
+                query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
+                cur.execute(query1)
 
-            title={}
-            title['QuestionnaireID']=questionnaireid
-            title['Questionnaire_Title'] = cur.fetchall()[0][0]
+                title={}
+                title['QuestionnaireID']=questionnaireid
+                title['Questionnaire_Title'] = cur.fetchall()[0][0]
 
-            query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
-            cur.execute(query2)
+                query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
+                cur.execute(query2)
 
-            x=cur.fetchall()
-            res2=[]
+                x=cur.fetchall()
+                res2=[]
 
             for tup in x:
                 res2.append(tup[0])
@@ -768,12 +779,12 @@ def QQID(questionnaireid):
             return resp
             #return json.dumps(title, ensure_ascii=False),200 
 
-
         except Exception as e:
-            print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+            resp.status_code = 500
+            return resp   
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        return jsonify({'status':'failed', 'reason':'Method Not Allowed'})
 
 
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET'])
