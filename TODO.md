@@ -2,20 +2,28 @@
 
 Tasks to be completed.
 
+
+## PRESENTATION
+
+
 ## SETUP
 - [ ] Make shell scripts to automate building services, cloning repo, creating virtual environments etc @ntua-el19144
 ## POSTMAN
 
-- [ ] Create Postman Script to automatically test API functionality @ntua-el19188
+- [ ] Finish Postman tests @ntua-el19188
 
 ## BACKEND
 
 - [ ] Implement remaining backend API endpoints @ntua-el19219
 - [ ] Accept csv format files and export them @ntua-el19144
+- [ ] Fix errors in endpoints
+- [ ] Implement HTTPS
+- [ ] Use Api to implement Use cases
 
 ## FRONTEND
 
 - [ ] Make minor tweaks to Frontend templates @ntua-el19219 
+- [ ] Fix error handling
 
 ## CLI
 - [ ] Create Command Line Tool @ntua-el19144
@@ -23,15 +31,15 @@ Tasks to be completed.
 
 ## DATABASE
 
-- [ ] Create another mock questionnaire @ntua-el19144
+- [ ] DBDUMP @ntua-el19144
 
 ## DOCUMENTATION
 
 - [ ] Update VPP graphs @ntua-el19219
 - [ ] Update SRS doc @ntua-el19219
-- [ ] Create Stakeholders Requirements Specifications Doc @ntua-el19188
 - [ ] Create API documentation
 - [ ] Create installation documentation
+
 
 ## TEST
 
@@ -54,3 +62,5 @@ Tasks to be completed.
 - [x] Design Front end 
 - [x] Create python scripts to interact with endpoints
 - [x] Implement api endpoints
+- [x] Separate API endpoints from Flask routes
+- [x] Create Postman Script to automatically test API functionality 
