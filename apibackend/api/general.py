@@ -13,7 +13,7 @@ from flask import send_from_directory
 from flask import current_app
 from collections import ChainMap
 from operator import itemgetter
-    
+
 @app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
 def QQID(questionnaireid):
 
@@ -162,9 +162,9 @@ def doanswer(questionnaireid,questionid,session,optionid):
             cur = db.connection.cursor()
             
             query0 = "select questionnaireid from questionnaire"
-            q1 ="select question_id from question"
-            q2 ="select session_id from sesion"
-            q3 ="select opt_id from options"
+            q1 ="select question_id from question where questionaireid = '{}'".format(questionnaireid)
+
+            q2 ="select optid from question_options where questionid='{}'".format(questionid)
             
             cur.execute(query0)
             x = cur.fetchall()
@@ -188,16 +188,6 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 resp.status_code = 400
                 return resp
             
-            cur.execute(q2)
-            x = cur.fetchall()
-            
-            sids=[]
-            for n in x:
-                sids.append(n[0])
-            if session not in sids:
-                resp = jsonify ({"status":"failed", "reason":"Session not found"})
-                resp.status_code = 400
-                return resp
             
             cur.execute(q2)
             x = cur.fetchall()
@@ -206,7 +196,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
             for n in x:
                 qqids.append(n[0])
             if optionid not in optids:
-                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp = jsonify ({"status":"failed", "reason":"Unvalid Option"})
                 resp.status_code = 400
                 return resp
             
@@ -282,7 +272,7 @@ def getsessinoanswers(questionnaireid, session):
         try:
             cur = db.connection.cursor()
             query0 = "select questionnaireid from questionnaire"
-            q2 ="select session_id from sesion where questionnaireid ='{}".format(questionnaireid)
+            q2 ="select session_id from sesion where questionnaireid ='{}'".format(questionnaireid)
             cur.execute(query0)
             x = cur.fetchall()
             

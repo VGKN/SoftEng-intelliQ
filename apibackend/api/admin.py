@@ -14,6 +14,8 @@ from flask import current_app
 from collections import ChainMap
 from operator import itemgetter
 
+
+            
 @app.route("/admin/healthcheck", methods=['GET'])
 def healthcheck():
 
@@ -60,7 +62,7 @@ def questionnaire_upd():
                     fil.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
                     success=True
                 else:
-                    errors[fil.filename]='FILE TYPE IS NOT ALLOWED'
+                    errors['ERROR']='FILE TYPE IS NOT ALLOWED'
             
             if count !=1:
                 errors['message']='Server can only process one .json file'
