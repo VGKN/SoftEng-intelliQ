@@ -31,3 +31,5 @@ db = MySQL(app)
 
 ## routes must be imported after the app object has been initialized
 from apibackend import routes
+from apibackend.api import admin
+from apibackend.api import general
