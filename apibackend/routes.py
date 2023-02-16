@@ -13,6 +13,7 @@ from flask import send_from_directory
 from flask import current_app
 from collections import ChainMap
 from operator import itemgetter
+from apibackend.api.util import allowed_file
 
 
 
@@ -365,9 +366,9 @@ def inserting(name):
           
  
 #process of file upload in /questionnaire_upd
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+#def allowed_file(filename):
+#    return '.' in filename and \
+#           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/questionnaire_upd', methods=['GET', 'POST'])
 def upload_file():
