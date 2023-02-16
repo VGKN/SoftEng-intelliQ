@@ -518,7 +518,4 @@ def Answers(QuestionnaireID, Question_ID):
             print(e)
             return render_template("base.html",pageTitle="Landing Page")
 
-
-        
-    
         return render_template("base.html",pageTitle="Landing Page")
