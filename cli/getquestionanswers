@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+import argparse
+import requests
+import json
+import pprint
+ 
+
+def getquestionanswers(ar):
+    url_call='http://localhost:5000/getquestionanswers/{}/{}'.format(ar.questionnaire_id,ar.question_id)
+    res = requests.get(url_call)
+    print(res.status_code)
+    print(json.dumps(res.json(),ensure_ascii=False,indent=2))
+    return True
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--questionnaire_id', help='Give questionnaire_id', required='TRUE')
+parser.add_argument('--question_id', help='Give session that you want to receive answers', required='TRUE')
+args = parser.parse_args()
+
+getquestionanswers(args)

@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+import argparse
+import requests
+import json
+import pprint
+ 
+
+def questionnaire_upd(ar):
+    with open(ar.source, 'rb') as f:
+        payload={'file':f}
+        res = requests.post('http://localhost:5000/admin/questionnaire_upd',files=payload)
+        print(res.status_code)
+        pprint.pprint(res.json())
+        return True
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--source', help='Give name of file meant for upload', required='TRUE')
+args = parser.parse_args()
+
+questionnaire_upd(args)
