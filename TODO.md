@@ -19,6 +19,7 @@ Tasks to be completed.
 - [ ] Fix errors in endpoints
 - [ ] Separate API endpoints from Flask routes
 - [ ] Implement HTTPS
+- [ ] Use Api to implement Use cases
 
 ## FRONTEND
 
