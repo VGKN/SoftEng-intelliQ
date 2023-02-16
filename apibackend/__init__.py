@@ -6,7 +6,7 @@ import json
 #The UPLOAD_FOLDER is where we will store the uploaded files
 # the ALLOWED_EXTENSIONS is the set of allowed file extensions.
 UPLOAD_FOLDER = './apibackend/'
-ALLOWED_EXTENSIONS = {'json', 'csv'}
+ALLOWED_EXTENSIONS = {'json'}
 
 
 
