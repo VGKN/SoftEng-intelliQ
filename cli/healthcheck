@@ -2,19 +2,12 @@
 import argparse
 import requests
 import json
-import sys
 import pprint
- 
-def print_to_stdout(*a):
- 
-    # Here a is the array holding the objects
-    # passed as the argument of the function
-    print(*a, file=sys.stdout)
+
 def healthcheck():
     res = requests.get('http://localhost:5000/admin/healthcheck', )
     print(res.status_code)
-    #print(res.json(), file=sys.stdout)
-    print_to_stdout(res.json())
+    print(res.json())
     return True
 
 
