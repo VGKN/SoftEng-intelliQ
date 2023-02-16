@@ -1003,7 +1003,7 @@ def getsessinoanswers(questionnaireid, session):
         try:
             cur = db.connection.cursor()
             query0 = "select questionnaireid from questionnaire"
-            q2 ="select session_id from sesion where questionnaireid ='{}".format(questionnaireid)
+            q2 ="select session_id from sesion where questionnaireid ='{}'".format(questionnaireid)
             cur.execute(query0)
             x = cur.fetchall()
             
