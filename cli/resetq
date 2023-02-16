@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+import argparse
+import requests
+import json
+import pprint
+ 
+
+def resetq(ar):
+    url_call='http://localhost:5000/admin/resetq/{}'.format(ar.questionnaire_id)
+    res = requests.post(url_call)
+    print(res.status_code)
+    pprint.pprint(res.json())
+    return True
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--questionnaire_id', help='Give questionnaire_id of questionnaire meant to delete ', required='TRUE')
+args = parser.parse_args()
+
+resetq(args)

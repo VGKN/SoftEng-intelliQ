@@ -15,7 +15,7 @@ Tasks to be completed.
 
 ## FRONTEND
 
-- [ ] Make minor tweaks to Frontend templates @ntua-el219 
+- [ ] Make minor tweaks to Frontend templates @ntua-el19219 
 
 ## CLI
 - [ ] Create Command Line Tool @ntua-el19144
