@@ -12,3 +12,30 @@ def test_healthcheck():
     command = [sys.executable,'healthcheck']
     out, err, exit_code= capture(command)
     assert b"200" in out
+
+def test_doanswer():
+    pass
+    
+def test_questionnaire():
+    pass
+    
+def test_question():
+    pass
+    
+def test_questionnaire_upd():
+    pass
+    
+def test_resetall():  
+	command = [sys.executable,'resetall']
+    out, err, exit_code= capture(command)
+    assert b"200" in out:
+    
+def test_resetq():
+    pass
+    
+def test_getquestionanswers():
+    pass
+ 
+def test_getsessionanswers():
+    pass
+
