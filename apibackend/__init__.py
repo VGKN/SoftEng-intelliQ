@@ -20,6 +20,7 @@ app = Flask(__name__, template_folder= '../frontend/templates')
 app.config.from_file("config.json",load=json.load)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['JSON_SORT_KEYS'] = False
+app.config['JSON_AS_ASCII'] = False
 
 ## secret key for sessions (signed cookies). Flask uses it to protect the contents of the user session against tampering.
 ## token for csrf protection of forms.
