@@ -14,7 +14,10 @@ def test_healthcheck():
     assert b"500" in out
 
 def test_doanswer():
-    pass
+	command = ["./SessionsPerPoint", "--format", "csv", "--datefrom", datefrom, "--dateto", dateto,"--apikey", data, "--point", "1"]
+	out, err, exitcode = capture(command)
+	#assert err != 0
+	assert b"200" in out
     
 def test_questionnaire():
     pass
