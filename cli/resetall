@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+import argparse
+import requests
+import json
+import pprint
+ 
+
+def resetall():
+	res = requests.post('http://localhost:5000/admin/resetall')
+	print(res.status_code)
+	pprint.pprint(res.json())
+	return True
+
+
+resetall()
