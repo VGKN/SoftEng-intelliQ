@@ -558,6 +558,10 @@ def questionnaire_upd():
     if request.method=='POST':
     
         try:
+            cur = db.connection.cursor()
+            
+            
+            
             success=False
             errors={}
             if 'file' not in request.files:
@@ -579,7 +583,7 @@ def questionnaire_upd():
             if count !=1:
                 errors['message']='Server can only process one .json file'
                 resp=jsonify(errors)
-                resp.status_code=500
+                resp.status_code=400
                 return resp
             if success and errors:
                 errors['message']='File succesfully uploaded'
@@ -590,7 +594,7 @@ def questionnaire_upd():
                 path='./apibackend/'+fil.filename
                 with open(path,'r', encoding='utf-8') as file:
                     data=json.load(file)
-                    cur= db.connection.cursor()
+                    
                     query="INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle'])
                     cur.execute(query)
                     cur.execute("Select Keyword from keywords")
@@ -657,7 +661,9 @@ def questionnaire_upd():
     else:
         resp=jsonify({'status':'No such method supported'})
         resp.status_code=500
-        return resp  
+        return resp
+    
+      
     
 @app.route("/admin/resetall", methods=["POST"])
 def postResetAll():
