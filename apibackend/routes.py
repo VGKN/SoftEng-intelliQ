@@ -578,7 +578,7 @@ def questionnaire_upd():
                     fil.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
                     success=True
                 else:
-                    errors[fil.filename]='FILE TYPE IS NOT ALLOWED'
+                    errors['ERROR']='FILE TYPE IS NOT ALLOWED'
             
             if count !=1:
                 errors['message']='Server can only process one .json file'
@@ -883,9 +883,9 @@ def doanswer(questionnaireid,questionid,session,optionid):
             cur = db.connection.cursor()
             
             query0 = "select questionnaireid from questionnaire"
-            q1 ="select question_id from question"
-            q2 ="select session_id from sesion"
-            q3 ="select opt_id from options"
+            q1 ="select question_id from question where questionaireid = '{}'".format(questionnaireid)
+
+            q2 ="select optid from question_options where questionid='{}'".format(questionid)
             
             cur.execute(query0)
             x = cur.fetchall()
@@ -909,16 +909,6 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 resp.status_code = 400
                 return resp
             
-            cur.execute(q2)
-            x = cur.fetchall()
-            
-            sids=[]
-            for n in x:
-                sids.append(n[0])
-            if session not in sids:
-                resp = jsonify ({"status":"failed", "reason":"Session not found"})
-                resp.status_code = 400
-                return resp
             
             cur.execute(q2)
             x = cur.fetchall()
@@ -927,7 +917,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
             for n in x:
                 qqids.append(n[0])
             if optionid not in optids:
-                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp = jsonify ({"status":"failed", "reason":"Unvalid Option"})
                 resp.status_code = 400
                 return resp
             
