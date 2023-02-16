@@ -544,7 +544,7 @@ def healthcheck():
         except Exception as e:
             print(e)
             resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
-            resp.statsu_code=500
+            resp.status_code=500
             return resp
     else:
         resp=jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
@@ -558,6 +558,10 @@ def questionnaire_upd():
     if request.method=='POST':
     
         try:
+            cur = db.connection.cursor()
+            
+            
+            
             success=False
             errors={}
             if 'file' not in request.files:
@@ -579,7 +583,7 @@ def questionnaire_upd():
             if count !=1:
                 errors['message']='Server can only process one .json file'
                 resp=jsonify(errors)
-                resp.status_code=500
+                resp.status_code=400
                 return resp
             if success and errors:
                 errors['message']='File succesfully uploaded'
@@ -590,7 +594,7 @@ def questionnaire_upd():
                 path='./apibackend/'+fil.filename
                 with open(path,'r', encoding='utf-8') as file:
                     data=json.load(file)
-                    cur= db.connection.cursor()
+                    
                     query="INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle'])
                     cur.execute(query)
                     cur.execute("Select Keyword from keywords")
@@ -656,8 +660,10 @@ def questionnaire_upd():
             return resp  
     else:
         resp=jsonify({'status':'No such method supported'})
-        resp.status_code=400
-        return resp  
+        resp.status_code=500
+        return resp
+    
+      
     
 @app.route("/admin/resetall", methods=["POST"])
 def postResetAll():
@@ -735,19 +741,30 @@ def QQID(questionnaireid):
     if request.method=='GET':
         try:
             cur = db.connection.cursor()
+            query0 = "select questionnaireid from questionnaire"
+            cur.execute(query0)
+            x = cur.fetchall()
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire ID not found"})
+                resp.status_code = 400
+                return resp
+            else:
 
-            query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
-            cur.execute(query1)
+                query1 = "select Questionnaire_Title from Questionnaire where QuestionnaireID = '{}'".format(questionnaireid)
+                cur.execute(query1)
 
-            title={}
-            title['QuestionnaireID']=questionnaireid
-            title['Questionnaire_Title'] = cur.fetchall()[0][0]
+                title={}
+                title['QuestionnaireID']=questionnaireid
+                title['Questionnaire_Title'] = cur.fetchall()[0][0]
 
-            query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
-            cur.execute(query2)
+                query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
+                cur.execute(query2)
 
-            x=cur.fetchall()
-            res2=[]
+                x=cur.fetchall()
+                res2=[]
 
             for tup in x:
                 res2.append(tup[0])
@@ -768,12 +785,12 @@ def QQID(questionnaireid):
             return resp
             #return json.dumps(title, ensure_ascii=False),200 
 
-
         except Exception as e:
-            print(e)
-            return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+            resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
+            resp.status_code = 500
+            return resp   
     else:
-        return {'status':'failed','dbconnection':'MySQL Database intelliQ running on Apache Web Server'}
+        return jsonify({'status':'failed', 'reason':'Method Not Allowed'})
 
 
 @app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET'])
@@ -786,6 +803,7 @@ def QQQID(questionnaireid,questionid):
             
             query0 = "select questionnaireid from questionnaire"
             q1 ="select question_id from question"
+            
             
             cur.execute(query0)
             x = cur.fetchall()
@@ -861,6 +879,57 @@ def doanswer(questionnaireid,questionid,session,optionid):
     if request.method=='POST':
         try:
             cur = db.connection.cursor()
+            
+            query0 = "select questionnaireid from questionnaire"
+            q1 ="select question_id from question"
+            q2 ="select session_id fron sesion"
+            q3 ="select opt_id from options"
+            
+            cur.execute(query0)
+            x = cur.fetchall()
+            
+            qids=[]
+            for n in x:
+                qids.append(n[0])
+            if questionnaireid not in qids:
+                resp = jsonify ({"status":"failed", "reason":"Questionnaire not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q1)
+            x = cur.fetchall()
+            
+            qqids=[]
+            for n in x:
+                qqids.append(n[0])
+            if questionid not in qqids:
+                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q2)
+            x = cur.fetchall()
+            
+            sids=[]
+            for n in x:
+                sids.append(n[0])
+            if session not in sids:
+                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q2)
+            x = cur.fetchall()
+            
+            optids=[]
+            for n in x:
+                qqids.append(n[0])
+            if optionid not in optids:
+                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp.status_code = 400
+                return resp
+            
+            
 
             query="select session_id from sesion"
 
@@ -914,11 +983,11 @@ def doanswer(questionnaireid,questionid,session,optionid):
         except Exception as e:
             print(e)
             resp=jsonify({'status':'failed','dberror':'Request not possible'})
-            resp.status_code=400
+            resp.status_code=500
             return resp
     else:
         resp=jsonify({'status':'failed','server':'This method is not allowed'})
-        resp.status_code=400
+        resp.status_code=500
         return resp
     
 
