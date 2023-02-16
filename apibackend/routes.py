@@ -802,7 +802,9 @@ def QQQID(questionnaireid,questionid):
             cur = db.connection.cursor()
             
             query0 = "select questionnaireid from questionnaire"
-            q1 ="select question_id from question"
+            q1 ="select question_id from question where questionaireid"
+            q2 ="select question_id from question where questionaireid ='{}".format(questionnaireid)
+
             
             
             cur.execute(query0)
@@ -825,6 +827,17 @@ def QQQID(questionnaireid,questionid):
                 qqids.append(n[0])
             if questionid not in qqids:
                 resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q2)
+            x = cur.fetchall()
+            
+            qqqids=[]
+            for n in x:
+                qqqids.append(n[0])
+            if questionid not in qqqids:
+                resp = jsonify ({"status":"failed", "reason":"Question not in Questionnaire"})
                 resp.status_code = 400
                 return resp
 
@@ -882,7 +895,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
             
             query0 = "select questionnaireid from questionnaire"
             q1 ="select question_id from question"
-            q2 ="select session_id fron sesion"
+            q2 ="select session_id from sesion"
             q3 ="select opt_id from options"
             
             cur.execute(query0)
@@ -914,7 +927,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
             for n in x:
                 sids.append(n[0])
             if session not in sids:
-                resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp = jsonify ({"status":"failed", "reason":"Session not found"})
                 resp.status_code = 400
                 return resp
             
@@ -1002,6 +1015,7 @@ def getsessinoanswers(questionnaireid, session):
             cur = db.connection.cursor()
             query0 = "select questionnaireid from questionnaire"
             q1 ="select session_id from sesion"
+            q2 ="select session_id from sesion where questionnaireid ='{}".format(questionnaireid)
             cur.execute(query0)
             x = cur.fetchall()
             
@@ -1021,6 +1035,17 @@ def getsessinoanswers(questionnaireid, session):
                 sids.append(n[0])
             if session not in sids:
                 resp = jsonify ({"status":"failed", "reason":"Session not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q2)
+            x = cur.fetchall()
+            
+            qqids=[]
+            for n in x:
+                qqids.append(n[0])
+            if session not in qqids:
+                resp = jsonify ({"status":"failed", "reason":"Session not in Questionnaire"})
                 resp.status_code = 400
                 return resp
             
@@ -1073,6 +1098,8 @@ def getquestionanswers(questionnaireID, questionID):
             cur = db.connection.cursor()
             query0 = "select questionnaireid from questionnaire"
             q1 ="select question_id from question"
+            q2 ="select question_id from question where questionaireid ='{}".format(questionnaireID)
+
             
             cur.execute(query0)
             x = cur.fetchall()
@@ -1094,6 +1121,18 @@ def getquestionanswers(questionnaireID, questionID):
                 qqids.append(n[0])
             if questionID not in qqids:
                 resp = jsonify ({"status":"failed", "reason":"Question not found"})
+                resp.status_code = 400
+                return resp
+            
+            cur.execute(q2)
+            x = cur.fetchall()
+            
+            
+            qqqids=[]
+            for n in x:
+                qqqids.append(n[0])
+            if questionID not in qqqids:
+                resp = jsonify ({"status":"failed", "reason":"Question not in Questionnaire"})
                 resp.status_code = 400
                 return resp
             
