@@ -197,13 +197,23 @@ def doanswer(questionnaireid,questionid,session,optionid):
             for n in x:
                 optids.append(n[0])
             if optionid not in optids:
-                resp = jsonify ({"status":"failed", "reason":"Invalid Option"})
+                resp = jsonify ({"status":"failed", "reason":"Invalid or Empty Option"})
+                resp.status_code = 400
+                return resp
+
+            if len(session) < 4:
+                resp = jsonify ({"status":"failed", "reason":"Session has less than 4 chars"})
+                resp.status_code = 400
+                return resp
+
+            if len(session) > 4:
+                resp = jsonify ({"status":"failed", "reason":"Session has more than 4 chars"})
                 resp.status_code = 400
                 return resp
             
             
 
-            query="select session_id from sesion where questionnaireid = '{}'".format(questionnaireid)
+            query="select session_id from sesion"
 
             cur.execute(query)
 
@@ -219,6 +229,20 @@ def doanswer(questionnaireid,questionid,session,optionid):
                     active = 1
                         
             if active == 1:
+
+                query="select questionnaireid from sesion where session_id= '{}'".format(session)
+                cur.execute(query)
+                q=list()
+
+                for b in cur.fetchall():
+                    q.append(b[0])
+
+                if q != questionnaireid:
+                    resp = jsonify ({"status":"failed", "reason":"This session belongs to a different questionnaire"})
+                    resp.status_code = 400
+                    return resp
+                
+
                 query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
 
                 cur.execute(query1)
