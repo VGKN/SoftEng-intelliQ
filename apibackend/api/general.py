@@ -197,7 +197,17 @@ def doanswer(questionnaireid,questionid,session,optionid):
             for n in x:
                 optids.append(n[0])
             if optionid not in optids:
-                resp = jsonify ({"status":"failed", "reason":"Invalid Option"})
+                resp = jsonify ({"status":"failed", "reason":"Invalid or Empty Option"})
+                resp.status_code = 400
+                return resp
+
+            if len(session) < 4:
+                resp = jsonify ({"status":"failed", "reason":"Session has less than 4 chars"})
+                resp.status_code = 400
+                return resp
+
+            if len(session) > 4:
+                resp = jsonify ({"status":"failed", "reason":"Session has more than 4 chars"})
                 resp.status_code = 400
                 return resp
             
@@ -219,12 +229,26 @@ def doanswer(questionnaireid,questionid,session,optionid):
                     active = 1
                         
             if active == 1:
+
+                query="select questionnaireid from sesion where session_id= '{}'".format(session)
+                cur.execute(query)
+                q=list()
+
+                for b in cur.fetchall():
+                    q.append(b[0])
+
+                if q != questionnaireid:
+                    resp = jsonify ({"status":"failed", "reason":"This session belongs to a different questionnaire"})
+                    resp.status_code = 400
+                    return resp
+                
+
                 query1="select o_id from session_questions_options where s_id='{}' and q_id='{}'".format(session,questionid)
 
                 cur.execute(query1)
 
                 if len(cur.fetchall()) != 0:
-                    resp=jsonify({'status':'failed','dberror':'Bad request'})
+                    resp=jsonify({'status':'failed','dberror':'The question has been answered by the same session'})
                     resp.status_code=400
                     return resp
                 
@@ -255,7 +279,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
         except Exception as e:
             print(e)
             resp=jsonify({'status':'failed','dberror':'Request not possible'})
-            resp.status_code=400
+            resp.status_code=500
             return resp
     else:
         resp=jsonify({'status':'failed','server':'This method is not allowed'})

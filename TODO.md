@@ -14,12 +14,10 @@ Tasks to be completed.
 
 - [ ] CSV  @ntua-el19144
 - [ ] Fix errors in endpoints
-- [ ] Implement HTTPS
 - [ ] Use Api to implement Use cases
 
 ## FRONTEND
 
-- [ ] Make html for wrong file upload @ntua-el19188
 - [ ] Fix error handling
 
 ## DOCUMENTATION

@@ -12,11 +12,12 @@
             <div class="card-body" id="card" >
                 <center> <h4 class="card-title">Upload your questionnaire here!</h4></center>
                 <p class="card-text" id="paragraph">Upload your .json file here.</p>
+
                 <form action = "/questionnaire_upd" method = "post" enctype="multipart/form-data">  
                     <input type="file" name="file" >  
                     <input type = "submit"  value="Upload">  
                 </form>
-				<h12 style="color:red;">{{info}}</h12>
+				<h12 style="color:red;">*Error: Only file type ".json" is allowed</h12>
             </div>
         </div>
     </div>
