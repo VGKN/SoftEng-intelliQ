@@ -22,7 +22,6 @@ Tasks to be completed.
 
 ## DOCUMENTATION
 
-- [ ] Update VPP graphs @ntua-el19219
 - [ ] Update SRS doc @ntua-el19219
 - [ ] Create API documentation
 - [ ] Create installation documentation

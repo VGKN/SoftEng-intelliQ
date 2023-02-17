@@ -237,7 +237,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 for b in cur.fetchall():
                     q.append(b[0])
 
-                if q != questionnaireid:
+                if q[0] != questionnaireid:
                     resp = jsonify ({"status":"failed", "reason":"This session belongs to a different questionnaire"})
                     resp.status_code = 400
                     return resp
