@@ -22,10 +22,10 @@ def healthcheck():
 
     if request.method=='GET':
         try:
-            cur = db.connection.cursor()
-            resp=jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'}) 
-            resp.status_code=200
-            return resp
+             cur = db.connection.cursor()
+             resp=jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'}) 
+             resp.status_code=200
+             return resp
         except Exception as e:
             print(e)
             resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
