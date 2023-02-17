@@ -14,7 +14,6 @@ Tasks to be completed.
 
 - [ ] CSV  @ntua-el19144
 - [ ] Fix errors in endpoints
-- [ ] Implement HTTPS
 - [ ] Use Api to implement Use cases
 
 ## FRONTEND
