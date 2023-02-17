@@ -52,7 +52,7 @@ CREATE TABLE Options (
 );
 
 CREATE TABLE Sesion (
-    Session_ID VARCHAR(50) NOT NULL,
+    Session_ID VARCHAR(4) NOT NULL,
     QuestionnaireID VARCHAR(50) NOT NULL,
     UserString VARCHAR(10) NOT NULL,
     PRIMARY KEY (Session_ID),
@@ -79,7 +79,7 @@ CREATE TABLE Questions_Options (
 
 CREATE TABLE Session_Questions_Options (
     Q_ID VARCHAR(50) NOT NULL,
-    S_ID VARCHAR(50) NOT NULL,
+    S_ID VARCHAR(4) NOT NULL,
     O_ID VARCHAR(50) NOT NULL,
     PRIMARY KEY (Q_ID, S_ID),
     FOREIGN KEY (Q_ID) REFERENCES Question(Question_ID) ON DELETE RESTRICT ON UPDATE CASCADE,

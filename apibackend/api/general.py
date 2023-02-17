@@ -203,7 +203,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
             
             
 
-            query="select session_id from sesion"
+            query="select session_id from sesion where questionnaireid = '{}'".format(questionnaireid)
 
             cur.execute(query)
 
@@ -224,7 +224,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 cur.execute(query1)
 
                 if len(cur.fetchall()) != 0:
-                    resp=jsonify({'status':'failed','dberror':'Bad request'})
+                    resp=jsonify({'status':'failed','dberror':'The question has been answered by the same session'})
                     resp.status_code=400
                     return resp
                 
