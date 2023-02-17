@@ -2,7 +2,9 @@ import json
 import os
 import random
 import string
-from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, Response
+import csv
+#import StringIO
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, Response,make_response
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
 from apibackend.forms import MyForm,FieldForm,ProjectForm,QuestionForm
@@ -21,15 +23,38 @@ from apibackend.api.util import allowed_file
 def healthcheck():
 
     if request.method=='GET':
-        try:
-            cur = db.connection.cursor()
-            resp=jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'}) 
-            resp.status_code=200
-            return resp
-        except Exception as e:
-            print(e)
-            resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
-            resp.status_code=500
+        f=request.args.get('format')
+        print(f)
+        if (f is None or f=='json'):
+            try:
+                cur = db.connection.cursor()
+                resp=jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'}) 
+                resp.status_code=200
+                return resp
+            except Exception as e:
+                print(e)
+                resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+                resp.status_code=500
+                return resp
+        elif f=='csv':
+            try:
+                cur = db.connection.cursor()
+                csv=""""status","dbconnection"
+                "OK","'MySQL Database intelliQ running on Apache Web Server"
+                """
+                resp=make_response(csv)
+                resp.headers["Content-type"] = "text/csv"
+                resp.headers["Content-disposition"] = "inline" 
+                resp.status_code=200
+                return resp
+            except Exception as e:
+                print(e)
+                resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+                resp.status_code=500
+                return resp
+        else:
+            resp=jsonify({'status':'failed', 'reason':'Only csv and json format is allowed'}) 
+            resp.status_code=400
             return resp
     else:
         resp=jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
