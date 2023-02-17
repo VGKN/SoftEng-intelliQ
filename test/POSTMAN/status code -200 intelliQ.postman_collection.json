@@ -1,0 +1,446 @@
+{
+	"info": {
+		"_postman_id": "40b26935-3e2d-434b-989f-e1e8f09912ee",
+		"name": "status code :200 intelliQ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "healthcheck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"OK\", \"dbconnection\": \"MySQL Database intelliQ running on Apache Web Server\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/healthcheck",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"message\": \"Questionnaire successfully uploaded\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/nicko/Desktop/q2.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/admin/questionnaire_upd",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"questionnaire_upd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"QuestionnaireID\": \"QQ000\", \"Questionnaire_Title\": \"My first research questionnaire\", \"keywords\": [ \"footbal\", \"islands\", \"timezone\" ], \"questions\": [ { \"Question_ID\": \"P01\", \"Qtext\": \"Ποια είναι η ηλικία σας;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"profile\" }, { \"Question_ID\": \"Q01\", \"Qtext\": \"Ποιο είναι το αγαπημένο σας χρώμα;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q02\", \"Qtext\": \"Ασχολείστε με το ποδόσφαιρο;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q03\", \"Qtext\": \"Τι ομάδα είστε;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q04\", \"Qtext\": \"Έχετε ζήσει σε νησί;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q05\", \"Qtext\": \"Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Έχετε ζήσει σε νησί;': Ποια η σχέση σας με το θαλάσσιο σκι;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q06\", \"Qtext\": \"Είστε χειμερινός κολυμβητής\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q07\", \"Qtext\": \"Κάνετε χειμερινό σκι;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q08\", \"Qtext\": \"Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q09\", \"Qtext\": \"Με δεδομένο ότι απαντήσατε 'Οχι' στην ερώτηση 'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;': Προτιμάτε τη θερινή ή την χειμερινή ώρα;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" } ] }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/questionnaire/:questionnaireid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"questionnaire",
+						":questionnaireid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === ' \"questionnaireID\": \"QQ000\", \"qID\": \"P01\", \"qtext\": \"Ποια είναι η ηλικία σας;\", \"required\": \"TRUE\", \"type\": \"profile\", \"options\": [ { \"optID\": \"P01A1\", \"opttxt\": \"<30\", \"nextqID\": \"Q01\" }, { \"optID\": \"P01A2\", \"opttxt\": \"30-50\", \"nextqID\": \"Q01\" }, { \"optID\": \"P01A3\", \"opttxt\": \"50-70\", \"nextqID\": \"Q01\" }, { \"optID\": \"P01A4\", \"opttxt\": \">70\", \"nextqID\": \"Q01\" } ] }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"message\": \"Server can only process one .json file\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"QuestionnaireID\": \"QQ000\", \"session\": \"ATBA\", \"answers\": [ { \"qID\": \"P01\", \"ans\": \"P01A1\" }, { \"qID\": \"Q01\", \"ans\": \"Q01A1\" }, { \"qID\": \"Q02\", \"ans\": \"Q02A1\" }, { \"qID\": \"Q03\", \"ans\": \"Q03A2\" }, { \"qID\": \"Q04\", \"ans\": \"Q04A2\" }, { \"qID\": \"Q06\", \"ans\": \"Q06A1\" }, { \"qID\": \"Q07\", \"ans\": \"Q07A2\" }, { \"qID\": \"Q08\", \"ans\": \"Q08A1\" }, { \"qID\": \"Q09\", \"ans\": \"Q09A2\" } ] }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getquestionanswers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"QuestionnaireID\": \"QQ000\", \"questionid\": \"P01\", \"answers\": [ { \"session\": \"ATBA\", \"ans\": \"P01A1\" }, { \"session\": \"ATBP\", \"ans\": \"P01A1\" }, { \"session\": \"ATBB\", \"ans\": \"P01A2\" }, { \"session\": \"ATBC\", \"ans\": \"P01A3\" }, { \"session\": \"ATBD\", \"ans\": \"P01A4\" } ] }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetq",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"OK\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/resetq/:questionnaireid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"resetq",
+						":questionnaireid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetall",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"OK\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/resetall",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"resetall"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

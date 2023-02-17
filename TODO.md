@@ -12,19 +12,15 @@ Tasks to be completed.
 
 ## BACKEND
 
-- [ ] CSV not only JSON for REST API @ntua-el19144
+- [ ] CSV  @ntua-el19144
 - [ ] Fix errors in endpoints
 - [ ] Implement HTTPS
 - [ ] Use Api to implement Use cases
 
 ## FRONTEND
 
-- [ ] Make minor tweaks to Frontend templates @ntua-el19219 
+- [ ] Make html for wrong file upload @ntua-el19188
 - [ ] Fix error handling
-
-## DATABASE
-
-- [ ] DBDUMP @ntua-el19144
 
 ## DOCUMENTATION
 
@@ -59,3 +55,4 @@ Tasks to be completed.
 - [x] Separate API endpoints from Flask routes
 - [x] Create Postman Script to automatically test API functionality 
 - [x] Implement API endpoints 
+- [x] DB DUMP 
