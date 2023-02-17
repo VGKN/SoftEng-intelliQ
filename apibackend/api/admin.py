@@ -24,7 +24,7 @@ def healthcheck():
 
     if request.method=='GET':
         f=request.args.get('format')
-        print(f)
+ 
         if (f is None or f=='json'):
             try:
                 cur = db.connection.cursor()
@@ -44,12 +44,16 @@ def healthcheck():
                 """
                 resp=make_response(csv)
                 resp.headers["Content-type"] = "text/csv"
-                resp.headers["Content-disposition"] = "inline" 
                 resp.status_code=200
                 return resp
+                
             except Exception as e:
                 print(e)
-                resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+                csv=""""status","dbconnection"
+                "failed","'MySQL Database intelliQ not connected"
+                """
+                resp.make_response(csv)
+                resp.headers["Content-type"] = "text/csv"
                 resp.status_code=500
                 return resp
         else:
@@ -66,108 +70,148 @@ def healthcheck():
 @app.route("/admin/questionnaire_upd", methods=["POST"])
 def questionnaire_upd():
     if request.method=='POST':
-    
-        try:
-            cur = db.connection.cursor()
-            
-            
-            
-            success=False
-            errors={}
-            if 'file' not in request.files:
-                resp=jsonify({'status':'No file part in request', 'state':success})
-                resp.status_code=400
-                return resp
-            file=request.files.getlist('file')
-            count=0
-            
-            for fil in file:
-                count+=1
-                if fil and allowed_file(fil.filename):
-                    filename=secure_filename(fil.filename)
-                    fil.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-                    success=True
-                else:
-                    errors['ERROR']='FILE TYPE IS NOT ALLOWED'
-            
-            if count !=1:
-                errors['message']='Server can only process one .json file'
-                resp=jsonify(errors)
-                resp.status_code=400
-                return resp
-            if success and errors:
-                errors['message']='File succesfully uploaded'
-                resp=jsonify(errors)
-                resp.status_code=500
-                return resp
-            if success:
-                path='./apibackend/'+fil.filename
-                with open(path,'r', encoding='utf-8') as file:
-                    data=json.load(file)
+        f=request.args.get('format')
+        if (f is None or f=='json' or f=='csv'):
+            try:
+                try:
+                    cur = db.connection.cursor()
+                except:
+                    if (f=='csv'):
+                        csv=""""status","reason"
+                        "failed", "Cannot connect to Database"
+                        """
+                        resp.make_response(csv)
+                        resp.headers["Content-type"] = "text/csv"
+                        resp.status_code=500
+                    else:
+                        resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
+                        resp.status_code=500
+                    return resp
                     
-                    query="INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle'])
-                    cur.execute(query)
-                    cur.execute("Select Keyword from keywords")
-                    Keywords=cur.fetchall()
-                    for keyword in data['keywords']:
-                        if keyword not in Keywords:
-                            query="INSERT INTO Keywords (keyword) VALUES ('{}');".format(keyword)
-                            cur.execute(query)
-                        query="INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('{}','{}');".format(data['questionnaireID'],keyword)
+                success=False
+                errors={}
+                
+                if 'file' not in request.files:
+                    if (f=='csv'):
+                        csv=""""status","reason"
+                        "failed", "No file part in request header"
+                        """
+                        resp.make_response(csv)
+                        resp.headers["Content-type"] = "text/csv"
+                        resp.status_code=500
+                    else:
+                        resp=jsonify({'status':'failed', 'reason':'No file part in request header'})
+                        resp.status_code=400
+                        return resp
+                    
+                file=request.files.getlist('file')
+                count=0
+                
+                for fil in file:
+                    count+=1
+                    if fil and allowed_file(fil.filename):
+                        filename=secure_filename(fil.filename)
+                        fil.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+                        success=True
+                    else:
+                        errors['ERROR']='FILE TYPE IS NOT ALLOWED'
+                
+                if count !=1:
+                    if (f=='csv'):
+                        csv=""""status","reason"
+                        "failed", "Cannot connect to Database"
+                        """
+                        resp.make_response(csv)
+                        resp.headers["Content-type"] = "text/csv"
+                        resp.status_code=500
+                    else:
+                        resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
+                        resp.status_code=500
+                        return resp
+                        errors['message']='Server can only process one .json file'
+                        resp=jsonify(errors)
+                        resp.status_code=400
+                        return resp
+                        
+                if success and errors:
+                    errors['message']='File succesfully uploaded'
+                    resp=jsonify(errors)
+                    resp.status_code=500
+                    return resp
+                if success:
+                    path='./apibackend/'+fil.filename
+                    with open(path,'r', encoding='utf-8') as file:
+                        data=json.load(file)
+                        
+                        query="INSERT INTO Questionnaire (questionnaireID, questionnaire_Title, Aid) VALUES ('{}','{}',1);".format(data['questionnaireID'],data['questionnaireTitle'])
                         cur.execute(query)
-                    for questions in data['questions']:
-                        myx=[]
-                        myy=[]
-                        qtext=[]
-                        texts=[]
-                        x=questions['qtext'].find("[*")
-                        myx.append(x)
-                        y=questions['qtext'].find("]",x+2)
-                        myy.append(y)
-                        while(x!=-1):
-                            qtext.append(questions['qtext'][x+2:y])
-                            x=questions['qtext'].find("[*", y)
+                        cur.execute("Select Keyword from keywords")
+                        Keywords=cur.fetchall()
+                        for keyword in data['keywords']:
+                            if keyword not in Keywords:
+                                query="INSERT INTO Keywords (keyword) VALUES ('{}');".format(keyword)
+                                cur.execute(query)
+                            query="INSERT INTO Questionnaire_Keywords (QuestionnaireQuestionnaireID, KeywordsKeyword) VALUES ('{}','{}');".format(data['questionnaireID'],keyword)
+                            cur.execute(query)
+                        for questions in data['questions']:
+                            myx=[]
+                            myy=[]
+                            qtext=[]
+                            texts=[]
+                            x=questions['qtext'].find("[*")
                             myx.append(x)
                             y=questions['qtext'].find("]",x+2)
                             myy.append(y)
-                        if len(qtext)!=0:
-                            for question in data['questions']:
-                                if question['qID ']==qtext[1]:
-                                    texts.append(question['qtext'])
-                                for options in question['options']:
-                                    if options['optID']==qtext[0]:
-                                        texts.append(options['opttxt'])
-                            questiontext=questions['qtext'][0:myx[0]]+"\\'"+texts[1]+"\\'"+questions['qtext'][myy[0]+1:myx[1]] +"\\'"+texts[0]+"\\'"+questions['qtext'][myy[1]+1:]          
-                            query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questiontext,questions['required'],questions['type'],data['questionnaireID'])
-                        else:
-                            query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID'])
-                        cur.execute(query)  
-                        nextq=''
-                    for questions in data['questions']:
-                        for option in questions['options']:
-                            query="INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt'])
-                            cur.execute(query)
-                            if option['nextqID']=='-':
-                                nextq=questions['qID ']
+                            while(x!=-1):
+                                qtext.append(questions['qtext'][x+2:y])
+                                x=questions['qtext'].find("[*", y)
+                                myx.append(x)
+                                y=questions['qtext'].find("]",x+2)
+                                myy.append(y)
+                            if len(qtext)!=0:
+                                for question in data['questions']:
+                                    if question['qID ']==qtext[1]:
+                                        texts.append(question['qtext'])
+                                    for options in question['options']:
+                                        if options['optID']==qtext[0]:
+                                            texts.append(options['opttxt'])
+                                questiontext=questions['qtext'][0:myx[0]]+"\\'"+texts[1]+"\\'"+questions['qtext'][myy[0]+1:myx[1]] +"\\'"+texts[0]+"\\'"+questions['qtext'][myy[1]+1:]          
+                                query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questiontext,questions['required'],questions['type'],data['questionnaireID'])
                             else:
-                                nextq=option['nextqID']
-                            query="INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq)
-                            cur.execute(query)
-                    db.connection.commit()
-                    state ="successfully added questionnaire"
-                    resp=jsonify({'message':'Questionnaire successfully uploaded'})
-                    resp.status_code=200
-                    return resp
-            else:
-                resp=jsonify(errors)
+                                query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID'])
+                            cur.execute(query)  
+                            nextq=''
+                        for questions in data['questions']:
+                            for option in questions['options']:
+                                query="INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('{}','{}');".format(option['optID'], option['opttxt'])
+                                cur.execute(query)
+                                if option['nextqID']=='-':
+                                    nextq=questions['qID ']
+                                else:
+                                    nextq=option['nextqID']
+                                query="INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq)
+                                cur.execute(query)
+                        db.connection.commit()
+                        state ="successfully added questionnaire"
+                        resp=jsonify({'message':'Questionnaire successfully uploaded'})
+                        resp.status_code=200
+                        return resp
+                else:
+                    resp=jsonify(errors)
+                    resp.status_code=500
+                    return resp      
+                    
+            except Exception as e:
+                print(e)
+                resp=jsonify({'status':'Database Error'})
                 resp.status_code=500
-                return resp      
+                return resp  
                 
-        except Exception as e:
-            print(e)
-            resp=jsonify({'status':'Database Error'})
-            resp.status_code=500
-            return resp  
+        else:
+            resp=jsonify({'status':'failed', 'reason':'Only csv and json format is allowed'}) 
+            resp.status_code=400
+            return resp
+
     else:
         resp=jsonify({'status':'No such method supported'})
         resp.status_code=500
