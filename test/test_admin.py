@@ -19,7 +19,7 @@ def test_resetall():
     assert b"200" in out
     
 def test_questionnaire_upd():
-    command = [sys.executable, "questionnaire_upd", "--source", 'test_q.json']
+    command = [sys.executable, "questionnaire_upd", "--source", '../test/test_q.json']
     out, err, exitcode = capture(command)
     assert b"200" in out
     
