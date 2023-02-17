@@ -1,0 +1,257 @@
+{
+	"info": {
+		"_postman_id": "87047e6d-8e02-4957-b87f-8698d9ea8c08",
+		"name": "intelliQ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "questionnaire",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/questionnaire/:questionnaireid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"questionnaire",
+						":questionnaireid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "ZATA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"type": "file",
+							"src": "/C:/Users/Matrix/Desktop/PIPA.txt"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/admin/questionnaire_upd",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"questionnaire_upd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getquestionsanswers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ001"
+						},
+						{
+							"key": "questionid",
+							"value": "P01a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetq",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/resetq/:questionnaireid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"resetq",
+						":questionnaireid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetall",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/resetall",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"resetall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/healthcheck",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "wpop"
+						},
+						{
+							"key": "optionid",
+							"value": "Q01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,917 @@
+{
+	"info": {
+		"_postman_id": "e02d9cb3-4095-4ce7-9b4e-03ab23b208e2",
+		"name": "intelliQscript",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25901665"
+	},
+	"item": [
+		{
+			"name": "questionnaire",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/questionnaire/:questionnaireid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"questionnaire",
+						":questionnaireid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "Q01"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "Q01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question Copy 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q02"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer Copy 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "Q02"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "Q02A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question Copy 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q03"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer Copy 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "Q03"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "Q03A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question Copy 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q04"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer Copy 4",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "Q04"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "Q04A2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question Copy 5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer Copy 5",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "Q06"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "Q06A2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question Copy 6",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q07"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer Copy 6",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "Q07"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "Q07A2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question Copy 7",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q08"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer Copy 7",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "Q08"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "Q08A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question Copy 8",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q09"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer Copy 8",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "Q09"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						},
+						{
+							"key": "optionid",
+							"value": "Q09A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "show"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(responseBody, true)",
+					"",
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "questionnaireID",
+			"value": "",
+			"disabled": true
+		}
+	]
+}

@@ -1,0 +1,1584 @@
+{
+	"info": {
+		"_postman_id": "5ef4f577-5ee0-4cb5-82a8-69eec12467f6",
+		"name": "status code :400 intelliQ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "questionnaire_upd (multiple files uploaded)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"message\": \"Server can only process one .json file\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/nicko/Desktop/intelliQ/SoftEng22-19/cli/test_q.json"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/nicko/Desktop/bad.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/admin/questionnaire_upd",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"questionnaire_upd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd (no file)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"No file part in request\", \"state\": false }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/admin/questionnaire_upd",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"questionnaire_upd"
+					],
+					"query": [
+						{
+							"key": "file",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd (file isnt json/csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"ERROR\": \"FILE TYPE IS NOT ALLOWED\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/nicko/Desktop/SAFE (2).sql"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/admin/questionnaire_upd",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"questionnaire_upd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd (bad file)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\",  \"dbconnection\": \"MySQL Database intelliQ not connected\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/nicko/Desktop/bad.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/admin/questionnaire_upd",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"questionnaire_upd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire (wrong questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire ID not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/questionnaire/:questionnaireid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"questionnaire",
+						":questionnaireid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ002"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire (no questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire ID not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/questionnaire/:questionnaireid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"questionnaire",
+						":questionnaireid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question {wrong questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ002"
+						},
+						{
+							"key": "questionID",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question {no questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": ""
+						},
+						{
+							"key": "questionID",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question {wrong question)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Question not in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "P001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question {no question)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Question not in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question {Question not matching questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Question not in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "P01a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers wrong questionnaire",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ002"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers no questionnaire",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": ""
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers wrong question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Question not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ001"
+						},
+						{
+							"key": "questionid",
+							"value": "P001"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers no question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Question not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ001"
+						},
+						{
+							"key": "questionid",
+							"value": ""
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers wrong session",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ001"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "AAAA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers wrong questionnaire Copy 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ002"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers wrong questionnairewqr",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ002"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswers wrong questionnaire Copy 5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ002"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers (wrong questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ002"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers (no questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": ""
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers (wrong session)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Session not in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "AAAA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers  (no session)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Session not in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers  (session questionnaire not matching)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Session not in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "ZATB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getquestionanswers (wrong questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ002"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getquestionanswers (no questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": ""
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getquestionanswers (wrong question)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Question not found in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getquestionanswers (no question)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Question not found in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getquestionanswers (Question not  matching Questionnaire)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Question not found in Questionnaire\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P01a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetq",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var x = JSON.stringify(pm.response.json())\r",
+							"    x === '{ \"status\": \"failed\", \"reason\": \"Questionnaire ID not found\" }'\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/resetq/:questionnaireid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"resetq",
+						":questionnaireid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ002"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
