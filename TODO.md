@@ -19,7 +19,7 @@ Tasks to be completed.
 
 ## FRONTEND
 
-- [ ] Make minor tweaks to Frontend templates @ntua-el19219 
+- [ ] Make html for wrong file upload @ntua-el19219 
 - [ ] Fix error handling
 
 ## DATABASE
