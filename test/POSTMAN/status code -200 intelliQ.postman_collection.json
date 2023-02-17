@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "40b26935-3e2d-434b-989f-e1e8f09912ee",
+		"_postman_id": "1fa937de-7ddf-4be8-891c-130ad6435a29",
 		"name": "status code :200 intelliQ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -18,8 +18,13 @@
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var x = JSON.stringify(pm.response.json())\r",
-							"    x === '{ \"status\": \"OK\", \"dbconnection\": \"MySQL Database intelliQ running on Apache Web Server\" }'\r",
+							"    var y = JSON.parse('{\"status\":\"OK\",\"dbconnection\":\"MySQL Database intelliQ running on Apache Web Server\"}');\r",
+							"    var x = JSON.parse(responseBody);\r",
+							"    var z=JSON.stringify(y);\r",
+							"    var t=JSON.stringify(x);\r",
+							"    console.log(z);\r",
+							"    console.log(t);\r",
+							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
 							"pm.test(responseBody, true)"
@@ -108,8 +113,13 @@
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var x = JSON.stringify(pm.response.json())\r",
-							"    x === '{ \"QuestionnaireID\": \"QQ000\", \"Questionnaire_Title\": \"My first research questionnaire\", \"keywords\": [ \"footbal\", \"islands\", \"timezone\" ], \"questions\": [ { \"Question_ID\": \"P01\", \"Qtext\": \"Ποια είναι η ηλικία σας;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"profile\" }, { \"Question_ID\": \"Q01\", \"Qtext\": \"Ποιο είναι το αγαπημένο σας χρώμα;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q02\", \"Qtext\": \"Ασχολείστε με το ποδόσφαιρο;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q03\", \"Qtext\": \"Τι ομάδα είστε;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q04\", \"Qtext\": \"Έχετε ζήσει σε νησί;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q05\", \"Qtext\": \"Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Έχετε ζήσει σε νησί;': Ποια η σχέση σας με το θαλάσσιο σκι;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q06\", \"Qtext\": \"Είστε χειμερινός κολυμβητής\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q07\", \"Qtext\": \"Κάνετε χειμερινό σκι;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q08\", \"Qtext\": \"Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" }, { \"Question_ID\": \"Q09\", \"Qtext\": \"Με δεδομένο ότι απαντήσατε 'Οχι' στην ερώτηση 'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;': Προτιμάτε τη θερινή ή την χειμερινή ώρα;\", \"Qrequired\": \"TRUE\", \"Qtype\": \"question\" } ] }'\r",
+							"    var y = JSON.parse(`{\"QuestionnaireID\":\"QQ000\",\"Questionnaire_Title\":\"My first research questionnaire\",\"keywords\":[\"footbal\",\"islands\",\"timezone\"],\"questions\":[{\"Question_ID\":\"P01\",\"Qtext\":\"Ποια είναι η ηλικία σας;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"profile\"},{\"Question_ID\":\"Q01\",\"Qtext\":\"Ποιο είναι το αγαπημένο σας χρώμα;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q02\",\"Qtext\":\"Ασχολείστε με το ποδόσφαιρο;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q03\",\"Qtext\":\"Τι ομάδα είστε;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q04\",\"Qtext\":\"Έχετε ζήσει σε νησί;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q05\",\"Qtext\":\"Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Έχετε ζήσει σε νησί;': Ποια η σχέση σας με το θαλάσσιο σκι;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q06\",\"Qtext\":\"Είστε χειμερινός κολυμβητής\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q07\",\"Qtext\":\"Κάνετε χειμερινό σκι;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q08\",\"Qtext\":\"Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q09\",\"Qtext\":\"Με δεδομένο ότι απαντήσατε 'Οχι' στην ερώτηση 'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;': Προτιμάτε τη θερινή ή την χειμερινή ώρα;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"}]}`);\r",
+							"    var x = JSON.parse(responseBody);\r",
+							"    var z=JSON.stringify(y);\r",
+							"    var t=JSON.stringify(x);\r",
+							"    console.log(z);\r",
+							"    console.log(t);\r",
+							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
 							"pm.test(responseBody, true)"
