@@ -255,7 +255,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
         except Exception as e:
             print(e)
             resp=jsonify({'status':'failed','dberror':'Request not possible'})
-            resp.status_code=400
+            resp.status_code=500
             return resp
     else:
         resp=jsonify({'status':'failed','server':'This method is not allowed'})

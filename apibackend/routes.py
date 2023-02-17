@@ -375,19 +375,19 @@ def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
+            return render_template("questionnaire_upd.html",info="You need to select a file")
         file = request.files['file']
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+            return render_template("questionnaire_upd.html",info="You need to select a file")
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             #print(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('inserting', name=filename))
+        else:
+            return render_template("questionnaire_upd.html",info="*Error: Only file type '.json' is allowed")
     return render_template("questionnaire_upd.html")
 
 # create and Download json File with all answers of questionnaire

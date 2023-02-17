@@ -10,16 +10,34 @@
 <br>
 <br>
     {% include "flash_messages.html" %}
-
-		<div class="row" id="row" >
-		 <div class="col-md-12" >
-            <div class="card" id="card-container-layout" >
-                <div class="card-body" id="card" >
-                    <h4 class="card-title">Congratulations!</h4>
-                    <p class="card-text" id="paragraph">You answered all the necessary questions.Thank you!<br></p>
+    <div class="card," id="card-container-layout" >
+		
+        <div class="card-body" id="card" >
+            <center>
+            <h4 class="card-title">Congratulations!</h4>
+            <p class="card-text" id="paragraph">You answered all the necessary questions. Thank you!<br></p>
+            </center>
+        </div>
+        
+        <center>
+        <div class="container" id="row-container" style="width: 250px;" >
+            <div class='parent'>
+            <p>&nbsp;&nbsp;&nbsp;</p>
+            <a href="/user" class="btn btn-primary">Go Home</a>
+            <p>&nbsp;&nbsp;</p>
+            <a href="/summary/{{session}}" class="btn btn-primary">Summary</a>
+            </div>
                 </div>
-                <a class="btn btn-primary" id="show-btn" href="/summary/{{session}}">Summary of answers</a>
+            </center>
             </div>
         </div> 
+    </div>
+</div>
+
+        <style>
+            .parent{ 
+                display:flex; 
+             } 
+            </style>
 
         {% endblock content%}

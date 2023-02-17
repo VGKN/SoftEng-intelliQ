@@ -19,7 +19,6 @@ Tasks to be completed.
 
 ## FRONTEND
 
-- [ ] Make html for wrong file upload @ntua-el19188
 - [ ] Fix error handling
 
 ## DOCUMENTATION
