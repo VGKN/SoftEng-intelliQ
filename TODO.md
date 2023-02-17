@@ -14,7 +14,6 @@ Tasks to be completed.
 
 - [ ] CSV  @ntua-el19144
 - [ ] Fix errors in endpoints
-- [ ] Implement HTTPS
 - [ ] Use Api to implement Use cases
 
 ## FRONTEND
@@ -23,7 +22,6 @@ Tasks to be completed.
 
 ## DOCUMENTATION
 
-- [ ] Update VPP graphs @ntua-el19219
 - [ ] Update SRS doc @ntua-el19219
 - [ ] Create API documentation
 - [ ] Create installation documentation
