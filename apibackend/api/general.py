@@ -197,7 +197,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
             for n in x:
                 optids.append(n[0])
             if optionid not in optids:
-                resp = jsonify ({"status":"failed", "reason":"Unvalid Option"})
+                resp = jsonify ({"status":"failed", "reason":"Invalid Option"})
                 resp.status_code = 400
                 return resp
             
