@@ -28,12 +28,12 @@ def healthcheck():
         if (f is None or f=='json'):
             try:
                 cur = db.connection.cursor()
-                resp=jsonify({'status':'OK', 'dbconnection':'MySQL Database intelliQ running on Apache Web Server'}) 
+                resp=jsonify({"status":"OK", "dbconnection":"MySQL Database intelliQ running on Apache Web Server"}) 
                 resp.status_code=200
                 return resp
             except Exception as e:
                 print(e)
-                resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
+                resp = jsonify({"status":"failed","dbconnection":"MySQL Database intelliQ not connected"})
                 resp.status_code=500
                 return resp
                 
@@ -41,7 +41,7 @@ def healthcheck():
             try:
                 cur = db.connection.cursor()
                 csv=""""status","dbconnection"
-                "OK","'MySQL Database intelliQ running on Apache Web Server"
+                "OK","MySQL Database intelliQ running on Apache Web Server"
                 """
                 resp=make_response(csv)
                 resp.headers["Content-type"] = "text/csv"
@@ -51,19 +51,19 @@ def healthcheck():
             except Exception as e:
                 print(e)
                 csv=""""status","dbconnection"
-                "failed","'MySQL Database intelliQ not connected"
+                "failed","MySQL Database intelliQ not connected"
                 """
                 resp.make_response(csv)
                 resp.headers["Content-type"] = "text/csv"
                 resp.status_code=500
                 return resp
         else:
-            resp=jsonify({'status':'failed', 'reason':'Only csv and json format is allowed'}) 
+            resp=jsonify({"status":"failed", "reason":"Only csv and json format is allowed"}) 
             resp.status_code=400
             return resp
     else:
-        resp=jsonify({'status':'failed','reason':'Method Not Allowed'})
-        resp.status_code=500
+        resp=jsonify({"status":"failed","reason":"Method Not Allowed"})
+        resp.status_code=400
         return resp
                                  
 
@@ -75,16 +75,9 @@ def questionnaire_upd():
     
         f=request.args.get('format')
         if (f is None or f=='json' or f=='csv'):
-           
             try:
                 cur = db.connection.cursor()
             except:
-                print(e)
-                resp = jsonify({'status':'failed','dbconnection':'MySQL Database intelliQ not connected'})
-                resp.status_code=500
-                return resp
-                
-            try:
                 if (f=='csv'):
                     csv=""""status","reason"
                     "failed", "Cannot connect to Database"
@@ -97,6 +90,7 @@ def questionnaire_upd():
                     resp.status_code=500
                 return resp
                 
+            try:
                 success=False
                 errors={}
                 
@@ -107,11 +101,11 @@ def questionnaire_upd():
                         """
                         resp.make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
-                        resp.status_code=500
-                    else:
-                        resp=jsonify({'status':'failed', 'reason':'No file part in request header'})
                         resp.status_code=400
-                        return resp
+                    else:
+                        resp=jsonify({"status":"failed", "reason":"No file part in request header"})
+                        resp.status_code=400
+                    return resp
                     
                 file=request.files.getlist('file')
                 count=0
@@ -128,25 +122,30 @@ def questionnaire_upd():
                 if count !=1:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed", "Cannot connect to Database"
+                        "failed", "Server can only process one .json file"
                         """
                         resp.make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
-                        resp.status_code=500
-                    else:
-                        resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
-                        resp.status_code=500
-                        return resp
-                        errors['message']='Server can only process one .json file'
-                        resp=jsonify(errors)
                         resp.status_code=400
-                        return resp
+                    else:
+                        resp=jsonify({"status":"failed", "reason":"Server can only process one .json file"})
+                        resp.status_code=400
+                    return resp
+                   
                         
                 if success and errors:
-                    errors['message']='File succesfully uploaded'
-                    resp=jsonify(errors)
-                    resp.status_code=500
+                    if (f=='csv'):
+                            csv=""""status","reason"
+                            "failed", "Database Error"
+                            """
+                            resp.make_response(csv)
+                            resp.headers["Content-type"] = "text/csv"
+                            resp.status_code=500
+                    else:
+                        resp=jsonify({"status":"failed", "reason":"Database Error"})
+                        resp.status_code=500
                     return resp
+                    
                 if success:
                     path='./apibackend/'+fil.filename
                     with open(path,'r', encoding='utf-8') as file:
@@ -201,98 +200,204 @@ def questionnaire_upd():
                                 query="INSERT INTO Questions_Options (QuestionID, OptID, Next_Q) VALUES ('{}','{}','{}');".format(questions['qID '], option['optID'], nextq)
                                 cur.execute(query)
                         db.connection.commit()
-                        state ="successfully added questionnaire"
-                        resp=jsonify({'message':'Questionnaire successfully uploaded'})
-                        resp.status_code=200
+                        
+                        if (f=='csv'):
+                            csv=""""status","state"
+                            "OK", "Questionnaire successfully uploaded"
+                            """
+                            resp.make_response(csv)
+                            resp.headers["Content-type"] = "text/csv"
+                            resp.status_code=200
+                        else:      
+                            resp=jsonify({"status":"OK","state":"Questionnaire successfully uploaded"})
+                            resp.status_code=200
                         return resp
                 else:
-                    resp=jsonify(errors)
-                    resp.status_code=500
-                    return resp                        
+                    if (f=='csv'):
+                        csv=""""status","reason"
+                        "failed", "Wrong file format"
+                        """
+                        resp.make_response(csv)
+                        resp.headers["Content-type"] = "text/csv"
+                        resp.status_code=400
+                    else:
+                        resp=jsonify({"status":"failed", "reason":"Wrong file format"})
+                        resp.status_code=400
+                    return resp                       
             except Exception as e:
-                print(e)
-                resp=jsonify({'status':'Database Error'})
-                resp.status_code=500
-                return resp  
-                  
-                    
+                if (f=='csv'):
+                    csv=""""status","reason"
+                    "failed", "Wrong json format, questionnaire not uploaded"
+                    """
+                    resp.make_response(csv)
+                    resp.headers["Content-type"] = "text/csv"
+                    resp.status_code=400
+                else:
+                    resp=jsonify({"status":"failed","reason":"Wrong json format, questionnaire not uploaded"})
+                    resp.status_code=400
+                return resp    
                 
         else:
-            resp=jsonify({'status':'failed', 'reason':'Only csv and json format is allowed'}) 
+            resp=jsonify({"status":"failed", "reason":"Only csv and json format is allowed"}) 
             resp.status_code=400
             return resp
 
     else:
-        resp=jsonify({'status':'failed','reason':'Method Not Allowed'})
-        resp.status_code=500
+        resp=jsonify({"status":"failed","reason":"Method Not Allowed"})
+        resp.status_code=400
         return resp
     
       
     
 @app.route("/admin/resetall", methods=["POST"])
 def postResetAll():
-    try:
-        if request.method == 'POST':
-            cur = db.connection.cursor()
 
-            cur.execute("DELETE FROM Questionnaire_Keywords")
-            cur.execute("DELETE FROM Questions_Options")
-            cur.execute("DELETE FROM Session_Questions_Options")
-            cur.execute("DELETE FROM Question")
-            cur.execute("DELETE FROM Sesion")
-            cur.execute("DELETE FROM Questionnaire")
-            cur.execute("DELETE FROM Keywords")
-            cur.execute("DELETE FROM Options")
-
-            db.connection.commit()
-
-            cur.close()
-
-            resp=jsonify({'status':'OK'})
-            resp.status_code=200
-            return resp 
-
-
+    if request.method == 'POST':
+        
+        f=request.args.get('format')
+        if (f is None or f=='json' or f=='csv'):
+                
+            try:
+                cur = db.connection.cursor()
+            except:
+                if (f=='csv'):
+                    csv=""""status","reason"
+                    "failed", "Cannot connect to Database"
+                    """
+                    resp.make_response(csv)
+                    resp.headers["Content-type"] = "text/csv"
+                    resp.status_code=500
+                else:
+                    resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
+                    resp.status_code=500
+                return resp
+                
+            try:
+                cur.execute("DELETE FROM Questionnaire_Keywords")
+                cur.execute("DELETE FROM Questions_Options")
+                cur.execute("DELETE FROM Session_Questions_Options")
+                cur.execute("DELETE FROM Question")
+                cur.execute("DELETE FROM Sesion")
+                cur.execute("DELETE FROM Questionnaire")
+                cur.execute("DELETE FROM Keywords")
+                cur.execute("DELETE FROM Options")
+                db.connection.commit()
+                cur.close()
+            except Exception as e:
+                if (f=='csv'):
+                    csv=""""status","reason"
+                    "failed", "Database error"
+                    """
+                    resp.make_response(csv)
+                    resp.headers["Content-type"] = "text/csv"
+                    resp.status_code=500
+                else:
+                    resp=jsonify({"status":"failed", "reason": "Database error"})
+                    resp.status_code=500
+                return resp
+            if (f=='csv'):
+                csv=""""status"
+                "OK"
+                """
+                resp.make_response(csv)
+                resp.headers["Content-type"] = "text/csv"
+                resp.status_code=500
+            else:
+                resp=jsonify({"status":"OK"})
+                resp.status_code=200
+            return resp
+                                   
         else:
-            resp=jsonify({'status':'failed', 'reason': '<This method is not allowed>'})
+            resp=jsonify({"status":"failed", "reason":"Only csv and json format is allowed"}) 
             resp.status_code=400
-            return resp              
-    except Exception as e:
-        print(e)
-        resp=jsonify({'status':'failed', 'reason': '<Database error>'})
-        resp.status_code=500
+            return resp
+
+    else:
+        resp=jsonify({"status":"failed","reason":"Method Not Allowed"})
+        resp.status_code=400
         return resp
-
-
 
 
 @app.route("/admin/resetq/<string:questionnaireid>", methods=['POST'])
 def resetq(questionnaireid):
-
+    
     if request.method=='POST':
-        try:
-            cur = db.connection.cursor()
-            query0 = "select questionnaireid from questionnaire"
-            cur.execute(query0)
-            x = cur.fetchall()
-            qids=[]
-            for n in x:
-                qids.append(n[0])
-            if questionnaireid not in qids:
-                resp = jsonify ({"status":"failed", "reason":"Questionnaire ID not found"})
-                resp.status_code = 400
+        f=request.args.get('format')
+        if (f is None or f=='json' or f=='csv'):
+        
+            try:
+                cur = db.connection.cursor()
+            except:
+                if (f=='csv'):
+                    csv=""""status","reason"
+                    "failed", "Cannot connect to Database"
+                    """
+                    resp.make_response(csv)
+                    resp.headers["Content-type"] = "text/csv"
+                    resp.status_code=500
+                else:
+                    resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
+                    resp.status_code=500
                 return resp
-            else:
-                query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
-                cur.execute(query)
-                query=  "delete from sesion where questionnaireid='{}'".format(questionnaireid)
-                cur.execute(query)
-                db.connection.commit()
-                cur.close()
-                return jsonify({'status':'OK'})   
-        except Exception as e:
-            resp = jsonify ({"status":"failed", "reason":"Internal Server Error"})
-            resp.status_code = 500
-            return resp   
+                
+                
+            try:
+                query0 = "select questionnaireid from questionnaire"
+                cur.execute(query0)
+                x = cur.fetchall()
+                qids=[]
+                for n in x:
+                    qids.append(n[0])
+                if questionnaireid not in qids:
+                    if (f=='csv'):
+                        csv=""""status","reason"
+                        "failed", "Questionnaire ID not found"
+                        """
+                        resp.make_response(csv)
+                        resp.headers["Content-type"] = "text/csv"
+                        resp.status_code=400
+                    else:
+                        resp=jsonify({"status":"failed", "reason":"Questionnaire ID not found"})
+                        resp.status_code=400
+                    return resp
+      
+                else:
+                    query = "delete from session_questions_options where q_id in (select question_id from question where questionaireid ='{}')".format(questionnaireid)
+                    cur.execute(query)
+                    query=  "delete from sesion where questionnaireid='{}'".format(questionnaireid)
+                    cur.execute(query)
+                    db.connection.commit()
+                    cur.close()
+                    if (f=='csv'):
+                        csv=""""status"
+                        "OK"
+                        """
+                        resp.make_response(csv)
+                        resp.headers["Content-type"] = "text/csv"
+                        resp.status_code=200
+                    else:
+                        resp=jsonify({"status":"OK"})
+                        resp.status_code=200
+                        return resp  
+                    
+            except Exception as e:
+                 if (f=='csv'):
+                        csv=""""status","reason"
+                        "failed", "Database Error"
+                        """
+                        resp.make_response(csv)
+                        resp.headers["Content-type"] = "text/csv"
+                        resp.status_code=500
+                else:
+                    resp=jsonify({"status":"failed", "reason":"Database Error"})
+                    resp.status_code=500
+                return resp   
+                
+        else:
+            resp=jsonify({"status":"failed", "reason":"Only csv and json format is allowed"}) 
+            resp.status_code=400
+            return resp        
     else:
-        return jsonify({'status':'failed', 'reason':'Method Not Allowed'})
+        resp=jsonify({"status":"failed","reason":"Method Not Allowed"})
+        resp.status_code=400
+        return resp
