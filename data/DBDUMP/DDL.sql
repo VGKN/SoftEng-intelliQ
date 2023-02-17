@@ -28,12 +28,6 @@ CREATE TABLE Keywords (
     PRIMARY KEY (Keyword)
 );
 
-CREATE TABLE User (
-    UserID INT UNSIGNED NOT NULL,
-    Username VARCHAR(50) NOT NULL,
-    Email  VARCHAR(50) NOT NULL,
-    PRIMARY KEY (UserID)
-);
 
 CREATE TABLE Question (
     Question_ID VARCHAR(50) NOT NULL,

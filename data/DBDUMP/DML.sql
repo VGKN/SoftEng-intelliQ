@@ -7,7 +7,7 @@ DELETE FROM Questionnaire;
 DELETE FROM Admin;
 DELETE FROM Keywords;
 DELETE FROM Options;
-DELETE FROM User;
+
 
 
 INSERT INTO Admin (Aid, Last_name, First_name, Telephone) VALUES (1,'Tiz', 'Ali', 6944343432);
