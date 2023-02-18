@@ -351,7 +351,7 @@ def resetq(questionnaireid):
                 if questionnaireid not in qids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Questionnaire ID not found"
+                        "failed","Questionnaire not found"
                         """
                         resp.make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
