@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "85733b8d-d571-400b-9627-ad0eb78f16cf",
+		"_postman_id": "7b521896-9a10-45a1-9fe9-52d27ad5c1f7",
 		"name": "status code :400 intelliQ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25901665"
@@ -41,12 +41,16 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/C:/Users/nicko/Desktop/intelliQ/SoftEng22-19/cli/test_q.json"
+							"src": [
+								"bad.json",
+								"test_q.json"
+							]
 						},
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/C:/Users/nicko/Desktop/bad.json"
+							"src": [],
+							"disabled": true
 						}
 					]
 				},
@@ -71,13 +75,13 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{\"status\":\"failed\",\"reason\":\"Wrong json format, questionnaire not uploaded\"}');\r",
+							"    var y = JSON.parse('{ \"status\": \"failed\", \"reason\": \"Wrong json format, questionnaire not uploaded\" }');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
@@ -99,7 +103,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/C:/Users/nicko/Desktop/intelliQ/SoftEng22-19/cli/test_q.json"
+							"src": "test_q.json"
 						}
 					]
 				},
@@ -129,7 +133,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"No file part in request\", \"state\": false }');\r",
+							"    var y = JSON.parse('{ \"status\": \"failed\", \"reason\": \"No file part in request header\" }');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
@@ -168,7 +172,7 @@
 					"query": [
 						{
 							"key": "file",
-							"value": null,
+							"value": "",
 							"disabled": true
 						}
 					]
@@ -210,7 +214,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/C:/Users/nicko/Desktop/SAFE (2).sql"
+							"src": "bad.txt"
 						}
 					]
 				},
@@ -262,7 +266,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/C:/Users/nicko/Desktop/bad.json"
+							"src": "bad.json"
 						}
 					]
 				},

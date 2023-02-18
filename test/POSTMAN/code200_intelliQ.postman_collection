@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ffcad49f-faee-4968-906e-b9149bb94ddd",
+		"_postman_id": "c499c1e7-0965-4230-bcc8-efa129ab452f",
 		"name": "status code :200 intelliQ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25901665"
@@ -63,7 +63,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{\"status\":\"ΟΚ\",\"state\":\"Questionnaire successfully uploaded\"}');\r",
+							"    var y = JSON.parse('{ \"status\": \"OK\", \"state\": \"Questionnaire successfully uploaded\" }');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
@@ -210,6 +210,61 @@
 			"response": []
 		},
 		{
+			"name": "getquestionanswers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"pm.globals.get(\"variable_key\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"json object\", function () {\r",
+							"    var y = JSON.parse('{ \"QuestionnaireID\": \"QQ000\", \"questionid\": \"P01\", \"answers\": [ { \"session\": \"ATBA\", \"ans\": \"P01A1\" }, { \"session\": \"ATBB\", \"ans\": \"P01A2\" }, { \"session\": \"ATBC\", \"ans\": \"P01A3\" }, { \"session\": \"ATBD\", \"ans\": \"P01A4\" }, { \"session\": \"ATBP\", \"ans\": \"P01A1\" } ] }')\r",
+							"    var x = JSON.parse(responseBody);\r",
+							"    var z=JSON.stringify(y);\r",
+							"    var t=JSON.stringify(x);\r",
+							"   \r",
+							"    pm.expect(z).to.eql(t);\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "doanswers",
 			"event": [
 				{
@@ -323,61 +378,6 @@
 						{
 							"key": "session",
 							"value": "ATBA"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getquestionanswers",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"pm.globals.get(\"variable_key\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"QuestionnaireID\": \"QQ000\", \"questionid\": \"P01\", \"answers\": [ { \"session\": \"ATBA\", \"ans\": \"P01A1\" }, { \"session\": \"ATBP\", \"ans\": \"P01A1\" }, { \"session\": \"show\", \"ans\": \"P01A1\" }, { \"session\": \"ATBB\", \"ans\": \"P01A2\" }, { \"session\": \"ATBC\", \"ans\": \"P01A3\" }, { \"session\": \"ATBD\", \"ans\": \"P01A4\" } ] }')\r",
-							"    var x = JSON.parse(responseBody);\r",
-							"    var z=JSON.stringify(y);\r",
-							"    var t=JSON.stringify(x);\r",
-							"   \r",
-							"    pm.expect(z).to.eql(t);\r",
-							"});\r",
-							"\r",
-							"pm.test(responseBody, true)"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
-					"host": [
-						"localhost"
-					],
-					"port": "5000",
-					"path": [
-						"getquestionanswers",
-						":questionnaireid",
-						":questionid"
-					],
-					"variable": [
-						{
-							"key": "questionnaireid",
-							"value": "QQ000"
-						},
-						{
-							"key": "questionid",
-							"value": "P01"
 						}
 					]
 				}
