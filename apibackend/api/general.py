@@ -15,7 +15,7 @@ from collections import ChainMap
 from operator import itemgetter
 from apibackend.api.util import allowed_file,sort_tuples
 
-@app.route("/questionnaire/<string:questionnaireid>", methods=['GET', 'POST'])
+@app.route("/questionnaire/<string:questionnaireid>", methods=['GET'])
 def QQID(questionnaireid):
    
     if request.method=='GET':
@@ -27,7 +27,7 @@ def QQID(questionnaireid):
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Cannot connect to Database"
+"failed","Cannot connect to Database"
                     """
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -47,7 +47,7 @@ def QQID(questionnaireid):
                 if questionnaireid not in qids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Questionnaire not found"
+"failed","Questionnaire not found"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -63,8 +63,8 @@ def QQID(questionnaireid):
                     cur.execute(query1)
 
                     title={}
-                    title['QuestionnaireID']=questionnaireid
-                    title['Questionnaire_Title'] = cur.fetchall()[0][0]
+                    title['questionnaireID']=questionnaireid
+                    title['questionnaireTitle'] = cur.fetchall()[0][0]
 
                     query2 = "select Keywordskeyword from Questionnaire_Keywords where QuestionnaireQuestionnaireID = '{}'".format(questionnaireid)
                     cur.execute(query2)
@@ -77,7 +77,7 @@ def QQID(questionnaireid):
 
                     title['keywords']=res2
 
-                    query3 = "select Question_ID, Qtext, Qrequired, Qtype from Question where QuestionaireID = '{}'".format(questionnaireid)
+                    query3 = "select Question_ID as qID, Qtext as qtext, Qrequired as required, Qtype as type from Question where QuestionaireID = '{}'".format(questionnaireid)
                     cur.execute(query3)
                     
                     col3_names = [j[0] for j in cur.description] 
@@ -86,41 +86,43 @@ def QQID(questionnaireid):
                     title['questions']=res3
                     
                     if (f=='csv'):
-                                            new_data=[]
-                    for i in maindic['options']:
-                        new_d=dict()
-                        for key,value in maindic.items():
-                            if (not isinstance(value,list)):
-                                new_d[key] = value                 
-                        for k, v in i.items():
-                            new_d["answers_" + k] = v
-                        new_data.append(new_d)
-                    
-                    csv_columns = new_data[0].keys()
-                  
-                    # Generate the first row of CSV 
-                    csv_data = ",".join(csv_columns) + "\n"
-                    # Generate the single record present
-                    for i in new_data:
-                        new_row = list()
-                        for col in csv_columns:
-                            new_row.append(str(i[col]))
-
-                        csv_data += ",".join(new_row) + "\n"  
-                        resp=make_response(csv)
+                        new_data=[]
+                        for i in title['questions']:
+                            new_d=dict()
+                            for key,value in title.items():
+                                if (not isinstance(value,list)):
+                                    new_d[key] = value 
+                            
+                            for b,value in enumerate(title['keywords']):
+                                x=str(b)
+                                new_d["keywords_" +x] = value
+                            for k, v in i.items():
+                                new_d["questions_" + k] = v
+                            new_data.append(new_d)
+                        
+                        csv_columns = new_data[0].keys()
+                        
+                        csv_data = ",".join(csv_columns) + "\n"   
+                        for i in new_data:
+                            new_row = list()
+                            for col in csv_columns:
+                                new_row.append(str(i[col]))
+                        
+                            csv_data += ",".join(new_row) + "\n"  
+                        resp=make_response(csv_data)
                         resp.headers["Content-type"] = "text/csv"
                         resp.headers["charset"]="utf-8"
                         resp.status_code=200
                     else:
                         resp = jsonify (title)
                         resp.status_code = 200
-                        return resp
+                    return resp
 
 
             except Exception as e:
                 if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Database Error"
+"failed","Database Error"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -152,7 +154,7 @@ def QQQID(questionnaireid,questionid):
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Cannot connect to Database"
+"failed","Cannot connect to Database"
                     """
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -173,7 +175,7 @@ def QQQID(questionnaireid,questionid):
                 if questionnaireid not in qids:                    
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Questionnaire not found"
+"failed","Questionnaire not found"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -192,7 +194,7 @@ def QQQID(questionnaireid,questionid):
                 if questionid not in qqqids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Question not in Questionnaire"
+"failed","Question not in Questionnaire"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -255,10 +257,10 @@ def QQQID(questionnaireid,questionid):
                             new_row.append(str(i[col]))
 
                         csv_data += ",".join(new_row) + "\n"  
-                        resp=make_response(csv_data)
-                        resp.headers["Content-type"] = "text/csv"
-                        resp.headers["charset"]="utf-8"
-                        resp.status_code=200
+                    resp=make_response(csv_data)
+                    resp.headers["Content-type"] = "text/csv"
+                    resp.headers["charset"]="utf-8"
+                    resp.status_code=200
                 else:
                     resp=jsonify(maindic)
                     resp.status_code=200
@@ -267,7 +269,7 @@ def QQQID(questionnaireid,questionid):
             except Exception as e:
                 if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Database Error"
+"failed","Database Error"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -286,10 +288,10 @@ def QQQID(questionnaireid,questionid):
         return resp
     
     
-@app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET', 'POST'])
+@app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET'])
 def doanswer(questionnaireid,questionid,session,optionid):
 
-    if request.method=='POST':
+    if request.method=='GET':
         f=request.args.get('format')
         if (f is None or f=='json' or f=='csv'):
             try:
@@ -297,7 +299,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Cannot connect to Database"
+"failed","Cannot connect to Database"
                     """
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -322,7 +324,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 if questionnaireid not in qids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Questionnaire not found"
+"failed","Questionnaire not found"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -341,7 +343,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 if questionid not in qqids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Question not in Questionnaire"
+"failed","Question not in Questionnaire"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -361,7 +363,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 if optionid not in optids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Invalid Option"
+"failed","Invalid Option"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -374,7 +376,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 if len(session) != 4:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Session format is not valid"
+"failed","Session format is not valid"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -410,7 +412,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                     if q[0] != questionnaireid:
                         if (f=='csv'):
                             csv=""""status","reason"
-                            "failed","Session does not refer to Questionnaire"
+"failed","Session does not refer to Questionnaire"
                             """
                             resp=make_response(csv)
                             resp.headers["Content-type"] = "text/csv"
@@ -425,8 +427,9 @@ def doanswer(questionnaireid,questionid,session,optionid):
 
                     if len(cur.fetchall()) != 0:
                         if (f=='csv'):
+                            print("YES")
                             csv=""""status","reason"
-                            "failed","Question already answered in Session"
+"failed","Question already answered in Session"
                             """
                             resp=make_response(csv)
                             resp.headers["Content-type"] = "text/csv"
@@ -448,7 +451,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 db.connection.commit()
                 cur.close()
                 if (f=='csv'):
-                    csv="""""" #fix here              
+                    csv=""""""              
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
                     resp.headers["charset"]="utf-8"
@@ -462,7 +465,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
             except Exception as e:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Database Error"
+"failed","Database Error"
                     """
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -494,7 +497,7 @@ def getsessionanswers(questionnaireid, session):
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Cannot connect to Database"
+"failed","Cannot connect to Database"
                     """
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -518,7 +521,7 @@ def getsessionanswers(questionnaireid, session):
                 if questionnaireid not in qids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Questionnaire not found"
+"failed","Questionnaire not found"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -537,7 +540,7 @@ def getsessionanswers(questionnaireid, session):
                 if session not in qqids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Session does not refer to Questionnaire"
+"failed","Session does not refer to Questionnaire"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -608,7 +611,7 @@ def getsessionanswers(questionnaireid, session):
             except Exception as e:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Database Error"
+"failed","Database Error"
                     """
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -642,7 +645,7 @@ def getquestionanswers(questionnaireID, questionID):
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Cannot connect to Database"
+"failed","Cannot connect to Database"
                     """
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -666,7 +669,7 @@ def getquestionanswers(questionnaireID, questionID):
                 if questionnaireID not in qids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Questionnaire not found"
+"failed","Questionnaire not found"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -686,7 +689,7 @@ def getquestionanswers(questionnaireID, questionID):
                 if questionID not in qqids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Question not in Questionnaire"
+"failed","Question not in Questionnaire"
                         """
                         resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -755,7 +758,7 @@ def getquestionanswers(questionnaireID, questionID):
             except Exception as e:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Database Error"
+"failed","Database Error"
                     """
                     resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
