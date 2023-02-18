@@ -5,7 +5,7 @@
 
 ## Python3 packages
 
-- [argparse] - Parser for command-line options, arguments and sub-commands
+- [argparse] - Parser for command-line options, arguments 
 - [requests] - Python HTTP library.
 - [json]     - Built-in package used to work with JSON data.
 
@@ -14,21 +14,21 @@
 - [pytest] - Full-featured Python testing tool
 
 ## Installation
-For a quick installation 
+Για γρήγορη εγκατάσταση:
 
-In git bash terminal
+Στο git bash terminal
 ```sh
 python -m venv venv
 . venv/Scripts/activate
 pip install -r requirements.txt
 ```
-To be able to run scripts without "./"
+Για να γινέται να τρέξουμε scripts χωρίς "./"
 ```sh
 export PATH="$PATH:/path/to/cli-client"
 ```
 
 ## Usage 
-Use according to the [document] provided by the course instructors
+Χρήση σύμφωνη με το document που δόθηκε μαζί με τις οδηγίες της εργασίας
 ```sh
 ./se22XX scope --param1 value1 [--param2 value2 ...] --format fff
 ```
