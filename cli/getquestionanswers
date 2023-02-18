@@ -6,13 +6,30 @@ import pprint
  
 
 def getquestionanswers(ar):
-    url_call='http://localhost:5000/getquestionanswers/{}/{}'.format(ar.questionnaire_id,ar.question_id)
-    res = requests.get(url_call)
-    print(res.status_code)
-    print(json.dumps(res.json(),ensure_ascii=False,indent=2))
-    return True
-
-
+    if (ar.format == 'csv' or ar.format== 'json'):
+        url_call='http://localhost:5000/getquestionanswers/{}/{}'.format(ar.questionnaire_id,ar.question_id)
+        if ar.format=='csv':
+            url_call = url_call + '?format=csv'
+            
+        res = requests.get(url_call)
+        print(res.status_code)
+        if (ar.format == 'json' and res.status_code == 200):
+            print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            return True
+        elif (ar.format == 'csv' and res.status_code == 200):
+            print(res.text)
+            return True
+        else:
+            if (ar.format=='csv'):
+                print(res.text)
+            else:
+                print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            return False
+        
+    else:
+        print("Only json and csv format is supported")
+        return False
+        
 parser = argparse.ArgumentParser()
 parser.add_argument('--questionnaire_id', help='Give questionnaire_id', required='TRUE')
 parser.add_argument('--question_id', help='Give session that you want to receive answers', required='TRUE')
