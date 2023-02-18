@@ -4,7 +4,7 @@
 
 - REST API. 
 
-- Τα API endpoints περιγράφονται στο openapidoc.json
+- Τα API endpoints περιγράφονται στο APIdocumentation.json
 - Περιέχονται τα routes που αφορούν το frontend
 
 
@@ -37,7 +37,11 @@ flask run
   
   `run.py` Εκκινεί τον ενσωματωμένο flask server και τρέχει το app πάνω του
 
-
+  `APIdocumentation.json` Το API documentation
+  
+  `config.json` Το configuration file για την σύνδεση database και app
+  
+  `requirements.txt` Το αρχέιο με τα dependencies της εφαρμογής
 
 ## License
 
