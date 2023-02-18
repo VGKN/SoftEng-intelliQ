@@ -20,6 +20,8 @@ pip install -r requirements.txt
 ## Testing
 Χρήση μέσα στο test directory
 
+Προυπόθεση αποτελεί η αρχικοποίηση της βάσης με το DML.sql
+
 Test για τα endpoints του admin
 ```sh
 pytest test_admin.py
