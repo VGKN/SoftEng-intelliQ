@@ -12,8 +12,6 @@ Tasks to be completed.
 
 ## BACKEND
 
-- [ ] CSV  @ntua-el19144
-- [ ] Fix errors in endpoints
 - [ ] Use Api to implement Use cases
 
 ## FRONTEND
@@ -53,3 +51,5 @@ Tasks to be completed.
 - [x] Create Postman Script to automatically test API functionality 
 - [x] Implement API endpoints 
 - [x] DB DUMP 
+- [x] CSV format parameter  
+- [x] Fix errors in endpoints
