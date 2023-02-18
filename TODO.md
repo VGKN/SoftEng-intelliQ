@@ -6,15 +6,10 @@ Tasks to be completed.
 
 - [ ] Create cli script for presentation 
 
-## BACKEND
-
-- [ ] Use Api to implement Use cases
-
 ## DOCUMENTATION
 
-- [ ] Code comments
-- [ ] Create installation documentation
 - [ ] Create README for apibackend, data, cli, test, installation
+- [ ] Code comments
 
 
 # DONE
@@ -42,3 +37,5 @@ Tasks to be completed.
 - [x] Update SRS doc
 - [x] Implement csv checks
 - [x] Finish Postman tests
+- [x] Create installation documentation
+
