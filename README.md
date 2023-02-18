@@ -36,8 +36,18 @@ Technical Details
 | Kassaris Nikolaos | 03119188
 | Vougias Konstantinos | 03119144
 
-Flask Backend
- cd apibackend/
+##Flask Backend
+`cd apibackend/`
+ 
+###Installation
+ ```bash
+ python3 -m venv venv
+ source venv/bin/activate
+ pip install -r requirements.txt
+ ```
+ ### DB
+ 
+ 
  
 
 
