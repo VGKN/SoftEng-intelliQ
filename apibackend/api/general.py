@@ -13,7 +13,7 @@ from flask import send_from_directory
 from flask import current_app
 from collections import ChainMap
 from operator import itemgetter
-from apibackend.api.util import allowed_file,sort_tuples
+from apibackend.api.util import allowed_file,sort_tuples,sort1_tuples
 
 @app.route("/questionnaire/<string:questionnaireid>", methods=['GET'])
 def QQID(questionnaireid):
@@ -214,9 +214,9 @@ def QQQID(questionnaireid,questionid):
                 cur.execute(query2)
                 x=cur.fetchall()
                 x=list(x)
-
-                y = sort_tuples(x)
-            
+                print(x)
+                y = sort1_tuples(x)
+                print(y)
             
                 for queryreturn in y:
                     helpdic={}

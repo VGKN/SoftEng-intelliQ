@@ -5,6 +5,10 @@ from apibackend import ALLOWED_EXTENSIONS
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           
 # Sort the tuples by the second item using the itemgetter function
 def sort_tuples(tup):
     return sorted(tup, key=itemgetter(1))
+# Sort the tuples by the first item using the itemgetter function
+def sort1_tuples(tup):
+    return sorted(tup, key=itemgetter(0))

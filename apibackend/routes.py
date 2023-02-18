@@ -532,6 +532,7 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template("404.html", pageTitle = "Not Found"),404
 
+
 @app.errorhandler(500)
 def server_error(e):
     return render_template("500.html", pageTitle = "Internal Server Error"),500
