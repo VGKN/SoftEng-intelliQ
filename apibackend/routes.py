@@ -532,6 +532,11 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template("404.html", pageTitle = "Not Found"),404
 
+@app.errorhandler(405)
+def method_not_allowed(e):
+    # note that we set the 404 status explicitly
+    return render_template("405.html", pageTitle = "Not Allowed"),405
+
 
 @app.errorhandler(500)
 def server_error(e):
