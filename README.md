@@ -71,7 +71,7 @@ To configuration για τα credentials της βασης δεδομενων β
 
 ### Run
 Εκτελω την παρακατω εντολη στο terminal με ανεβασμενα τα services και activated το venv: 
-'python run.py'
+`python run.py`
 
 Για δοκιμή των HTTP methods χρησιμοποιυμε το Postman.
 
