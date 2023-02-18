@@ -2,7 +2,6 @@
 
 ## Contents
 - Command Line interface
-- CLI functional tests
 
 ## Python3 packages
 
