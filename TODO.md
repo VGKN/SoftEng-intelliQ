@@ -1,12 +1,3 @@
-# TODO
-
-Tasks to be completed.
-
-## DOCUMENTATION
-
-- [ ] Code comments
-
-
 # DONE
 - [x] Create  python script that establishes connection to database
 - [x] Figure out server that will host the database and the required credentials

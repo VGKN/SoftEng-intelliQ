@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8c4b7502-914d-4907-a0ef-9f7804e2dcab",
+		"_postman_id": "1db2cf09-587a-4599-8685-dacf86e671c0",
 		"name": "200ok(csv)intelliq",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25901665"
 	},
 	"item": [
 		{
@@ -31,12 +32,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/admin/healthcheck?format=csv",
+					"raw": "localhost:9103/intelliq_api/admin/healthcheck?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"admin",
 						"healthcheck"
 					],
@@ -87,12 +89,13 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:5000/admin/questionnaire_upd?format=csv",
+					"raw": "localhost:9103/intelliq_api/admin/questionnaire_upd?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"admin",
 						"questionnaire_upd"
 					],
@@ -142,12 +145,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/questionnaire/:questionnaireid?format=csv",
+					"raw": "localhost:9103/intelliq_api/questionnaire/:questionnaireid?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"questionnaire",
 						":questionnaireid"
 					],
@@ -196,12 +200,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID?format=csv",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -260,12 +265,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session?format=csv",
+					"raw": "localhost:9103/intelliq_api/getsessionanswers/:questionnaireid/:session?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"getsessionanswers",
 						":questionnaireid",
 						":session"
@@ -320,12 +326,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid?format=csv",
+					"raw": "localhost:9103/intelliq_api/getquestionanswers/:questionnaireid/:questionid?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"getquestionanswers",
 						":questionnaireid",
 						":questionid"
@@ -374,12 +381,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid?format=csv",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -439,12 +447,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/admin/resetq/:questionnaireid?format=csv",
+					"raw": "localhost:9103/intelliq_api/admin/resetq/:questionnaireid?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"admin",
 						"resetq",
 						":questionnaireid"
@@ -490,12 +499,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/admin/resetall?format=csv",
+					"raw": "localhost:9103/intelliq_api/admin/resetall?format=csv",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"admin",
 						"resetall"
 					],

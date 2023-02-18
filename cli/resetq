@@ -5,7 +5,7 @@ import json
 
 def resetq(ar):
     if (ar.format == 'csv' or ar.format== 'json'):
-        url_call='http://localhost:5000/admin/resetq/{}'.format(ar.questionnaire_id)
+        url_call='http://localhost:9103/intelliq_api/admin/resetq/{}'.format(ar.questionnaire_id)
         if ar.format=='csv':
             url_call = url_call + '?format=csv'
         res = requests.post(url_call)
