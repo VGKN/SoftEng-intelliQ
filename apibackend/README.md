@@ -29,11 +29,11 @@ flask run
   
   `forms.py` βοηθητικό αρχείο για τις φόρμες που χρησιμοποιούνται
   
-  `api\admin.py` περιέχει την υλοποίηση των api endpoints του admin
+  `api/admin.py` περιέχει την υλοποίηση των api endpoints του admin
   
-  `api\util.py` περιέχει βοηθητικές συναρτήσεις
+  `api/util.py` περιέχει βοηθητικές συναρτήσεις
   
-  `api\general.py`περιέχει την υλοποίηση των υπολοίπων api endpoints
+  `api/general.py`περιέχει την υλοποίηση των υπολοίπων api endpoints
   
   `run.py` Εκκινεί τον ενσωματωμένο flask server και τρέχει το app πάνω του
 
