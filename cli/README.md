@@ -25,6 +25,8 @@ export PATH="$PATH:/path/to/cli-client"
 ```
 
 ## Usage 
+Προυπόθεση αποτελεί η αρχικοποίηση της βάσης με το DML.sql
+
 Χρήση σύμφωνη με το [document] που δόθηκε μαζί με τις οδηγίες της εργασίας
 ```sh
 ./se22XX scope --param1 value1 [--param2 value2 ...] --format fff
