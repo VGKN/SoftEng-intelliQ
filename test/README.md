@@ -16,7 +16,7 @@ python -m venv venv
 pip install -r requirements.txt
 
 ```
-Test για τα υπόλοιπα cli scripts
+
 ## Testing
 Χρήση μέσα στο test directory
 
