@@ -70,7 +70,8 @@ python run.py
 To configuration για τα credentials της βασης δεδομενων βρισκονται στο αρχειο config.json μεσα στο github για την επιδειξη της εφαρμογης.
 
 ### Run
-Εκτελω την παρακατω εντολη στο terminal με ανεβασμενα τα services και activated το venv: 
+Εκτελω την παρακατω εντολη στο terminal με ανεβασμενα τα services και activated το venv:
+
 ```python run.py```
 
 Για δοκιμή των HTTP methods χρησιμοποιυμε το Postman.
