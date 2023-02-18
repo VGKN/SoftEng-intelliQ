@@ -610,7 +610,7 @@ def getquestionanswers(questionnaireID, questionID):
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
                         resp.status_code=400
-                    return res
+                    return resp
                  
                 cur.execute(q1)
                 x = cur.fetchall()  
