@@ -34,10 +34,6 @@ To get a help message for each scope
 ./se2219 scope -h
 ```
 
-MIT
-
-**Free Software, Hell Yeah!**
-
    [argparse]: https://docs.python.org/3/library/argparse.html
    [json]:https://docs.python.org/3/library/json.html
    [requests]: https://requests.readthedocs.io/en/master/
