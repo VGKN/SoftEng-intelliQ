@@ -111,7 +111,7 @@ def QQID(questionnaireid):
                             csv_data += ",".join(new_row) + "\n"  
                         resp=make_response(csv_data)
                         resp.headers["Content-type"] = "text/csv"
-                        resp.headers["charset"]="utf-8"
+                        resp.headers["Accept-Charset"]="utf-8"
                         resp.status_code=200
                     else:
                         resp = jsonify (title)
@@ -288,10 +288,10 @@ def QQQID(questionnaireid,questionid):
         return resp
     
     
-@app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['GET'])
+@app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['POST'])
 def doanswer(questionnaireid,questionid,session,optionid):
 
-    if request.method=='GET':
+    if request.method=='POST':
         f=request.args.get('format')
         if (f is None or f=='json' or f=='csv'):
             try:

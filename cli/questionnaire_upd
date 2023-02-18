@@ -6,12 +6,31 @@ import pprint
  
 
 def questionnaire_upd(ar):
-    with open(ar.source, 'rb') as f:
-        payload={'file':f}
-        res = requests.post('http://localhost:5000/admin/questionnaire_upd',files=payload)
-        print(res.status_code)
-        pprint.pprint(res.json())
-        return True
+    if (ar.format == 'csv' or ar.format== 'json'):
+        url_call='http://localhost:5000/admin/questionnaire_upd'
+        if ar.format=='csv':
+            url_call = url_call + '?format=csv'
+        with open(ar.source, 'rb') as f:
+            payload={'file':f}
+            res = requests.post(url_call,files=payload)
+            print(res.status_code)
+        if (ar.format == 'json' and res.status_code == 200):
+            print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            return True
+        elif (ar.format == 'csv' and res.status_code == 200):
+            print(res.text)
+            return True
+        else:
+            if (ar.format=='csv'):
+                print(res.text)
+            else:
+                print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            return False
+        
+    else:
+        print("Only json and csv format is supported")
+        return False
+        
 
 
 parser = argparse.ArgumentParser()
