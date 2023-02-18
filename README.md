@@ -36,3 +36,8 @@ Technical Details
 | Kassaris Nikolaos | 03119188
 | Vougias Konstantinos | 03119144
 
+Flask Backend
+ cd apibackend/
+ 
+
+
