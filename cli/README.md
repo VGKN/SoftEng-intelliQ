@@ -10,9 +10,6 @@
 - [json]     - Built-in package used to work with JSON data.
 
 
-## Testing tool
-- [pytest] - Full-featured Python testing tool
-
 ## Installation
 Για γρήγορη εγκατάσταση:
 
@@ -43,6 +40,5 @@ MIT
 
    [argparse]: https://docs.python.org/3/library/argparse.html
    [json]:https://docs.python.org/3/library/json.html
-   [pytest]: https://docs.pytest.org/en/stable/
    [requests]: https://requests.readthedocs.io/en/master/
    [document]: https://helios.ntua.gr/pluginfile.php/1959/course/section/16951/project_softeng2022_part2_v01a.pdf
