@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "e02d9cb3-4095-4ce7-9b4e-03ab23b208e2",
+		"_postman_id": "49a6ea65-3e04-4935-aada-dc7d12aac874",
 		"name": "intelliQscript",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25901665"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -133,7 +132,7 @@
 			"response": []
 		},
 		{
-			"name": "question Copy",
+			"name": "question Q01",
 			"event": [
 				{
 					"listen": "test",
@@ -183,7 +182,7 @@
 			"response": []
 		},
 		{
-			"name": "doanswer Copy",
+			"name": "doanswer Q01A1",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -223,7 +222,7 @@
 			"response": []
 		},
 		{
-			"name": "question Copy 2",
+			"name": "question Q02",
 			"event": [
 				{
 					"listen": "test",
@@ -273,7 +272,7 @@
 			"response": []
 		},
 		{
-			"name": "doanswer Copy 2",
+			"name": "doanswer Q02A1",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -313,7 +312,7 @@
 			"response": []
 		},
 		{
-			"name": "question Copy 3",
+			"name": "question Q03",
 			"event": [
 				{
 					"listen": "test",
@@ -363,7 +362,7 @@
 			"response": []
 		},
 		{
-			"name": "doanswer Copy 3",
+			"name": "doanswer Q03A1",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -403,7 +402,7 @@
 			"response": []
 		},
 		{
-			"name": "question Copy 4",
+			"name": "question Q04",
 			"event": [
 				{
 					"listen": "test",
@@ -453,7 +452,7 @@
 			"response": []
 		},
 		{
-			"name": "doanswer Copy 4",
+			"name": "doanswer Q04A2",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -493,7 +492,7 @@
 			"response": []
 		},
 		{
-			"name": "question Copy 5",
+			"name": "question Q06",
 			"event": [
 				{
 					"listen": "test",
@@ -543,7 +542,7 @@
 			"response": []
 		},
 		{
-			"name": "doanswer Copy 5",
+			"name": "doanswer Q06A2",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -583,7 +582,7 @@
 			"response": []
 		},
 		{
-			"name": "question Copy 6",
+			"name": "question Q07",
 			"event": [
 				{
 					"listen": "test",
@@ -633,7 +632,7 @@
 			"response": []
 		},
 		{
-			"name": "doanswer Copy 6",
+			"name": "doanswer Q07A2",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -673,7 +672,7 @@
 			"response": []
 		},
 		{
-			"name": "question Copy 7",
+			"name": "question Q08",
 			"event": [
 				{
 					"listen": "test",
@@ -723,7 +722,7 @@
 			"response": []
 		},
 		{
-			"name": "doanswer Copy 7",
+			"name": "doanswer Q08A1",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -763,7 +762,7 @@
 			"response": []
 		},
 		{
-			"name": "question Copy 8",
+			"name": "question Q09",
 			"event": [
 				{
 					"listen": "test",
@@ -813,7 +812,7 @@
 			"response": []
 		},
 		{
-			"name": "doanswer Copy 8",
+			"name": "doanswer Q09A1",
 			"request": {
 				"method": "POST",
 				"header": [],
