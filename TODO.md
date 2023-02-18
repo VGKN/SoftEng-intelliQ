@@ -4,7 +4,7 @@ Tasks to be completed.
 
 ## PRESENTATION
 
-- [ ] Create cli script for presentation @ntua-el19144 
+- [ ] Create cli script for presentation 
 
 ## BACKEND
 

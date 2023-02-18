@@ -8,24 +8,45 @@ def capture(command):
     out,err = proc.communicate()
     return out, err, proc.returncode
     
-def test_healthcheck():
-    command = [sys.executable,'healthcheck']
+def test_healthcheck_json():
+    command = [sys.executable,'healthcheck',"--format", "json"]
     out, err, exit_code= capture(command)
     assert b"200" in out
  
-def test_resetall():  
-    command = [sys.executable,'resetall']
+def test_resetall_json():  
+    command = [sys.executable,'resetall',"--format", "json"]
     out, err, exit_code= capture(command)
     assert b"200" in out
     
-def test_questionnaire_upd():
-    command = [sys.executable, "questionnaire_upd", "--source", '../test/test_q.json']
+def test_questionnaire_upd_json():
+    command = [sys.executable, "questionnaire_upd", "--source", "../test/test_q.json","--format", "json"]
+    out, err, exitcode = capture(command)
+    assert b"200" in out
+       
+def test_resetq_json():
+    command = [sys.executable, "resetq",  "--questionnaire_id", "QQ001","--format", "json"]
     out, err, exitcode = capture(command)
     assert b"200" in out
     
-def test_resetq():
-    command = [sys.executable, "resetq",  "--questionnaire_id", 'QQ001']
+
+def test_healthcheck_csv():
+    command = [sys.executable,'healthcheck',"--format", "csv" ]
+    out, err, exit_code= capture(command)
+    assert b"200" in out
+ 
+def test_resetall_csv():  
+    command = [sys.executable,'resetall',"--format", "csv" ]
+    out, err, exit_code= capture(command)
+    assert b"200" in out
+    
+def test_questionnaire_upd_csv():
+    command = [sys.executable, "questionnaire_upd", "--source", '../test/test_q.json',"--format", "csv" ]
     out, err, exitcode = capture(command)
     assert b"200" in out
     
+def test_resetq_csv():
+    command = [sys.executable, "resetq",  "--questionnaire_id", 'QQ001',"--format", "csv" ]
+    out, err, exitcode = capture(command)
+    assert b"200" in out
+        
 
