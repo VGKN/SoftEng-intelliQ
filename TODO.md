@@ -2,25 +2,18 @@
 
 Tasks to be completed.
 
-
 ## PRESENTATION
+
 - [ ] Create cli script for presentation @ntua-el19144 
-
-## POSTMAN
-
-- [ ] Finish Postman tests @ntua-el19188
 
 ## BACKEND
 
 - [ ] Use Api to implement Use cases
 
 ## DOCUMENTATION
- 
+
+- [ ] Code comments
 - [ ] Create installation documentation
-
-## TEST
-
-- [ ] Implement csv checks @ntua-el19136
 
 
 # DONE
@@ -46,3 +39,5 @@ Tasks to be completed.
 - [x] Fix errors in endpoints
 - [x] Fix error handling
 - [x] Update SRS doc
+- [x] Implement csv checks
+- [x] Finish Postman tests
