@@ -91,7 +91,7 @@ To configuration για τα credentials της βάσης δεδομένων β
 
 Κάνουμε import τα credentials στο `__init__.py` αντικαθιστώντας την `app.config` εντολή με:
 
-    _apibackend/config.json_
+    apibackend/config.json
     
     ```json
     {
