@@ -55,7 +55,7 @@ def QQID(questionnaireid):
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
                         resp.status_code=400
-                    return res
+                    return resp
                     
                     
                 else:
@@ -160,7 +160,7 @@ def QQQID(questionnaireid,questionid):
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
                         resp.status_code=400
-                    return res
+                    return resp
                    
                 cur.execute(q2)
                 x = cur.fetchall()
@@ -179,7 +179,7 @@ def QQQID(questionnaireid,questionid):
                     else:
                         resp=jsonify({"status":"failed", "reason":"Question not in Questionnaire"})
                         resp.status_code=400
-                    return res
+                    return resp
 
                 query1 = "select Question_ID, Qtext, Qrequired, Qtype from Question where (Question_ID = '{}' and questionaireid = '{}')".format(questionid, questionnaireid)
                 cur.execute(query1)
@@ -288,7 +288,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
                         resp.status_code=400
-                    return res
+                    return resp
                 
                 cur.execute(q1)
                 x = cur.fetchall()
@@ -483,7 +483,7 @@ def getsessionanswers(questionnaireid, session):
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
                         resp.status_code=400
-                    return res
+                    return resp
          
                 cur.execute(q2)
                 x = cur.fetchall()
