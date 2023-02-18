@@ -9,7 +9,7 @@
 
 
 ## Installation
-For a quick installation 
+Για μια γρήγορη εγκατάσταση
 
 Για το ξεκίνημα της εφαρμογής, απαιτείτε το activation του venv με όλα τα dependencies που περιέχονται στο requirements.txt αρχείο,
 το σήκωμα του MySQL server και του Apache Web Server καθώς και η αρχικοποίηση της βάσεις δεδομένων με το DML.sql αρχείο στο data φάκελο.
@@ -23,28 +23,24 @@ flask run
 ```
 ## Structure
 
+  `run.py` Εκκινεί τον ενσωματωμένο flask server και τρέχει το app πάνω του
+
   `__init__.py` ρυθμίζει το app, συμπεριλαμβάνοντας τις απαραίτητες πληροφορίες και τα credentials για την σύνδεση με το database
   
   `routes.py` περιέχει όλα τα routes που αφορούν το frontend
   
   `forms.py` βοηθητικό αρχείο για τις φόρμες που χρησιμοποιούνται
   
-  `api\admin.py` περιέχει την υλοποίηση των api endpoints του admin
+  `api/admin.py` περιέχει την υλοποίηση των api endpoints του admin
   
-  `api\util.py` περιέχει βοηθητικές συναρτήσεις
+  `api/util.py` περιέχει βοηθητικές συναρτήσεις
   
-  `api\general.py`περιέχει την υλοποίηση των υπολοίπων api endpoints
-  
-  `run.py` Εκκινεί τον ενσωματωμένο flask server και τρέχει το app πάνω του
+  `api/general.py`περιέχει την υλοποίηση των υπολοίπων api endpoints
 
   `APIdocumentation.json` Το API documentation
   
   `config.json` Το configuration file για την σύνδεση database και app
   
   `requirements.txt` Το αρχέιο με τα dependencies της εφαρμογής
-
-## License
-
-MIT
 
 
