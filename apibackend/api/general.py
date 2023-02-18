@@ -28,8 +28,7 @@ def QQID(questionnaireid):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
@@ -47,8 +46,7 @@ def QQID(questionnaireid):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Questionnaire not found" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
@@ -119,8 +117,7 @@ def QQID(questionnaireid):
                 if (f=='csv'):
                         csv=""""status","reason"
 "failed","Database Error" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Database Error"})
@@ -150,8 +147,7 @@ def QQQID(questionnaireid,questionid):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
@@ -170,8 +166,7 @@ def QQQID(questionnaireid,questionid):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Questionnaire not found" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
@@ -188,8 +183,7 @@ def QQQID(questionnaireid,questionid):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Question not in Questionnaire" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Question not in Questionnaire"})
@@ -248,9 +242,7 @@ def QQQID(questionnaireid,questionid):
                             new_row.append(str(i[col]))
 
                         csv_data += ",".join(new_row) + "\n"  
-                    resp=make_response(csv_data)
-                    resp.headers["Content-type"] = "text/csv"
-                    resp.headers["charset"]="utf-8"
+                    resp=Response(csv_data,mimetype="text/csv")
                     resp.status_code=200
                 else:
                     resp=jsonify(maindic)
@@ -261,8 +253,7 @@ def QQQID(questionnaireid,questionid):
                 if (f=='csv'):
                         csv=""""status","reason"
 "failed","Database Error" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Database Error"})
@@ -290,8 +281,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
@@ -314,8 +304,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Questionnaire not found" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
@@ -332,8 +321,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Question not in Questionnaire" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Question not in Questionnaire"})
@@ -351,8 +339,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Invalid Option" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp = jsonify ({"status":"failed", "reason":"Invalid Option"})
@@ -363,8 +350,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Session format is not valid" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp = jsonify ({"status":"failed", "reason":"Session format is not valid"})
@@ -398,8 +384,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                         if (f=='csv'):
                             csv=""""status","reason"
 "failed","Session does not refer to Questionnaire" """
-                            resp=make_response(csv)
-                            resp.headers["Content-type"] = "text/csv"
+                            resp=Response(csv,mimetype="text/csv")
                             resp.status_code=400
                         else:
                             resp = jsonify ({"status":"failed", "reason":"Session does not refer to Questionnaire"})
@@ -414,8 +399,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                             print("YES")
                             csv=""""status","reason"
 "failed","Question already answered in Session" """
-                            resp=make_response(csv)
-                            resp.headers["Content-type"] = "text/csv"
+                            resp=Response(csv,mimetype="text/csv")
                             resp.status_code=400
                         else:
                             resp = jsonify ({"status":"failed", "reason":"Question already answered in Session"})
@@ -435,9 +419,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 cur.close()
                 if (f=='csv'):
                     csv=""""""              
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
-                    resp.headers["charset"]="utf-8"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=200
                 else:
                     resp = jsonify ()
@@ -449,8 +431,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Database Error" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp = jsonify ({"status":"failed", "reason":"Database Error"})
@@ -480,8 +461,7 @@ def getsessionanswers(questionnaireid, session):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
@@ -503,8 +483,7 @@ def getsessionanswers(questionnaireid, session):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Questionnaire not found" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
@@ -521,8 +500,7 @@ def getsessionanswers(questionnaireid, session):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Session does not refer to Questionnaire" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp = jsonify ({"status":"failed", "reason":"Session does not refer to Questionnaire"})
@@ -578,9 +556,7 @@ def getsessionanswers(questionnaireid, session):
                             new_row.append(str(i[col]))
 
                         csv_data += ",".join(new_row) + "\n"    
-                    resp=make_response(csv_data)
-                    resp.headers["Content-type"] = "text/csv"
-                    resp.headers["charset"]="utf-8"
+                    resp=Response(csv_data,mimetype="text/csv")
                     resp.status_code=200
                 else:
                     resp = jsonify (maindic)
@@ -591,8 +567,7 @@ def getsessionanswers(questionnaireid, session):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Database Error" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp = jsonify ({"status":"failed", "reason":"Database Error"})
@@ -624,8 +599,7 @@ def getquestionanswers(questionnaireID, questionID):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
@@ -647,8 +621,7 @@ def getquestionanswers(questionnaireID, questionID):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Questionnaire not found" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
@@ -666,8 +639,7 @@ def getquestionanswers(questionnaireID, questionID):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Question not in Questionnaire" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Question not in Questionnaire"})
@@ -720,9 +692,7 @@ def getquestionanswers(questionnaireID, questionID):
 
                         csv_data += ",".join(new_row) + "\n"
            
-                    resp=make_response(csv_data)
-                    resp.headers["Content-type"] = "text/csv"
-                    resp.headers["charset"]="utf-8"
+                    resp=Response(csv_data,mimetype="text/csv")
                     resp.status_code=200
                 else:
                     resp = jsonify (maindic)
@@ -733,8 +703,7 @@ def getquestionanswers(questionnaireID, questionID):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Database Error" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp = jsonify ({"status":"failed", "reason":"Database Error"})
