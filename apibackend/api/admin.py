@@ -364,7 +364,7 @@ def resetq(questionnaireid):
                     else:
                         resp=jsonify({"status":"OK"})
                         resp.status_code=200
-                        return resp  
+                    return resp  
                     
             except Exception as e:
                 if (f=='csv'):
