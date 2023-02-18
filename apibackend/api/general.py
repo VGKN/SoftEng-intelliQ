@@ -15,8 +15,8 @@ from collections import ChainMap
 from operator import itemgetter
 from apibackend.api.util import allowed_file,sort_tuples,sort1_tuples
 
-#{baseurl}/questionnaire/
-@app.route("/questionnaire/<string:questionnaireid>", methods=['GET'])
+
+@app.route("/intelliq_api/questionnaire/<string:questionnaireid>", methods=['GET'])
 def QQID(questionnaireid):
    
     if request.method=='GET':
@@ -135,7 +135,7 @@ def QQID(questionnaireid):
         return resp
 
 
-@app.route("/question/<string:questionnaireid>/<string:questionid>", methods=['GET'])
+@app.route("/intelliq_api/question/<string:questionnaireid>/<string:questionid>", methods=['GET'])
 def QQQID(questionnaireid,questionid):
 
     if request.method=='GET':
@@ -270,7 +270,7 @@ def QQQID(questionnaireid,questionid):
         return resp
     
     
-@app.route("/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['POST'])
+@app.route("/intelliq_api/doanswer/<string:questionnaireid>/<string:questionid>/<string:session>/<string:optionid>", methods=['POST'])
 def doanswer(questionnaireid,questionid,session,optionid):
 
     if request.method=='POST':
@@ -450,7 +450,7 @@ def doanswer(questionnaireid,questionid,session,optionid):
         return resp
 
 
-@app.route("/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET'])
+@app.route("/intelliq_api/getsessionanswers/<string:questionnaireid>/<string:session>", methods=['GET'])
 def getsessionanswers(questionnaireid, session):
     if request.method=='GET':
         f=request.args.get('format')
@@ -587,7 +587,7 @@ def getsessionanswers(questionnaireid, session):
    
     
     
-@app.route("/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=['GET'])
+@app.route("/intelliq_api/getquestionanswers/<string:questionnaireID>/<string:questionID>",methods=['GET'])
 def getquestionanswers(questionnaireID, questionID):
 
     if request.method=='GET':
