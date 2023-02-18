@@ -14,6 +14,7 @@ Tasks to be completed.
 
 - [ ] Code comments
 - [ ] Create installation documentation
+- [ ] Create README for apibackend, data, cli, test, installation
 
 
 # DONE
