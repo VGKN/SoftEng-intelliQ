@@ -4,7 +4,7 @@ Tasks to be completed.
 
 ## PRESENTATION
 
-- [ ] Create cli script for presentation 
+
 
 ## DOCUMENTATION
 
@@ -37,4 +37,4 @@ Tasks to be completed.
 - [x] Implement csv checks
 - [x] Finish Postman tests
 - [x] Create installation documentation
-
+- [x] Create cli script for presentation 
