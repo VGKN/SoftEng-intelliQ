@@ -3,7 +3,7 @@ import argparse
 import requests
 import json
 import pprint
- 
+ url = 'http://pluganddrive.ddns.net:8765/evcharge/api/SessionsPerEV/' + ar.ev + '/' + str(ar.datefrom).replace("-","") + '/' + str(ar.dateto).replace("-","")
 
 def questionnaire(ar):
     url_call='http://localhost:5000/questionnaire/{}'.format(ar.questionnaire_id)
@@ -15,6 +15,7 @@ def questionnaire(ar):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--questionnaire_id', help='Give questionnaire_id to see info', required='TRUE')
+parser.add_argument('--format', help='Give response format', required='TRUE')
 args = parser.parse_args()
 
 questionnaire(args)

@@ -5,12 +5,39 @@ import json
 import pprint
 
 def healthcheck(ar):
-    url_call='http://localhost:5000/admin/healthcheck?format={}'.format(ar.format)
-    res = requests.get(url_call)
-    print(res.status_code)
-    print(res.text)
-    return True
-
+    
+    #elif (ar.format == 'csv' and res.status_code == 200):
+       #f = open("./SessionsPerEV.cv",'w+')
+        #f.truncate(0)
+        #f.write(res.text)
+        #f.seek(0)
+       # x = from_csv(f, delimiter =',')
+      #  x.set_style(DEFAULT)
+     #   print(x)
+      #  f.close()
+        
+    
+    
+    if (ar.format == 'csv' or ar.format== 'json'):
+        url_call='http://localhost:5000/admin/healthcheck'
+        if ar.format=='csv':
+            url_call = url_call + '?format=csv'
+        res = requests.get(url_call)
+        print(res.status_code)
+        if (ar.format == 'json' and res.status_code == 200):
+            print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            return True
+        elif (ar.format == 'csv' and res.status_code == 200):
+            print(res.text)
+            return True
+        else:
+            return False
+        
+    else:
+        print("Only json and csv format is supported")
+        return False
+        
+    
 parser = argparse.ArgumentParser()
 parser.add_argument('--format', help='Give response format', required='TRUE')
 args = parser.parse_args()

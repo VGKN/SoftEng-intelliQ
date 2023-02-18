@@ -7,4 +7,4 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 # Sort the tuples by the second item using the itemgetter function
 def sort_tuples(tup):
-    return sorted(tup, key=itemgetter(0))
+    return sorted(tup, key=itemgetter(1))

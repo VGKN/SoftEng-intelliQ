@@ -41,8 +41,7 @@ def healthcheck():
             try:
                 cur = db.connection.cursor()
                 csv=""""status","dbconnection"
-                "OK","MySQL Database intelliQ running on Apache Web Server"
-                """
+"OK","MySQL Database intelliQ running on Apache Web Server" """
                 resp=make_response(csv)
                 resp.headers["Content-type"] = "text/csv"
                 resp.status_code=200
@@ -51,9 +50,8 @@ def healthcheck():
             except Exception as e:
                 print(e)
                 csv=""""status","dbconnection"
-                "failed","MySQL Database intelliQ not connected"
-                """
-                resp.make_response(csv)
+"failed","MySQL Database intelliQ not connected" """
+                resp=make_response(csv)
                 resp.headers["Content-type"] = "text/csv"
                 resp.status_code=500
                 return resp
@@ -80,9 +78,9 @@ def questionnaire_upd():
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Cannot connect to Database"
-                    """
-                    resp.make_response(csv)
+"failed","Cannot connect to Database" """
+                    
+                    resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
                     resp.status_code=500
                 else:
@@ -97,9 +95,8 @@ def questionnaire_upd():
                 if 'file' not in request.files:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","No file part in request header"
-                        """
-                        resp.make_response(csv)
+"failed","No file part in request header" """
+                        resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
                         resp.status_code=400
                     else:
@@ -122,9 +119,8 @@ def questionnaire_upd():
                 if count !=1:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Server can only process one .json file"
-                        """
-                        resp.make_response(csv)
+"failed","Server can only process one .json file" """
+                        resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
                         resp.status_code=400
                     else:
@@ -136,9 +132,8 @@ def questionnaire_upd():
                 if success and errors:
                     if (f=='csv'):
                             csv=""""status","reason"
-                            "failed","Database Error"
-                            """
-                            resp.make_response(csv)
+"failed","Database Error" """
+                            resp=make_response(csv)
                             resp.headers["Content-type"] = "text/csv"
                             resp.status_code=500
                     else:
@@ -203,9 +198,8 @@ def questionnaire_upd():
                         
                         if (f=='csv'):
                             csv=""""status","state"
-                            "OK","Questionnaire successfully uploaded"
-                            """
-                            resp.make_response(csv)
+"OK","Questionnaire successfully uploaded" """
+                            resp=make_response(csv)
                             resp.headers["Content-type"] = "text/csv"
                             resp.status_code=200
                         else:      
@@ -215,9 +209,8 @@ def questionnaire_upd():
                 else:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Wrong file format"
-                        """
-                        resp.make_response(csv)
+"failed","Wrong file format" """
+                        resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
                         resp.status_code=400
                     else:
@@ -227,9 +220,8 @@ def questionnaire_upd():
             except Exception as e:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Wrong json format, questionnaire not uploaded"
-                    """
-                    resp.make_response(csv)
+"failed","Wrong json format, questionnaire not uploaded" """
+                    resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
                     resp.status_code=400
                 else:
@@ -262,9 +254,8 @@ def postResetAll():
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Cannot connect to Database"
-                    """
-                    resp.make_response(csv)
+"failed","Cannot connect to Database" """
+                    resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
                     resp.status_code=500
                 else:
@@ -286,9 +277,8 @@ def postResetAll():
             except Exception as e:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Database error"
-                    """
-                    resp.make_response(csv)
+"failed","Database error" """
+                    resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
                     resp.status_code=500
                 else:
@@ -297,11 +287,10 @@ def postResetAll():
                 return resp
             if (f=='csv'):
                 csv=""""status"
-                "OK"
-                """
-                resp.make_response(csv)
+"OK" """
+                resp=make_response(csv)
                 resp.headers["Content-type"] = "text/csv"
-                resp.status_code=500
+                resp.status_code=200
             else:
                 resp=jsonify({"status":"OK"})
                 resp.status_code=200
@@ -330,9 +319,8 @@ def resetq(questionnaireid):
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed","Cannot connect to Database"
-                    """
-                    resp.make_response(csv)
+"failed","Cannot connect to Database" """
+                    resp=make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
                     resp.status_code=500
                 else:
@@ -351,9 +339,8 @@ def resetq(questionnaireid):
                 if questionnaireid not in qids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Questionnaire not found"
-                        """
-                        resp.make_response(csv)
+"failed","Questionnaire not found" """
+                        resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
                         resp.status_code=400
                     else:
@@ -370,9 +357,8 @@ def resetq(questionnaireid):
                     cur.close()
                     if (f=='csv'):
                         csv=""""status"
-                        "OK"
-                        """
-                        resp.make_response(csv)
+"OK" """
+                        resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
                         resp.status_code=200
                     else:
@@ -383,9 +369,8 @@ def resetq(questionnaireid):
             except Exception as e:
                 if (f=='csv'):
                         csv=""""status","reason"
-                        "failed","Database Error"
-                        """
-                        resp.make_response(csv)
+"failed","Database Error" """
+                        resp=make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
                         resp.status_code=500
                 else:

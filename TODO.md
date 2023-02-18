@@ -12,17 +12,10 @@ Tasks to be completed.
 
 ## BACKEND
 
-- [ ] CSV  @ntua-el19144
-- [ ] Fix errors in endpoints
 - [ ] Use Api to implement Use cases
 
-## FRONTEND
-
-- [ ] Fix error handling
-
 ## DOCUMENTATION
-
-- [ ] Update SRS doc @ntua-el19219
+ 
 - [ ] Create API documentation
 - [ ] Create installation documentation
 
@@ -53,3 +46,7 @@ Tasks to be completed.
 - [x] Create Postman Script to automatically test API functionality 
 - [x] Implement API endpoints 
 - [x] DB DUMP 
+- [x] CSV format parameter  
+- [x] Fix errors in endpoints
+- [x] Fix error handling
+- [x] Update SRS doc

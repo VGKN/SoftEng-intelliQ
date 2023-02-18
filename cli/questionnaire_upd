@@ -16,6 +16,7 @@ def questionnaire_upd(ar):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--source', help='Give name of file meant for upload', required='TRUE')
+parser.add_argument('--format', help='Give response format', required='TRUE')
 args = parser.parse_args()
 
 questionnaire_upd(args)
