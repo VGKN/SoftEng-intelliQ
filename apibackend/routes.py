@@ -107,7 +107,7 @@ def getFirst(qid):
         for _ in range(10):
             session = ''.join(random.choice(s) for _ in range(4))
 
-        print(type(session))
+        
 
         z = string.ascii_letters
         for _ in range(10):
@@ -396,7 +396,7 @@ def upload_file():
 def download(filename):
     try:
         path = filename
-        print(path)
+        
         return send_file(path, as_attachment=True)
     except Exception as e:
         print(e)
@@ -496,7 +496,7 @@ def Answers(QuestionnaireID, Question_ID):
             l=[]
             for x in Answers: 
                 l.append(x['O_ID'])
-            print(l)
+            
             
             dic={}                
             for i in l:
