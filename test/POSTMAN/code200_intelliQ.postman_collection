@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "377b4d0e-b3cd-4772-ae3b-96cf9094edba",
-		"name": "status code :500 intelliQ",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "ffcad49f-faee-4968-906e-b9149bb94ddd",
+		"name": "status code :200 intelliQ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25901665"
 	},
 	"item": [
 		{
@@ -12,16 +13,17 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"failed\", \"dbconnection\": \"MySQL Database intelliQ not connected\" }');\r",
+							"    var y = JSON.parse('{\"status\":\"OK\",\"dbconnection\":\"MySQL Database intelliQ running on Apache Web Server\"}');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
+							"    \r",
 							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
@@ -55,16 +57,17 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"Database Error\" }');\r",
+							"    var y = JSON.parse('{\"status\":\"ΟΚ\",\"state\":\"Questionnaire successfully uploaded\"}');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
+							"    \r",
 							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
@@ -83,60 +86,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/C:/Users/nicko/Desktop/intelliQ/SoftEng22-19/cli/test_q.json"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:5000/admin/questionnaire_upd",
-					"host": [
-						"localhost"
-					],
-					"port": "5000",
-					"path": [
-						"admin",
-						"questionnaire_upd"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "questionnaire_upd  (upload same questionnaire)",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
-							"pm.globals.get(\"variable_key\");\r",
-							"});\r",
-							"\r",
-							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"Database Error\" }');\r",
-							"    var x = JSON.parse(responseBody);\r",
-							"    var z=JSON.stringify(y);\r",
-							"    var t=JSON.stringify(x);\r",
-							"    pm.expect(z).to.eql(t);\r",
-							"});\r",
-							"\r",
-							"pm.test(responseBody, true)"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/nicko/Desktop/intelliQ/SoftEng22-19/cli/test_q.json"
+							"src": "test_q.json"
 						}
 					]
 				},
@@ -161,16 +111,17 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"failed\", \"reason\": \"Internal Server Error\" }');\r",
+							"    var y = JSON.parse(`{\"QuestionnaireID\":\"QQ000\",\"Questionnaire_Title\":\"My first research questionnaire\",\"keywords\":[\"footbal\",\"islands\",\"timezone\"],\"questions\":[{\"Question_ID\":\"P01\",\"Qtext\":\"Ποια είναι η ηλικία σας;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"profile\"},{\"Question_ID\":\"Q01\",\"Qtext\":\"Ποιο είναι το αγαπημένο σας χρώμα;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q02\",\"Qtext\":\"Ασχολείστε με το ποδόσφαιρο;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q03\",\"Qtext\":\"Τι ομάδα είστε;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q04\",\"Qtext\":\"Έχετε ζήσει σε νησί;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q05\",\"Qtext\":\"Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Έχετε ζήσει σε νησί;': Ποια η σχέση σας με το θαλάσσιο σκι;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q06\",\"Qtext\":\"Είστε χειμερινός κολυμβητής\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q07\",\"Qtext\":\"Κάνετε χειμερινό σκι;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q08\",\"Qtext\":\"Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q09\",\"Qtext\":\"Με δεδομένο ότι απαντήσατε 'Οχι' στην ερώτηση 'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;': Προτιμάτε τη θερινή ή την χειμερινή ώρα;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"}]}`);\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
+							"    \r",
 							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
@@ -210,16 +161,17 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"failed\", \"reason\": \"Internal Server Error\" }');\r",
+							"    var y = JSON.parse('{ \"questionnaireID\": \"QQ000\", \"qID\": \"P01\", \"qtext\": \"Ποια είναι η ηλικία σας;\", \"required\": \"TRUE\", \"type\": \"profile\", \"options\": [ { \"optID\": \"P01A1\", \"opttxt\": \"<30\", \"nextqID\": \"Q01\" }, { \"optID\": \"P01A2\", \"opttxt\": \"30-50\", \"nextqID\": \"Q01\" }, { \"optID\": \"P01A3\", \"opttxt\": \"50-70\", \"nextqID\": \"Q01\" }, { \"optID\": \"P01A4\", \"opttxt\": \">70\", \"nextqID\": \"Q01\" } ] }');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
+							"    \r",
 							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
@@ -258,22 +210,23 @@
 			"response": []
 		},
 		{
-			"name": "doanswer",
+			"name": "doanswers",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"failed\", \"dberror\": \"Request not possible\" }');\r",
+							"    var y = JSON.parse('{}');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
+							"    \r",
 							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
@@ -310,11 +263,11 @@
 						},
 						{
 							"key": "session",
-							"value": "ATBA"
+							"value": "show"
 						},
 						{
 							"key": "optionid",
-							"value": "Q01A1"
+							"value": "P01A1"
 						}
 					]
 				}
@@ -328,16 +281,17 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"failed\", \"reason\": \"Internal Server Error\" }');\r",
+							"    var y = JSON.parse('{ \"QuestionnaireID\": \"QQ000\", \"session\": \"ATBA\", \"answers\": [ { \"qID\": \"P01\", \"ans\": \"P01A1\" }, { \"qID\": \"Q01\", \"ans\": \"Q01A1\" }, { \"qID\": \"Q02\", \"ans\": \"Q02A1\" }, { \"qID\": \"Q03\", \"ans\": \"Q03A2\" }, { \"qID\": \"Q04\", \"ans\": \"Q04A2\" }, { \"qID\": \"Q06\", \"ans\": \"Q06A1\" }, { \"qID\": \"Q07\", \"ans\": \"Q07A2\" }, { \"qID\": \"Q08\", \"ans\": \"Q08A1\" }, { \"qID\": \"Q09\", \"ans\": \"Q09A2\" } ] }');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
+							"    \r",
 							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
@@ -382,17 +336,17 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"failed\", \"reason\": \"Internal Server Error\" }');\r",
+							"    var y = JSON.parse('{ \"QuestionnaireID\": \"QQ000\", \"questionid\": \"P01\", \"answers\": [ { \"session\": \"ATBA\", \"ans\": \"P01A1\" }, { \"session\": \"ATBP\", \"ans\": \"P01A1\" }, { \"session\": \"show\", \"ans\": \"P01A1\" }, { \"session\": \"ATBB\", \"ans\": \"P01A2\" }, { \"session\": \"ATBC\", \"ans\": \"P01A3\" }, { \"session\": \"ATBD\", \"ans\": \"P01A4\" } ] }')\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
-							"    \r",
+							"   \r",
 							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
@@ -419,7 +373,7 @@
 					"variable": [
 						{
 							"key": "questionnaireid",
-							"value": "QQ001"
+							"value": "QQ000"
 						},
 						{
 							"key": "questionid",
@@ -437,17 +391,17 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"status\": \"failed\", \"reason\": \"Internal Server Error\" }');\r",
+							"    var y = JSON.parse('{ \"status\": \"OK\" }');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
-							"   \r",
+							"    \r",
 							"    pm.expect(z).to.eql(t);\r",
 							"});\r",
 							"\r",
@@ -488,13 +442,13 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"pm.globals.get(\"variable_key\");\r",
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{\"status\":\"failed\",\"reason\":\"<Database error>\"}');\r",
+							"    var y = JSON.parse('{ \"status\": \"OK\" }');\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
