@@ -42,6 +42,7 @@ MIT
 **Free Software, Hell Yeah!**
 
    [argparse]: https://docs.python.org/3/library/argparse.html
+   [json]:https://docs.python.org/3/library/json.html
    [pytest]: https://docs.pytest.org/en/stable/
    [requests]: https://requests.readthedocs.io/en/master/
-   [document]: https://helios.ntua.gr/course/view.php?id=890/project_softeng2022_part2_v01a-1.pdf
+   [document]: https://helios.ntua.gr/pluginfile.php/1959/course/section/16951/project_softeng2022_part2_v01a.pdf
