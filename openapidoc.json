@@ -1,0 +1,970 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: intlliQ API
+  description: An API to illustrate the implementation of intelligent Questionnaires
+
+servers:
+  - url: https://localhost:5000
+
+security:
+  - BasicAuth: []
+
+paths:
+{baseURL}/admin/healthcheck:
+get:
+  description: Returns the database connection status
+
+  responses:
+    '200':
+      description: Database connected
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                status:
+                    type: string
+                dbconnection:
+                    type:string
+
+    '500':
+      description: Database not connected
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                status:
+                    type: string
+                dbconnection:
+                    type:string
+
+
+
+{baseURL}/admin/questionnaire_upd:
+post:
+  description: 
+  parameters:
+
+    -name:file
+    in:header
+    required:true
+
+  responses:
+    '200':
+      description: Successfully uploaded questionnaire
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                state:
+                    type:string
+
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                status:
+                  type:string
+                reason:
+                  type:string
+            
+    '500':
+      description: Internat server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+
+
+{baseURL}/admin/resetall:
+post:
+  description: Initialization of all data
+
+  responses:
+    '200':
+      description: Successfully emptied database
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                status:
+                    type:string
+
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/admin/resetq/{questionnaireID}:
+post:
+    description: Deletion of all answers of given questionnaire 
+    parameters:
+
+        -name:file
+        in:path
+        required:true
+
+  responses:
+    '200':
+      description: Successfully deleted all answers of given questionnaire
+      content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+
+    '400':
+      description: Bad request
+      content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+    '500':
+    description: Internal server error
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/questionnaire/{questionnaireID}:
+get:
+    description: Return questionnaire data
+    parameters:
+    
+        -name:questionnaireID
+        in:path
+        required:true
+
+  responses:
+    '200':
+      description: Successfully returned questionnaire data
+      content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                questionnaireID:
+                    type:string
+                questionnaireTitle:
+                    type:string
+                keywords:
+                    type:array
+                        items:
+                            type:string
+                questions:
+                    type:array
+                        items:
+                            type:object
+                               properties:
+                                    qID:
+                                        type:string
+                                    qtext:
+                                        type:string
+                                    required:
+                                        type:string
+                                    type:
+                                        type:string
+
+    '400':
+      description: Bad request
+      content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/question/{questionnaireID}/{questionID}:
+get:
+    description: Return data of given question of given questionnaire
+    parameters:
+
+        -name:questionnaireID
+        in:path
+        required:true
+
+        -name:questionID
+        in:path
+        required:true
+
+  responses:
+    '200':
+    description: Successfully return data of given question of given questionnaire
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                questionnaireID:
+                    type:string
+                qID:
+                    type:string
+                qtext:
+                    type:array
+                required:
+                    type:string
+                type:
+                    type:string
+                options:
+                    type:array
+                        items:
+                            type:object
+                            properties:
+                                optID:
+                                    type:string
+                                opttxt:
+                                    type:string
+                                nextqID:
+                                    type:string
+                
+    '400':
+    description: Bad request
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+    '500':
+    description: Internal server error
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/doanswer/{questionnaireID}/{questionID}/{session}/{optionID}:
+post:
+  description: Registers the given option to the given question of the given questionnaire of the given session
+  parameters:
+
+    -name:questionnaireID
+    in:path
+    required:true
+
+    -name:questionID
+    in:path
+    required:true
+    
+    -name:session
+    in:path
+    required:true
+
+    -name:optionID
+    in:path
+    required:true
+
+  responses:
+    '200':
+        description: Successfully registers the answer
+        content:
+            application/json:
+            schema:
+                type: object
+    '400':
+    description: Bad request
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+    '500':
+    description: Internal server error
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/getsessionanswers/{questionnaireID}/{session}:
+get:
+    description: Returns answers of given session of given questionnaire
+    parameters:
+
+    -name:questionnaireID
+    in:path
+    required:true
+
+    -name:session
+    in:path
+    required:true
+
+  responses:
+    '200':
+    description: Successfully returns answers of given session of given questionnaire
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                questionnaireID:
+                    type:string
+                session:
+                    type:string
+                answers:
+                    type:array
+                        items:
+                            type:object
+                            properties:
+                                qID:
+                                    type:string
+                                ans:
+                                    type:string
+
+    '400':
+    description: Bad request
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+    '500':
+    description: Internal server error
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/getquestionanswers/{questionnaireID}/{questionID}:
+get:
+  description: Returns all answers of given question of given questionnaire
+  parameters:
+
+    -name:questionnaireID
+    in:path
+    required:true
+
+    -name:questionID
+    in:path
+    required:true
+
+  responses:
+    '200':
+        description: Successfully returns all answers of given question of given questionnaire
+        content:
+            application/json:
+            schema:
+                type: object
+                properties:
+                    questionnaireID:
+                        type:string
+                    questionID:
+                        type:string
+                    answers:
+                        type:array
+                            items:
+                                type:object
+                                properties:
+                                    session:
+                                        type:string
+                                    ans:
+                                        type:string
+
+    '400':
+    description: Bad request
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+    '500':
+    description: Internal server error
+    content:
+        application/json:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+
+         
+                    
+
+
+{baseURL}/admin/healthcheck?format=csv:
+get:
+    description: Returns the database connection status
+    parameters:
+
+        -name:format
+        in:query
+        required:true   
+
+    responses:
+    '200':
+        description: Database connected
+        content:
+        text/csv:
+            schema:
+            type: object
+            properties:
+                status:
+                    type: string
+                dbconnection:
+                    type:string
+
+    '500':
+        description: Database not connected
+        content:
+        text/csv:
+            schema:
+            type: object
+            properties:
+                status:
+                    type: string
+                dbconnection:
+                    type:string
+
+
+
+{baseURL}/admin/questionnaire_upd?format=csv:
+post:
+    description: 
+    parameters:
+
+        -name:format
+        in:query
+        required:true 
+
+        -name:file
+        in:header
+        required:true
+
+    responses:
+    '200':
+        description: Successfully uploaded questionnaire
+        content:
+        text/csv:
+            schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                state:
+                    type:string
+
+    '400':
+        description: Bad request
+        content:
+        text/csv:
+            schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+    '500':
+        description: Internat server error
+        content:
+        text/csv:
+            schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+
+
+{baseURL}/admin/resetall?format=csv:
+post:
+    description: Initialization of all data
+    parameters:
+
+        -name:format
+        in:query
+        required:true 
+
+    responses:
+    '200':
+        description: Successfully emptied database
+        content:
+        text/csv:
+            schema:
+            type: object
+            properties:
+                status:
+                    type:string
+
+    '500':
+        description: Internal server error
+        content:
+        text/csv:
+            schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/admin/resetq/{questionnaireID}?format=csv:
+post:
+    description: Deletion of all answers of given questionnaire 
+    parameters:
+
+        -name:format
+        in:query
+        required:true 
+
+        -name:file
+        in:path
+        required:true
+
+    responses:
+    '200':
+        description: Successfully deleted all answers of given questionnaire
+        content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+
+    '400':
+        description: Bad request
+        content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+    '500':
+    description: Internal server error
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/questionnaire/{questionnaireID}?format=csv:
+get:
+    description: Return questionnaire data
+    parameters:
+
+        -name:format
+        in:query
+        required:true 
+
+        -name:questionnaireID
+        in:path
+        required:true
+
+    responses:
+    '200':
+        description: Successfully returned questionnaire data
+        content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                questionnaireID:
+                    type:string
+                questionnaireTitle:
+                    type:string
+                keywords:
+                    type:array
+                        items:
+                            type:string
+                questions:
+                    type:array
+                        items:
+                            type:object
+                                properties:
+                                    qID:
+                                        type:string
+                                    qtext:
+                                        type:string
+                                    required:
+                                        type:string
+                                    type:
+                                        type:string
+
+    '400':
+        description: Bad request
+        content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+    '500':
+        description: Internal server error
+        content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/question/{questionnaireID}/{questionID}?format=csv:
+get:
+    description: Return data of given question of given questionnaire
+    parameters:
+
+        -name:format
+        in:query
+        required:true 
+
+        -name:questionnaireID
+        in:path
+        required:true
+
+        -name:questionID
+        in:path
+        required:true
+
+    responses:
+    '200':
+    description: Successfully return data of given question of given questionnaire
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                questionnaireID:
+                    type:string
+                qID:
+                    type:string
+                qtext:
+                    type:array
+                required:
+                    type:string
+                type:
+                    type:string
+                options:
+                    type:array
+                        items:
+                            type:object
+                            properties:
+                                optID:
+                                    type:string
+                                opttxt:
+                                    type:string
+                                nextqID:
+                                    type:string
+                
+    '400':
+    description: Bad request
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+            
+    '500':
+    description: Internal server error
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/doanswer/{questionnaireID}/{questionID}/{session}/{optionID}?format=csv:
+post:
+    description: Registers the given option to the given question of the given questionnaire of the given session
+    parameters:
+
+        -name:format
+        in:query
+        required:true 
+        
+        -name:questionnaireID
+        in:path
+        required:true
+
+        -name:questionID
+        in:path
+        required:true
+        
+        -name:session
+        in:path
+        required:true
+
+        -name:optionID
+        in:path
+        required:true
+
+    responses:
+    '200':
+        description: Successfully registers the answer
+        content:
+            text/csv:
+            schema:
+                type: object
+    '400':
+    description: Bad request
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+    '500':
+    description: Internal server error
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/getsessionanswers/{questionnaireID}/{session}?format=csv:
+get:
+    description: Returns answers of given session of given questionnaire
+    parameters:
+
+        -name:format
+        in:query
+        required:true 
+
+        -name:questionnaireID
+        in:path
+        required:true
+
+        -name:session
+        in:path
+        required:true
+
+    responses:
+    '200':
+    description: Successfully returns answers of given session of given questionnaire
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                questionnaireID:
+                    type:string
+                session:
+                    type:string
+                answers:
+                    type:array
+                        items:
+                            type:object
+                            properties:
+                                qID:
+                                    type:string
+                                ans:
+                                    type:string
+
+    '400':
+    description: Bad request
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+    '500':
+    description: Internal server error
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+
+{baseURL}/getquestionanswers/{questionnaireID}/{questionID}?format=csv:
+get:
+    description: Returns all answers of given question of given questionnaire
+    parameters:
+        
+        -name:format
+        in:query
+        required:true 
+
+        -name:questionnaireID
+        in:path
+        required:true
+
+        -name:questionID
+        in:path
+        required:true
+
+    responses:
+    '200':
+        description: Successfully returns all answers of given question of given questionnaire
+        content:
+            text/csv:
+            schema:
+                type: object
+                properties:
+                    questionnaireID:
+                        type:string
+                    questionID:
+                        type:string
+                    answers:
+                        type:array
+                            items:
+                                type:object
+                                properties:
+                                    session:
+                                        type:string
+                                    ans:
+                                        type:string
+
+    '400':
+    description: Bad request
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string
+
+    '500':
+    description: Internal server error
+    content:
+        text/csv:
+        schema:
+            type: object
+            properties:
+                status:
+                    type:string
+                reason:
+                    type:string

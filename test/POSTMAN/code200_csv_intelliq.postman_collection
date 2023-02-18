@@ -1,0 +1,513 @@
+{
+	"info": {
+		"_postman_id": "8c4b7502-914d-4907-a0ef-9f7804e2dcab",
+		"name": "200ok(csv)intelliq",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "healthcheck (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(`\"status\",\"dbconnection\"\r",
+							"\"OK\",\"MySQL Database intelliQ running on Apache Web Server\" `);\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/healthcheck?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"healthcheck"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(`\"status\",\"state\"\r",
+							"\"OK\",\"Questionnaire successfully uploaded\" `);\r",
+							"});\r",
+							"\r",
+							"pm.test(responseBody, true);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "test_q.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/admin/questionnaire_upd?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"questionnaire_upd"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(`questionnaireID,questionnaireTitle,keywords_0,keywords_1,keywords_2,questions_qID,questions_qtext,questions_required,questions_type\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,P01,Ποια είναι η ηλικία σας;,TRUE,profile\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q01,Ποιο είναι το αγαπημένο σας χρώμα;,TRUE,question\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q02,Ασχολείστε με το ποδόσφαιρο;,TRUE,question\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q03,Τι ομάδα είστε;,TRUE,question\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q04,Έχετε ζήσει σε νησί;,TRUE,question\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q05,Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Έχετε ζήσει σε νησί;': Ποια η σχέση σας με το θαλάσσιο σκι;,TRUE,question\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q06,Είστε χειμερινός κολυμβητής,TRUE,question\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q07,Κάνετε χειμερινό σκι;,TRUE,question\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q08,Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;,TRUE,question\r",
+							"QQ000,My first research questionnaire,footbal,islands,timezone,Q09,Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;': Προτιμάτε τη θερινή ή την χειμερινή ώρα;,TRUE,question\r",
+							"`);\r",
+							"});\r",
+							"pm.test(responseBody, true);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/questionnaire/:questionnaireid?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"questionnaire",
+						":questionnaireid"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "question (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(`questionnaireID,qID,qtext,required,type,answers_optID,answers_opttxt,answers_nextqID\r",
+							"QQ000,P01,Ποια είναι η ηλικία σας;,TRUE,profile,P01A2,30-50,Q01\r",
+							"QQ000,P01,Ποια είναι η ηλικία σας;,TRUE,profile,P01A3,50-70,Q01\r",
+							"QQ000,P01,Ποια είναι η ηλικία σας;,TRUE,profile,P01A1,<30,Q01\r",
+							"QQ000,P01,Ποια είναι η ηλικία σας;,TRUE,profile,P01A4,>70,Q01\r",
+							"`);\r",
+							"});\r",
+							"pm.test(responseBody, true);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/question/:questionnaireID/:questionID?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getsessionanswers (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(`QuestionnaireID,session,answers_qID,answers_ans\r",
+							"QQ000,ATBA,P01,P01A1\r",
+							"QQ000,ATBA,Q01,Q01A1\r",
+							"QQ000,ATBA,Q02,Q02A1\r",
+							"QQ000,ATBA,Q03,Q03A2\r",
+							"QQ000,ATBA,Q04,Q04A2\r",
+							"QQ000,ATBA,Q06,Q06A1\r",
+							"QQ000,ATBA,Q07,Q07A2\r",
+							"QQ000,ATBA,Q08,Q08A1\r",
+							"QQ000,ATBA,Q09,Q09A2\r",
+							"`);\r",
+							"});\r",
+							"pm.test(responseBody, true);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getsessionanswers",
+						":questionnaireid",
+						":session"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "ATBA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getquestionanswers (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(`QuestionnaireID,questionid,answers_session,answers_ans\r",
+							"QQ000,P01,ATBA,P01A1\r",
+							"QQ000,P01,ATBP,P01A1\r",
+							"QQ000,P01,ATBB,P01A2\r",
+							"QQ000,P01,ATBC,P01A3\r",
+							"QQ000,P01,ATBD,P01A4\r",
+							"`);\r",
+							"});\r",
+							"pm.test(responseBody, true);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"getquestionanswers",
+						":questionnaireid",
+						":questionid"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(``);\r",
+							"});\r",
+							"pm.test(responseBody, true);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"doanswer",
+						":questionnaireid",
+						":questionid",
+						":session",
+						":optionid"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionid",
+							"value": "P01"
+						},
+						{
+							"key": "session",
+							"value": "AAAA"
+						},
+						{
+							"key": "optionid",
+							"value": "P01A1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetq (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(`\"status\"\r",
+							"\"OK\" `);\r",
+							"});\r",
+							"pm.test(responseBody, true);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/resetq/:questionnaireid?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"resetq",
+						":questionnaireid"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireid",
+							"value": "QQ000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetall (csv)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(`\"status\"\r",
+							"\"OK\" `);\r",
+							"});\r",
+							"pm.test(responseBody, true);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/admin/resetall?format=csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"admin",
+						"resetall"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
