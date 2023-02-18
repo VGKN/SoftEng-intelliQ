@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c499c1e7-0965-4230-bcc8-efa129ab452f",
+		"_postman_id": "092ea0c3-d06d-4a35-bc7d-67feff1e1183",
 		"name": "status code :200 intelliQ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25901665"
@@ -37,12 +37,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/admin/healthcheck",
+					"raw": "localhost:9103/intelliq_api/admin/healthcheck",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"admin",
 						"healthcheck"
 					]
@@ -91,12 +92,13 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:5000/admin/questionnaire_upd",
+					"raw": "localhost:9103/intelliq_api/admin/questionnaire_upd",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"admin",
 						"questionnaire_upd"
 					]
@@ -117,7 +119,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse(`{\"QuestionnaireID\":\"QQ000\",\"Questionnaire_Title\":\"My first research questionnaire\",\"keywords\":[\"footbal\",\"islands\",\"timezone\"],\"questions\":[{\"Question_ID\":\"P01\",\"Qtext\":\"Ποια είναι η ηλικία σας;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"profile\"},{\"Question_ID\":\"Q01\",\"Qtext\":\"Ποιο είναι το αγαπημένο σας χρώμα;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q02\",\"Qtext\":\"Ασχολείστε με το ποδόσφαιρο;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q03\",\"Qtext\":\"Τι ομάδα είστε;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q04\",\"Qtext\":\"Έχετε ζήσει σε νησί;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q05\",\"Qtext\":\"Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Έχετε ζήσει σε νησί;': Ποια η σχέση σας με το θαλάσσιο σκι;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q06\",\"Qtext\":\"Είστε χειμερινός κολυμβητής\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q07\",\"Qtext\":\"Κάνετε χειμερινό σκι;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q08\",\"Qtext\":\"Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"},{\"Question_ID\":\"Q09\",\"Qtext\":\"Με δεδομένο ότι απαντήσατε 'Οχι' στην ερώτηση 'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;': Προτιμάτε τη θερινή ή την χειμερινή ώρα;\",\"Qrequired\":\"TRUE\",\"Qtype\":\"question\"}]}`);\r",
+							"    var y = JSON.parse(`{ \"questionnaireID\": \"QQ000\", \"questionnaireTitle\": \"My first research questionnaire\", \"keywords\": [ \"footbal\", \"islands\", \"timezone\" ], \"questions\": [ { \"qID\": \"P01\", \"qtext\": \"Ποια είναι η ηλικία σας;\", \"required\": \"TRUE\", \"type\": \"profile\" }, { \"qID\": \"Q01\", \"qtext\": \"Ποιο είναι το αγαπημένο σας χρώμα;\", \"required\": \"TRUE\", \"type\": \"question\" }, { \"qID\": \"Q02\", \"qtext\": \"Ασχολείστε με το ποδόσφαιρο;\", \"required\": \"TRUE\", \"type\": \"question\" }, { \"qID\": \"Q03\", \"qtext\": \"Τι ομάδα είστε;\", \"required\": \"TRUE\", \"type\": \"question\" }, { \"qID\": \"Q04\", \"qtext\": \"Έχετε ζήσει σε νησί;\", \"required\": \"TRUE\", \"type\": \"question\" }, { \"qID\": \"Q05\", \"qtext\": \"Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Έχετε ζήσει σε νησί;': Ποια η σχέση σας με το θαλάσσιο σκι;\", \"required\": \"TRUE\", \"type\": \"question\" }, { \"qID\": \"Q06\", \"qtext\": \"Είστε χειμερινός κολυμβητής\", \"required\": \"TRUE\", \"type\": \"question\" }, { \"qID\": \"Q07\", \"qtext\": \"Κάνετε χειμερινό σκι;\", \"required\": \"TRUE\", \"type\": \"question\" }, { \"qID\": \"Q08\", \"qtext\": \"Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\", \"required\": \"TRUE\", \"type\": \"question\" }, { \"qID\": \"Q09\", \"qtext\": \"Με δεδομένο ότι απαντήσατε 'Ναι' στην ερώτηση 'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;': Προτιμάτε τη θερινή ή την χειμερινή ώρα;\", \"required\": \"TRUE\", \"type\": \"question\" } ] }`);\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
@@ -135,12 +137,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/questionnaire/:questionnaireid",
+					"raw": "localhost:9103/intelliq_api/questionnaire/:questionnaireid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"questionnaire",
 						":questionnaireid"
 					],
@@ -185,12 +188,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -222,7 +226,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"json object\", function () {\r",
-							"    var y = JSON.parse('{ \"QuestionnaireID\": \"QQ000\", \"questionid\": \"P01\", \"answers\": [ { \"session\": \"ATBA\", \"ans\": \"P01A1\" }, { \"session\": \"ATBB\", \"ans\": \"P01A2\" }, { \"session\": \"ATBC\", \"ans\": \"P01A3\" }, { \"session\": \"ATBD\", \"ans\": \"P01A4\" }, { \"session\": \"ATBP\", \"ans\": \"P01A1\" } ] }')\r",
+							"    var y = JSON.parse('{ \"QuestionnaireID\": \"QQ000\", \"questionid\": \"P01\", \"answers\": [ { \"session\": \"ATBA\", \"ans\": \"P01A1\" }, { \"session\": \"ATBP\", \"ans\": \"P01A1\" }, { \"session\": \"ATBB\", \"ans\": \"P01A2\" }, { \"session\": \"ATBC\", \"ans\": \"P01A3\" }, { \"session\": \"ATBD\", \"ans\": \"P01A4\" } ] }')\r",
 							"    var x = JSON.parse(responseBody);\r",
 							"    var z=JSON.stringify(y);\r",
 							"    var t=JSON.stringify(x);\r",
@@ -240,12 +244,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/getquestionanswers/:questionnaireid/:questionid",
+					"raw": "localhost:9103/intelliq_api/getquestionanswers/:questionnaireid/:questionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"getquestionanswers",
 						":questionnaireid",
 						":questionid"
@@ -295,12 +300,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -360,12 +366,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"raw": "localhost:9103/intelliq_api/getsessionanswers/:questionnaireid/:session",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"getsessionanswers",
 						":questionnaireid",
 						":session"
@@ -415,12 +422,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/admin/resetq/:questionnaireid",
+					"raw": "localhost:9103/intelliq_api/admin/resetq/:questionnaireid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"admin",
 						"resetq",
 						":questionnaireid"
@@ -466,12 +474,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/admin/resetall",
+					"raw": "localhost:9103/intelliq_api/admin/resetall",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"admin",
 						"resetall"
 					]

@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "49a6ea65-3e04-4935-aada-dc7d12aac874",
+		"_postman_id": "a77cbd85-2725-4e23-b98d-405aae345a7d",
 		"name": "intelliQscript",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25901665"
 	},
 	"item": [
 		{
@@ -22,12 +23,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/questionnaire/:questionnaireid",
+					"raw": "localhost:9103/intelliq_api/questionnaire/:questionnaireid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"questionnaire",
 						":questionnaireid"
 					],
@@ -67,12 +69,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -97,12 +100,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -157,12 +161,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -187,12 +192,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -247,12 +253,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -277,12 +284,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -337,12 +345,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -367,12 +376,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -427,12 +437,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -457,12 +468,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -517,12 +529,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -547,12 +560,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -607,12 +621,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -637,12 +652,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -697,12 +713,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -727,12 +744,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -787,12 +805,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/question/:questionnaireID/:questionID",
+					"raw": "localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"question",
 						":questionnaireID",
 						":questionID"
@@ -817,12 +836,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/doanswer/:questionnaireid/:questionid/:session/:optionid",
+					"raw": "localhost:9103/intelliq_api/doanswer/:questionnaireid/:questionid/:session/:optionid",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"doanswer",
 						":questionnaireid",
 						":questionid",
@@ -857,12 +877,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:5000/getsessionanswers/:questionnaireid/:session",
+					"raw": "localhost:9103/intelliq_api/getsessionanswers/:questionnaireid/:session",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "9103",
 					"path": [
+						"intelliq_api",
 						"getsessionanswers",
 						":questionnaireid",
 						":session"
