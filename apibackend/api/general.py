@@ -194,7 +194,6 @@ def QQQID(questionnaireid,questionid):
                 maindic['required']=z[2]
                 maindic['type']=z[3]
                 maindic['options']=[]
-                print(maindic)
                 query2 = "select o.opt_id, o.opt_Text, q.next_q from Options as o join Questions_Options as q on (opt_id = optid) where Opt_ID in (select OptID from Questions_Options where QuestionID = '{}')".format(questionid)
                 
                 cur.execute(query2)
