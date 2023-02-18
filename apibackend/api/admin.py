@@ -18,7 +18,7 @@ from apibackend.api.util import allowed_file
 
 
 #healthcheck endpoint            
-@app.route("/admin/healthcheck", methods=['GET'])
+@app.route("/intelliq_api/admin/healthcheck", methods=['GET'])
 def healthcheck():
 
     if request.method=='GET':
@@ -63,7 +63,7 @@ def healthcheck():
                                  
 
 
-@app.route("/admin/questionnaire_upd", methods=["POST"])
+@app.route("/intelliq_api/admin/questionnaire_upd", methods=["POST"])
 def questionnaire_upd():
 
     if request.method=='POST':
@@ -231,7 +231,7 @@ def questionnaire_upd():
     
       
     
-@app.route("/admin/resetall", methods=["POST"])
+@app.route("/intelliq_api/admin/resetall", methods=["POST"])
 def postResetAll():
 
     if request.method == 'POST':
@@ -241,7 +241,7 @@ def postResetAll():
                 
             try:
                 cur = db.connection.cursor()
-            except:
+            except: #if database connected
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
@@ -294,7 +294,7 @@ def postResetAll():
         return resp
 
 
-@app.route("/admin/resetq/<string:questionnaireid>", methods=['POST'])
+@app.route("/intelliq_api/admin/resetq/<string:questionnaireid>", methods=['POST'])
 def resetq(questionnaireid):
     
     if request.method=='POST':
