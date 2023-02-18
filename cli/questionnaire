@@ -14,6 +14,7 @@ def questionnaire(ar):
         print(res.status_code)
         if (ar.format == 'json' and res.status_code == 200):
             print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            print(res.encoding)
             return True
         elif (ar.format == 'csv' and res.status_code == 200):
             print(res.text)
@@ -22,7 +23,6 @@ def questionnaire(ar):
         else:
             if (ar.format=='csv'):
                 print(res.text)
-                print(res.encoding)
             else:
                 print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
             return False

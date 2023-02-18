@@ -107,9 +107,7 @@ def QQID(questionnaireid):
                                 new_row.append(str(i[col]))
                         
                             csv_data += ",".join(new_row) + "\n"  
-                        resp=make_response(csv_data)
-                        resp.headers["Content-type"] = "text/csv"
-                        resp.headers["Accept-Charset"]="utf-8"
+                        resp=Response(csv_data,mimetype="text/csv")
                         resp.status_code=200
                     else:
                         resp = jsonify (title)
