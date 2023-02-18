@@ -42,8 +42,7 @@ def healthcheck():
                 cur = db.connection.cursor()
                 csv=""""status","dbconnection"
 "OK","MySQL Database intelliQ running on Apache Web Server" """
-                resp=make_response(csv)
-                resp.headers["Content-type"] = "text/csv"
+                resp=Response(csv,mimetype="text/csv")
                 resp.status_code=200
                 return resp
                 
@@ -51,8 +50,7 @@ def healthcheck():
                 print(e)
                 csv=""""status","dbconnection"
 "failed","MySQL Database intelliQ not connected" """
-                resp=make_response(csv)
-                resp.headers["Content-type"] = "text/csv"
+                resp=Response(csv,mimetype="text/csv")
                 resp.status_code=500
                 return resp
         else:
@@ -80,8 +78,7 @@ def questionnaire_upd():
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
                     
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
@@ -96,8 +93,7 @@ def questionnaire_upd():
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","No file part in request header" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"No file part in request header"})
@@ -120,8 +116,7 @@ def questionnaire_upd():
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Server can only process one .json file" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Server can only process one .json file"})
@@ -133,8 +128,7 @@ def questionnaire_upd():
                     if (f=='csv'):
                             csv=""""status","reason"
 "failed","Database Error" """
-                            resp=make_response(csv)
-                            resp.headers["Content-type"] = "text/csv"
+                            resp=Response(csv,mimetype="text/csv")
                             resp.status_code=500
                     else:
                         resp=jsonify({"status":"failed", "reason":"Database Error"})
@@ -199,8 +193,7 @@ def questionnaire_upd():
                         if (f=='csv'):
                             csv=""""status","state"
 "OK","Questionnaire successfully uploaded" """
-                            resp=make_response(csv)
-                            resp.headers["Content-type"] = "text/csv"
+                            resp=Response(csv,mimetype="text/csv")
                             resp.status_code=200
                         else:      
                             resp=jsonify({"status":"OK","state":"Questionnaire successfully uploaded"})
@@ -210,8 +203,7 @@ def questionnaire_upd():
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Wrong file format" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Wrong file format"})
@@ -221,8 +213,7 @@ def questionnaire_upd():
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Wrong json format, questionnaire not uploaded" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=400
                 else:
                     resp=jsonify({"status":"failed","reason":"Wrong json format, questionnaire not uploaded"})
@@ -255,8 +246,7 @@ def postResetAll():
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
@@ -278,8 +268,7 @@ def postResetAll():
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Database error" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason": "Database error"})
@@ -288,8 +277,7 @@ def postResetAll():
             if (f=='csv'):
                 csv=""""status"
 "OK" """
-                resp=make_response(csv)
-                resp.headers["Content-type"] = "text/csv"
+                resp=Response(csv,mimetype="text/csv")
                 resp.status_code=200
             else:
                 resp=jsonify({"status":"OK"})
@@ -320,8 +308,7 @@ def resetq(questionnaireid):
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
-                    resp=make_response(csv)
-                    resp.headers["Content-type"] = "text/csv"
+                    resp=Response(csv,mimetype="text/csv")
                     resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Cannot connect to Database"})
@@ -340,8 +327,7 @@ def resetq(questionnaireid):
                     if (f=='csv'):
                         csv=""""status","reason"
 "failed","Questionnaire not found" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=400
                     else:
                         resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
@@ -358,8 +344,7 @@ def resetq(questionnaireid):
                     if (f=='csv'):
                         csv=""""status"
 "OK" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=200
                     else:
                         resp=jsonify({"status":"OK"})
@@ -370,8 +355,7 @@ def resetq(questionnaireid):
                 if (f=='csv'):
                         csv=""""status","reason"
 "failed","Database Error" """
-                        resp=make_response(csv)
-                        resp.headers["Content-type"] = "text/csv"
+                        resp=Response(csv,mimetype="text/csv")
                         resp.status_code=500
                 else:
                     resp=jsonify({"status":"failed", "reason":"Database Error"})
