@@ -62,7 +62,7 @@ cd..
 cd..
 python run.py
 ```
-#### DBMS
+### DBMS
 Χρησιμοποιουμε MySQL Server χωρις χρηση ORM. 
 
 ### Configurations
@@ -74,7 +74,7 @@ To configuration για τα credentials της βασης δεδομενων β
 
 ```python run.py```
 
-Για δοκιμή των HTTP methods χρησιμοποιυμε το Postman.
+Για δοκιμή του Rest API methods χρησιμοποιoυμε το Postman.
 
 
 
