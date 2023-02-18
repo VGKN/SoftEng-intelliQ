@@ -36,10 +36,10 @@ Technical Details
 | Kassaris Nikolaos | 03119188
 | Vougias Konstantinos | 03119144
 
-##Flask Backend
+## Flask Backend
 `cd apibackend/`
  
-###Installation
+### Installation
  ```bash
  python3 -m venv venv
  source venv/bin/activate
