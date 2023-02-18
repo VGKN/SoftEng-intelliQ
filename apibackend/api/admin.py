@@ -80,7 +80,7 @@ def questionnaire_upd():
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed", "Cannot connect to Database"
+                    "failed","Cannot connect to Database"
                     """
                     resp.make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -97,7 +97,7 @@ def questionnaire_upd():
                 if 'file' not in request.files:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed", "No file part in request header"
+                        "failed","No file part in request header"
                         """
                         resp.make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -122,7 +122,7 @@ def questionnaire_upd():
                 if count !=1:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed", "Server can only process one .json file"
+                        "failed","Server can only process one .json file"
                         """
                         resp.make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -136,7 +136,7 @@ def questionnaire_upd():
                 if success and errors:
                     if (f=='csv'):
                             csv=""""status","reason"
-                            "failed", "Database Error"
+                            "failed","Database Error"
                             """
                             resp.make_response(csv)
                             resp.headers["Content-type"] = "text/csv"
@@ -203,7 +203,7 @@ def questionnaire_upd():
                         
                         if (f=='csv'):
                             csv=""""status","state"
-                            "OK", "Questionnaire successfully uploaded"
+                            "OK","Questionnaire successfully uploaded"
                             """
                             resp.make_response(csv)
                             resp.headers["Content-type"] = "text/csv"
@@ -215,7 +215,7 @@ def questionnaire_upd():
                 else:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed", "Wrong file format"
+                        "failed","Wrong file format"
                         """
                         resp.make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -227,7 +227,7 @@ def questionnaire_upd():
             except Exception as e:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed", "Wrong json format, questionnaire not uploaded"
+                    "failed","Wrong json format, questionnaire not uploaded"
                     """
                     resp.make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -262,7 +262,7 @@ def postResetAll():
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed", "Cannot connect to Database"
+                    "failed","Cannot connect to Database"
                     """
                     resp.make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -286,7 +286,7 @@ def postResetAll():
             except Exception as e:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed", "Database error"
+                    "failed","Database error"
                     """
                     resp.make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -330,7 +330,7 @@ def resetq(questionnaireid):
             except:
                 if (f=='csv'):
                     csv=""""status","reason"
-                    "failed", "Cannot connect to Database"
+                    "failed","Cannot connect to Database"
                     """
                     resp.make_response(csv)
                     resp.headers["Content-type"] = "text/csv"
@@ -351,7 +351,7 @@ def resetq(questionnaireid):
                 if questionnaireid not in qids:
                     if (f=='csv'):
                         csv=""""status","reason"
-                        "failed", "Questionnaire ID not found"
+                        "failed","Questionnaire ID not found"
                         """
                         resp.make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
@@ -381,9 +381,9 @@ def resetq(questionnaireid):
                         return resp  
                     
             except Exception as e:
-                 if (f=='csv'):
+                if (f=='csv'):
                         csv=""""status","reason"
-                        "failed", "Database Error"
+                        "failed","Database Error"
                         """
                         resp.make_response(csv)
                         resp.headers["Content-type"] = "text/csv"
