@@ -2,8 +2,7 @@
 import argparse
 import requests
 import json
-import pprint
- 
+
 
 def questionnaire(ar):
     if (ar.format == 'csv' or ar.format== 'json'):
