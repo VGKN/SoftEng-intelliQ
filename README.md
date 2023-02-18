@@ -21,9 +21,9 @@ Technical Details
 | Asset | Technologies Used |
 | ----- | ----------- |
 | backend | Python Flask |
-| frontend | html, css, javascript, bootstrap5 |
-| database | MySQL + SQL Alchemy ORM |
-| CLI | Python3 argparse|
+| frontend | html, css, bootstrap5 |
+| database | MySQL |
+| CLI | Python3 argparse |
 
 
 **The project is a collaborate effort of a team of 4 members:**
@@ -40,12 +40,44 @@ Technical Details
 `cd apibackend/`
  
 ### Installation
- ```bash
- python3 -m venv venv
- source venv/bin/activate
+ ```Σε περιβάλλον cmd
+ python -m venv venv
+ cd venv/Scripts
+ activate
+ cd..
+ cd..
  pip install -r requirements.txt
  ```
- ### DB
+ 
+### DB
+
+Χρησιμοποιούμε XAMPP και συνδεόμαστε στον Apache Web Server στο Port:80 και τρέχομε MySQL Server στο Port:3306.
+ 
+#### Κάθε επόμενη φορά
+Σηκωνουμε τα services: Ανοιγουμε XAMPP και ανοιγουμε Apache Web Server και MySQL Server.
+Ανοιγω terminal στον φακελο Scripts του venv. 
+```
+activate
+cd..
+cd..
+python run.py
+```
+### DBMS
+Χρησιμοποιουμε MySQL Server χωρις χρηση ORM. 
+
+### Configurations
+
+To configuration για τα credentials της βασης δεδομενων βρισκονται στο αρχειο config.json μεσα στο github για την επιδειξη της εφαρμογης.
+
+### Run
+Εκτελω την παρακατω εντολη στο terminal με ανεβασμενα τα services και activated το venv:
+
+```python run.py```
+
+Για δοκιμή του Rest API methods χρησιμοποιoυμε το Postman.
+
+
+
  
  
  
