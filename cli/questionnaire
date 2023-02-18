@@ -17,12 +17,10 @@ def questionnaire(ar):
             return True
         elif (ar.format == 'csv' and res.status_code == 200):
             print(res.text)
-            print(res.encoding)
             return True
         else:
             if (ar.format=='csv'):
                 print(res.text)
-                print(res.encoding)
             else:
                 print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
             return False
