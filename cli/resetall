@@ -5,14 +5,29 @@ import json
 import pprint
  
 
-def resetall():
-	res = requests.post('http://localhost:5000/admin/resetall')
-	print(res.status_code)
-	pprint.pprint(res.json())
-	return True
+def resetall(ar):
+    if (ar.format == 'csv' or ar.format== 'json'):
+        url_call='http://localhost:5000/admin/resetall'
+        if ar.format=='csv':
+            url_call = url_call + '?format=csv'
+        res = requests.post(url_call)
+        print(res.status_code)
+        if (ar.format == 'json' and res.status_code == 200):
+            print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            return True
+        elif (ar.format == 'csv' and res.status_code == 200):
+            print(res.text)
+            return True
+        else:
+            return False
+        
+    else:
+        print("Only json and csv format is supported")
+        return False
+        
     
 parser = argparse.ArgumentParser()
 parser.add_argument('--format', help='Give response format', required='TRUE')
 args = parser.parse_args()
 
-resetall()
+resetall(args)
