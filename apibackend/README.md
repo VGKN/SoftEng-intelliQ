@@ -21,6 +21,23 @@ For a quick installation
 set FLASK_APP=apibackend
 flask run
 ```
+## Structure
+
+  `__init__.py` ρυθμίζει το app, συμπεριλαμβάνοντας όλες τις απαραίτητες πληροφορίες και τα credentials για την σύνδεση με την βάση δεδομένων
+  
+  `routes.py` περιέχει όλα τα routes που αφορούν το frontend
+  
+  `forms.py` βοηθητικό αρχείο για τις φόρμες που χρησιμοποιούνται
+  
+  `api\admin.py` περιέχει την υλοποίηση των api endpoints του admin
+  
+  `api\util.py` περιέχει βοηθητικές συναρτήσεις
+  
+  `api\general.py`περιέχει την υλοποίηση των υπολοίπων api endpoints
+  
+  `run.py` Εκκινεί τον ενσωματωμένο flask server και τρέχει το app πάνω του
+
+
 
 ## License
 
