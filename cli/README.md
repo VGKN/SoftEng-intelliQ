@@ -28,7 +28,7 @@ export PATH="$PATH:/path/to/cli-client"
 ```
 
 ## Usage 
-Χρήση σύμφωνη με το document που δόθηκε μαζί με τις οδηγίες της εργασίας
+Χρήση σύμφωνη με το [document] που δόθηκε μαζί με τις οδηγίες της εργασίας
 ```sh
 ./se22XX scope --param1 value1 [--param2 value2 ...] --format fff
 ```
@@ -41,3 +41,7 @@ MIT
 
 **Free Software, Hell Yeah!**
 
+   [argparse]: https://docs.python.org/3/library/argparse.html
+   [pytest]: https://docs.pytest.org/en/stable/
+   [requests]: https://requests.readthedocs.io/en/master/
+   [document]: https://helios.ntua.gr/course/view.php?id=890/project_softeng2022_part2_v01a-1.pdf
