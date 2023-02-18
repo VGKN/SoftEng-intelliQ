@@ -72,6 +72,7 @@
  
 ## Κάθε επόμενη φορά
 Σηκώνουμε τα services: Ανοίγουμε XAMPP και ανοίγουμε Apache Web Server και MySQL Server.
+Αρχικοποιούμε το database χρησιμοποιώντας τα `DML.sql` , `DDL.sql`.
 Ανοίγω terminal στον φάκελο Scripts του venv. 
 ```
 activate
@@ -86,9 +87,12 @@ python run.py
 
 To configuration για τα credentials της βάσης δεδομένων βρίσκονται στο αρχείο config.json.
 
-Δεν συνίσταται να ανεβάζετε κωδικούς πρόσβασης ή API κλειδιά στο github. Εμείς ανεβάσαμε το αρχείο config.json για την επίδειξη της εφαρμογής. Κανονικά θα συμπεριλαμβανόταν στο .gitignore:
+Δεν συνίσταται να ανεβαίνουν κωδικοί πρόσβασης ή API κλειδιά στο github. Εμείς ανεβάσαμε το αρχείο config.json για την επίδειξη της εφαρμογής. Κανονικά θα συμπεριλαμβανόταν στο .gitignore.
+
 Κάνουμε import τα credentials στο `__init__.py` αντικαθιστώντας την `app.config` εντολή με:
+
     _apibackend/config.json_
+    
     ```json
     {
         "MYSQL_USER": "root",
