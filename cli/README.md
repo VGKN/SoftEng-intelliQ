@@ -10,9 +10,6 @@
 - [json]     - Built-in package used to work with JSON data.
 
 
-## Testing tool
-- [pytest] - Full-featured Python testing tool
-
 ## Installation
 Για γρήγορη εγκατάσταση:
 
@@ -28,7 +25,7 @@ export PATH="$PATH:/path/to/cli-client"
 ```
 
 ## Usage 
-Χρήση σύμφωνη με το document που δόθηκε μαζί με τις οδηγίες της εργασίας
+Χρήση σύμφωνη με το [document] που δόθηκε μαζί με τις οδηγίες της εργασίας
 ```sh
 ./se22XX scope --param1 value1 [--param2 value2 ...] --format fff
 ```
@@ -41,3 +38,7 @@ MIT
 
 **Free Software, Hell Yeah!**
 
+   [argparse]: https://docs.python.org/3/library/argparse.html
+   [json]:https://docs.python.org/3/library/json.html
+   [requests]: https://requests.readthedocs.io/en/master/
+   [document]: https://helios.ntua.gr/pluginfile.php/1959/course/section/16951/project_softeng2022_part2_v01a.pdf
