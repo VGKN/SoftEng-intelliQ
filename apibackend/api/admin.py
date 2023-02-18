@@ -3,7 +3,6 @@ import os
 import random
 import string
 import csv
-#import StringIO
 from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, Response,make_response
 from flask_mysqldb import MySQL
 from apibackend import app, db,ALLOWED_EXTENSIONS ## initially created by __init__.py, need to be used here
@@ -18,7 +17,7 @@ from operator import itemgetter
 from apibackend.api.util import allowed_file
 
 
-            
+#healthcheck endpoint            
 @app.route("/admin/healthcheck", methods=['GET'])
 def healthcheck():
 
@@ -27,11 +26,11 @@ def healthcheck():
  
         if (f is None or f=='json'):
             try:
-                cur = db.connection.cursor()
+                cur = db.connection.cursor() #database connection
                 resp=jsonify({"status":"OK", "dbconnection":"MySQL Database intelliQ running on Apache Web Server"}) 
                 resp.status_code=200
                 return resp
-            except Exception as e:
+            except Exception as e: #not connected to database
                 print(e)
                 resp = jsonify({"status":"failed","dbconnection":"MySQL Database intelliQ not connected"})
                 resp.status_code=500
@@ -39,26 +38,26 @@ def healthcheck():
                 
         elif f=='csv':
             try:
-                cur = db.connection.cursor()
+                cur = db.connection.cursor() #database connected
                 csv=""""status","dbconnection"
 "OK","MySQL Database intelliQ running on Apache Web Server" """
                 resp=Response(csv,mimetype="text/csv")
                 resp.status_code=200
                 return resp
                 
-            except Exception as e:
+            except Exception as e: #not connected to database
                 print(e)
                 csv=""""status","dbconnection"
 "failed","MySQL Database intelliQ not connected" """
                 resp=Response(csv,mimetype="text/csv")
                 resp.status_code=500
                 return resp
-        else:
+        else: #checking for the format
             resp=jsonify({"status":"failed", "reason":"Only csv and json format is allowed"}) 
             resp.status_code=400
             return resp
-    else:
-        resp=jsonify({"status":"failed","reason":"Method Not Allowed"})
+    else: #if method is POST
+        resp=jsonify({"status":"failed","reason":"Method Not Allowed"}) 
         resp.status_code=400
         return resp
                                  
@@ -73,7 +72,7 @@ def questionnaire_upd():
         if (f is None or f=='json' or f=='csv'):
             try:
                 cur = db.connection.cursor()
-            except:
+            except: #if database not connected
                 if (f=='csv'):
                     csv=""""status","reason"
 "failed","Cannot connect to Database" """
