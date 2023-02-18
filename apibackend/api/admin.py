@@ -357,7 +357,7 @@ def resetq(questionnaireid):
                         resp.headers["Content-type"] = "text/csv"
                         resp.status_code=400
                     else:
-                        resp=jsonify({"status":"failed", "reason":"Questionnaire ID not found"})
+                        resp=jsonify({"status":"failed", "reason":"Questionnaire not found"})
                         resp.status_code=400
                     return resp
       
