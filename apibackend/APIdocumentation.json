@@ -5,10 +5,7 @@ info:
   description: An API to illustrate the implementation of intelligent Questionnaires
 
 servers:
-  - url: https://localhost:5000
-
-security:
-  - BasicAuth: []
+  - url: http://localhost:9103/intelliq_api
 
 paths:
 {baseURL}/admin/healthcheck:
