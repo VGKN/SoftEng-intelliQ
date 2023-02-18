@@ -15,6 +15,7 @@ from collections import ChainMap
 from operator import itemgetter
 from apibackend.api.util import allowed_file,sort_tuples,sort1_tuples
 
+#{baseurl}/questionnaire/
 @app.route("/questionnaire/<string:questionnaireid>", methods=['GET'])
 def QQID(questionnaireid):
    
