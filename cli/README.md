@@ -22,7 +22,7 @@ python -m venv venv
 . venv/Scripts/activate
 pip install -r requirements.txt
 ```
-Για να γινέται να τρέξουμε scripts χωρίς "./"
+Για να γίνεται να τρέξουμε scripts χωρίς "./"
 ```sh
 export PATH="$PATH:/path/to/cli-client"
 ```
