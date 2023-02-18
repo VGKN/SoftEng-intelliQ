@@ -14,13 +14,8 @@ Tasks to be completed.
 
 - [ ] Use Api to implement Use cases
 
-## FRONTEND
-
-- [ ] Fix error handling
-
 ## DOCUMENTATION
-
-- [ ] Update SRS doc @ntua-el19219
+ 
 - [ ] Create API documentation
 - [ ] Create installation documentation
 
@@ -53,3 +48,5 @@ Tasks to be completed.
 - [x] DB DUMP 
 - [x] CSV format parameter  
 - [x] Fix errors in endpoints
+- [x] Fix error handling
+- [x] Update SRS doc
