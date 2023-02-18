@@ -9,7 +9,7 @@
 
 
 ## Installation
-For a quick installation 
+Για μια γρήγορη εγκατάσταση
 
 Για το ξεκίνημα της εφαρμογής, απαιτείτε το activation του venv με όλα τα dependencies που περιέχονται στο requirements.txt αρχείο,
 το σήκωμα του MySQL server και του Apache Web Server καθώς και η αρχικοποίηση της βάσεις δεδομένων με το DML.sql αρχείο στο data φάκελο.
