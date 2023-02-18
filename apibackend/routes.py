@@ -432,7 +432,7 @@ def mkjson(QuestionnaireID):
         mydict['questions']=questions
         path = './apibackend/'+QuestionnaireID+'.json'
         File1 = open(path, "w+")
-        json.dump(mydict, File1)
+        json.dump(mydict,File1,ensure_ascii=False,indent=2,sort_keys=False)
         File1.close()
         path = QuestionnaireID+'.json'
         return  redirect (url_for ("download",filename=path))
