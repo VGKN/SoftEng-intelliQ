@@ -41,7 +41,7 @@
 ## Εξαρτήσεις
 
  - [XAMPP](https://www.apachefriends.org/download.html) για Windows
- - [Python],(https://www.python.org/downloads/) με τις επιπρόσθετες βιβλιοθήκες:
+ - [Python](https://www.python.org/downloads/) με τις επιπρόσθετες βιβλιοθήκες:
     - [Flask](https://flask.palletsprojects.com/en/2.0.x/)
     - [Flask-MySQLdb](https://flask-mysqldb.readthedocs.io/en/latest/)
     - [Flask-WTForms](https://flask-wtf.readthedocs.io/en/1.0.x/)
