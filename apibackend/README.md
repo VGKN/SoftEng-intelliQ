@@ -23,6 +23,8 @@ flask run
 ```
 ## Structure
 
+  `run.py` Εκκινεί τον ενσωματωμένο flask server και τρέχει το app πάνω του
+
   `__init__.py` ρυθμίζει το app, συμπεριλαμβάνοντας τις απαραίτητες πληροφορίες και τα credentials για την σύνδεση με το database
   
   `routes.py` περιέχει όλα τα routes που αφορούν το frontend
@@ -34,8 +36,6 @@ flask run
   `api/util.py` περιέχει βοηθητικές συναρτήσεις
   
   `api/general.py`περιέχει την υλοποίηση των υπολοίπων api endpoints
-  
-  `run.py` Εκκινεί τον ενσωματωμένο flask server και τρέχει το app πάνω του
 
   `APIdocumentation.json` Το API documentation
   
