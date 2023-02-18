@@ -8,7 +8,6 @@ Tasks to be completed.
 
 ## DOCUMENTATION
 
-- [ ] Create README for apibackend, data, cli, test, installation
 - [ ] Code comments
 
 
