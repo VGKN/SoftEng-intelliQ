@@ -25,7 +25,7 @@
 | frontend | html, css, bootstrap5 |
 | database | MySQL |
 | CLI | Python3 argparse |
-
+| testing| Postman API functionality tests/ Python Pytest CLI functionality tests|
 
 
 **Το project είναι μια συλλογική προσπάθεια μιας ομάδας 4 ατόμων:** 
