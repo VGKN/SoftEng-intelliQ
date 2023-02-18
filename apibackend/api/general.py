@@ -209,9 +209,7 @@ def QQQID(questionnaireid,questionid):
                 cur.execute(query2)
                 x=cur.fetchall()
                 x=list(x)
-                print(x)
                 y = sort1_tuples(x)
-                print(y)
             
                 for queryreturn in y:
                     helpdic={}
