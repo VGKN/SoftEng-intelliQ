@@ -5,7 +5,7 @@ import json
 
 def getquestionanswers(ar):
     if (ar.format == 'csv' or ar.format== 'json'):
-        url_call='http://localhost:5000/intelliq_api/getquestionanswers/{}/{}'.format(ar.questionnaire_id,ar.question_id)
+        url_call='http://localhost:9103/intelliq_api/getquestionanswers/{}/{}'.format(ar.questionnaire_id,ar.question_id)
         if ar.format=='csv':
             url_call = url_call + '?format=csv'
             
