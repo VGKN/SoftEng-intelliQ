@@ -43,8 +43,4 @@ flask run
   
   `requirements.txt` Το αρχέιο με τα dependencies της εφαρμογής
 
-## License
-
-MIT
-
 
