@@ -30,11 +30,4 @@ pytest test_sessions.py
 ```
 
 
-## License
-
-MIT
-
-**Free Software, Hell Yeah!**
-
-
   [pytest]: https://docs.pytest.org/en/stable/
