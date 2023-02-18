@@ -25,7 +25,7 @@ INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALU
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q06','Είστε χειμερινός κολυμβητής','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q07','Κάνετε χειμερινό σκι;','TRUE','question','QQ000');
 INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q08','Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;','TRUE','question','QQ000');
-INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q09','Με δεδομένο ότι απαντήσατε \'Οχι\' στην ερώτηση \'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\': Προτιμάτε τη θερινή ή την χειμερινή ώρα;','TRUE','question','QQ000');
+INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('Q09','Με δεδομένο ότι απαντήσατε \'Ναι\' στην ερώτηση \'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;\': Προτιμάτε τη θερινή ή την χειμερινή ώρα;','TRUE','question','QQ000');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01A1','<30');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01A2','30-50');
 INSERT INTO Options (Opt_ID, Opt_Text) VALUES ('P01A3','50-70');
