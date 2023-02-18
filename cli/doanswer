@@ -10,13 +10,13 @@ def doanswer(ar):
         url_call='http://localhost:5000/doanswer/{}/{}/{}/{}'.format(ar.questionnaire_id,ar.question_id,ar.session_id,ar.option_id)
         if ar.format=='csv':
             url_call = url_call + '?format=csv'
-        res = requests.get(url_call)
+        res = requests.post(url_call)
         print(res.status_code)
         if (ar.format == 'json' and res.status_code == 200):
-            print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            #print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
             return True
         elif (ar.format == 'csv' and res.status_code == 200):
-            print(res.text)
+            #print(res.text)
             return True
         else:
             if (ar.format=='csv'):
