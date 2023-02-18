@@ -2,10 +2,6 @@
 
 Tasks to be completed.
 
-## PRESENTATION
-
-
-
 ## DOCUMENTATION
 
 - [ ] Code comments
