@@ -40,12 +40,26 @@ Technical Details
 `cd apibackend/`
  
 ### Installation
- ```bash
- python3 -m venv venv
- source venv/bin/activate
+ ```Σε περιβάλλον cmd
+ python -m venv venv
+ cd venv/Scripts
+ activate
+ cd..
+ cd..
  pip install -r requirements.txt
  ```
- ### DB
+ 
+### DB
+
+Χρησιμοποιούμε XAMPP και συνδεόμαστε στον Apache Web Server στο Port:80 και τρέχομε MySQL Server στο Port:3306.
+ 
+#### Κάθε επόμενη φορά
+```
+Ανί
+venv/scripts/activate
+cd../cd..`
+python run.py
+```
  
  
  
