@@ -16,6 +16,7 @@ def getquestionanswers(ar):
 parser = argparse.ArgumentParser()
 parser.add_argument('--questionnaire_id', help='Give questionnaire_id', required='TRUE')
 parser.add_argument('--question_id', help='Give session that you want to receive answers', required='TRUE')
+parser.add_argument('--format', help='Give response format', required='TRUE')
 args = parser.parse_args()
 
 getquestionanswers(args)

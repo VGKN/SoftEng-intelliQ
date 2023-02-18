@@ -17,6 +17,7 @@ parser.add_argument('--questionnaire_id', help='Give questionnaire_id of the que
 parser.add_argument('--question_id', help='Give question that you want to answer', required='TRUE')
 parser.add_argument('--session_id', help='Give the session number', required='TRUE')
 parser.add_argument('--option_id', help='Pick Option', required='TRUE')
+parser.add_argument('--format', help='Give response format', required='TRUE')
 args = parser.parse_args()
 
 doanswer(args)
