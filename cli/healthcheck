@@ -3,21 +3,9 @@ import argparse
 import requests
 import json
 import pprint
+#from prettytable improt from_csv,DEFAULT
 
 def healthcheck(ar):
-    
-    #elif (ar.format == 'csv' and res.status_code == 200):
-       #f = open("./SessionsPerEV.cv",'w+')
-        #f.truncate(0)
-        #f.write(res.text)
-        #f.seek(0)
-       # x = from_csv(f, delimiter =',')
-      #  x.set_style(DEFAULT)
-     #   print(x)
-      #  f.close()
-        
-    
-    
     if (ar.format == 'csv' or ar.format== 'json'):
         url_call='http://localhost:5000/admin/healthcheck'
         if ar.format=='csv':
@@ -28,9 +16,23 @@ def healthcheck(ar):
             print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
             return True
         elif (ar.format == 'csv' and res.status_code == 200):
-            print(res.text)
+            print(res.text) 
+        
+            #f = open("./SessionsPerEV.cv",'w+')
+            #f.truncate(0)
+            #f.write(res.text)
+            #f.seek(0)
+            #x= from_csv(f, delimiter =',')
+            #x.set_style(DEFAULT)
+            #print(x)
+            #f.close()
+     
             return True
         else:
+            if (ar.format=='csv'):
+                print(res.text)
+            else:
+                print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
             return False
         
     else:
@@ -43,3 +45,4 @@ parser.add_argument('--format', help='Give response format', required='TRUE')
 args = parser.parse_args()
 
 healthcheck(args)
+

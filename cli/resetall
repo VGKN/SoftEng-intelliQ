@@ -19,6 +19,10 @@ def resetall(ar):
             print(res.text)
             return True
         else:
+            if (ar.format=='csv'):
+                print(res.text)
+            else:
+                print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
             return False
         
     else:

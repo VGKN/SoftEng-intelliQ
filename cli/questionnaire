@@ -3,15 +3,34 @@ import argparse
 import requests
 import json
 import pprint
- url = 'http://pluganddrive.ddns.net:8765/evcharge/api/SessionsPerEV/' + ar.ev + '/' + str(ar.datefrom).replace("-","") + '/' + str(ar.dateto).replace("-","")
 
 def questionnaire(ar):
-    url_call='http://localhost:5000/questionnaire/{}'.format(ar.questionnaire_id)
-    res = requests.get(url_call)
-    print(res.status_code)
-    pprint.pprint(res.json())
-    return True
 
+    if (ar.format == 'csv' or ar.format== 'json'):
+        url_call='http://localhost:5000/questionnaire/{}'.format(ar.questionnaire_id)
+        if ar.format=='csv':
+            url_call = url_call + '?format=csv'
+        res = requests.get(url_call)
+        print(res.status_code)
+        if (ar.format == 'json' and res.status_code == 200):
+            print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            return True
+        elif (ar.format == 'csv' and res.status_code == 200):
+            print(res.text)
+            print(res.encoding)
+            return True
+        else:
+            if (ar.format=='csv'):
+                print(res.text)
+                print(res.encoding)
+            else:
+                print(json.dumps(res.json(),ensure_ascii=False,indent=2,sort_keys=False))
+            return False
+        
+    else:
+        print("Only json and csv format is supported")
+        return False
+        
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--questionnaire_id', help='Give questionnaire_id to see info', required='TRUE')
