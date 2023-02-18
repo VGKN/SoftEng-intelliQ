@@ -749,7 +749,6 @@ def getquestionanswers(questionnaireID, questionID):
                     resp.headers["charset"]="utf-8"
                     resp.status_code=200
                 else:
-                    print(maindic)
                     resp = jsonify (maindic)
                     resp.status_code=200
                 return resp
