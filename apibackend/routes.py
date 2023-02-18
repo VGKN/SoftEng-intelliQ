@@ -87,7 +87,7 @@ def getUser():
                               
     except Exception as e:
         print(e)
-        return render_template("base.html")
+        abort(500)
         
 
 @app.route("/firstanswer/<string:qid>",methods=["GET","POST"])
@@ -123,7 +123,7 @@ def getFirst(qid):
                                  
     except Exception as e:
         print(e)
-        return render_template("base.html")
+        abort(500)
 
 
 @app.route("/answering/<string:qid>/<string:questionid>/<string:session>",methods=["GET","POST"])
@@ -155,8 +155,8 @@ def getAnswering(qid,questionid,session):
             return render_template("answering.html", qid=qid, questionid=questionid, session=session,question=question, options=options, form=form)
                                  
     except Exception as e:
-            print(e)
-            return render_template("base.html")
+        print(e)
+        abort(500)
 
 @app.route("/next/<string:qid>/<string:questionid>/<string:session>", methods=['POST'])
 def getNext(qid,questionid,session):
@@ -202,7 +202,7 @@ def getAnswered(session):
                              
     except Exception as e:
         print(e)
-        return render_template("base.html")
+        abort(500)
 
 @app.route("/summary/<string:session>")
 def getSummary(session):
@@ -230,17 +230,16 @@ def getSummary(session):
                              
     except Exception as e:
         print(e)
-        return render_template("base.html")
+        abort(500)
 
 
 @app.route("/admin")
 def Admin():
     try:
-        return render_template("admin.html")
-         #                      
+        return render_template("admin.html")                     
     except Exception as e:
         print(e)
-        return render_template("base.html")
+        abort(500)
 
 @app.route("/keyword", methods=['GET', 'POST'])
 def Keyword():
@@ -275,16 +274,19 @@ def Keyword():
                     return render_template("badquestionrequest.html")
 
         else:
-            return render_template("keywordquestions.html")
-         #                      
+            return render_template("keywordquestions.html")                      
     except Exception as e:
         print(e)
-        return render_template("base.html")
+        abort(500)
     
 @app.route('/upload/<string:name>/<string:state>', methods = ['GET'])  
-def success(name,state):  
-    if request.method == 'GET':
-       return render_template("Acknowledgement.html", name=name, state=state)
+def success(name,state): 
+    try:
+        if request.method == 'GET':
+            return render_template("Acknowledgement.html", name=name, state=state)
+    except Exception as e:
+        print(e)
+        abort(500)
 
   
 #redirection upon successfull upload of the allowed files
@@ -323,7 +325,6 @@ def inserting(name):
                         myx.append(x)
                         y=questions['qtext'].find("]",x+2)
                         myy.append(y)
-                    print(qtext)
                     if len(qtext)!=0:
                         for question in data['questions']:
                             if question['qID ']==qtext[1]:
@@ -331,10 +332,7 @@ def inserting(name):
                             for options in question['options']:
                                 if options['optID']==qtext[0]:
                                     texts.append(options['opttxt'])
-                        print(myx,myy)
-                        print(texts)
                         questiontext=questions['qtext'][0:myx[0]]+"\\'"+texts[1]+"\\'"+questions['qtext'][myy[0]+1:myx[1]] +"\\'"+texts[0]+"\\'"+questions['qtext'][myy[1]+1:]          
-                        print(questions)
                         query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questiontext,questions['required'],questions['type'],data['questionnaireID'])
                     else:
                         query="INSERT INTO Question (Question_ID, Qtext, Qrequired, Qtype, QuestionaireID) VALUES ('{}','{}','{}','{}','{}');".format(questions['qID '],questions['qtext'],questions['required'],questions['type'],data['questionnaireID'])
@@ -352,13 +350,10 @@ def inserting(name):
                         cur.execute(query)
             db.connection.commit()
             state ="successfully added questionnaire"
-            print(state)
             return redirect(url_for('success', name=name, state=state))
         except Exception as e:
             print(e)
-            print('hello')
-            state ="questionnaire was not added to the database due to error with the format of the json file"
-            print(state)
+            state =" was **NOT** added to the database -- WRONG JSON FORMAT"
             return redirect(url_for('success', name=name, state=state))
     return render_template('error500.html')
               
@@ -372,67 +367,78 @@ def inserting(name):
 
 @app.route('/questionnaire_upd', methods=['GET', 'POST'])
 def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            return render_template("questionnaire_upd.html",info="You need to select a file")
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            return render_template("questionnaire_upd.html",info="You need to select a file")
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            #print(filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('inserting', name=filename))
-        else:
-            return render_template("questionnaire_upd.html",info="*Error: Only file type '.json' is allowed")
-    return render_template("questionnaire_upd.html")
+    try:
+        if request.method == 'POST':
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                return render_template("questionnaire_upd.html",info="You need to select a file")
+            file = request.files['file']
+            # If the user does not select a file, the browser submits an
+            # empty file without a filename.
+            if file.filename == '':
+                return render_template("questionnaire_upd.html",info="You need to select a file")
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                #print(filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                return redirect(url_for('inserting', name=filename))
+            else:
+                return render_template("questionnaire_upd.html",info="*Error: Only file type '.json' is allowed")
+        return render_template("questionnaire_upd.html")
+    except Exception as e:
+        print(e)
+        abort(500)
 
 # create and Download json File with all answers of questionnaire
 
 
 @app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
-    path = filename
-    print(path)
-    return send_file(path, as_attachment=True)
+    try:
+        path = filename
+        print(path)
+        return send_file(path, as_attachment=True)
+    except Exception as e:
+        print(e)
+        abort(500)
 
     
 @app.route('/dnld/<string:QuestionnaireID>')
 def mkjson(QuestionnaireID):
-    mydict={}
-    mydict['questionnaireID']=QuestionnaireID
-    cur = db.connection.cursor()
-    query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
-    cur.execute(query1)
-    myquestions=[]
-    for queryreturn in cur.fetchall():
-        myquestions.append(queryreturn[0])
+    try:
+        mydict={}
+        mydict['questionnaireID']=QuestionnaireID
+        cur = db.connection.cursor()
+        query1 = ("select Question_ID from Question where QuestionaireID = '{}'").format(QuestionnaireID)
+        cur.execute(query1)
+        myquestions=[]
+        for queryreturn in cur.fetchall():
+            myquestions.append(queryreturn[0])
 
-    #print(myquestions)
-    questions=[]
-    for qqid in myquestions:
-        query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
-        cur.execute(query2)
-        x=cur.fetchall()     
-        maindic={}
-        maindic['questionid']=qqid
-        maindic['answers']=[]
-        for queryreturn in x:
-            helpdic={}
-            helpdic['session']=queryreturn[0]
-            helpdic['ans']=queryreturn[1]
-            maindic['answers'].append(helpdic)
-        questions.append(maindic)
-    mydict['questions']=questions
-    path = './apibackend/'+QuestionnaireID+'.json'
-    File1 = open(path, "w+")
-    json.dump(mydict, File1)
-    File1.close()
-    path = QuestionnaireID+'.json'
-    return  redirect (url_for ("download",filename=path))
+        questions=[]
+        for qqid in myquestions:
+            query2 = "select S_ID,O_ID from session_questions_options where (Q_ID = '{}')".format(qqid)
+            cur.execute(query2)
+            x=cur.fetchall()     
+            maindic={}
+            maindic['questionid']=qqid
+            maindic['answers']=[]
+            for queryreturn in x:
+                helpdic={}
+                helpdic['session']=queryreturn[0]
+                helpdic['ans']=queryreturn[1]
+                maindic['answers'].append(helpdic)
+            questions.append(maindic)
+        mydict['questions']=questions
+        path = './apibackend/'+QuestionnaireID+'.json'
+        File1 = open(path, "w+")
+        json.dump(mydict, File1)
+        File1.close()
+        path = QuestionnaireID+'.json'
+        return  redirect (url_for ("download",filename=path))
+    except Exception as e:
+        print(e)
+        abort(500)
 
 
 
@@ -451,7 +457,7 @@ def getquestionnaires():
         return render_template("getquestionnaires.html",Questionnaire=Questionnaire)
     except Exception as e:
         print(e)
-        return render_template("base.html")
+        abort(500)
     
 
 @app.route("/getquestionnaires/<string:QuestionnaireID>")
@@ -472,7 +478,7 @@ def Questions(QuestionnaireID):
                                                                 
         except Exception as e:
             print(e)
-            return render_template("base.html")
+            abort(500)
 
 @app.route("/getquestionnaires/<string:QuestionnaireID>/<string:Question_ID>")
 def Answers(QuestionnaireID, Question_ID):
@@ -507,9 +513,6 @@ def Answers(QuestionnaireID, Question_ID):
                 for y in dic.keys():
                     if x['Opt_ID']==y:
                         x['Count']=dic[y]
-                        
-            print(Answers)
-            print(dic)
 
             cur.close()
 
@@ -517,6 +520,18 @@ def Answers(QuestionnaireID, Question_ID):
                                                                 
         except Exception as e:
             print(e)
-            return render_template("base.html",pageTitle="Landing Page")
+            abort(500)
 
-        return render_template("base.html",pageTitle="Landing Page")
+@app.errorhandler(400)
+def page_not_found(e):
+    # note that we set the 400 status explicitly
+    return render_template("400.html", pageTitle = "Bad Request"),400
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template("404.html", pageTitle = "Not Found"),404
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template("500.html", pageTitle = "Internal Server Error"),500
