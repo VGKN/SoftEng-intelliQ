@@ -16,11 +16,7 @@ Tasks to be completed.
 
 ## DOCUMENTATION
  
-- [ ] Create API documentation
 - [ ] Create installation documentation
-
-## CLI
-- [ ] Include format parameter
 
 ## TEST
 
