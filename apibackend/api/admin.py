@@ -26,7 +26,7 @@ def healthcheck():
  
         if (f is None or f=='json'):
             try:
-                cur = db.connection.cursor() #database connection
+                cur = db.connection.cursor() #database connected
                 resp=jsonify({"status":"OK", "dbconnection":"MySQL Database intelliQ running on Apache Web Server"}) 
                 resp.status_code=200
                 return resp
