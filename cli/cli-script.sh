@@ -18,4 +18,4 @@ python question --questionnaire_id QQ000 --question_id Q08 --format json
 python doanswer --questionnaire_id QQ000 --question_id Q08 --session_id zzzz --option_id Q08A1 --format json
 python question --questionnaire_id QQ000 --question_id Q09 --format json
 python doanswer --questionnaire_id QQ000 --question_id Q09 --session_id zzzz --option_id Q09A1 --format json
-python getsessionanswers --questionnaire_id QQ000 --session_id zzzz --format json-s
+python getsessionanswers --questionnaire_id QQ000 --session_id zzzz --format json
